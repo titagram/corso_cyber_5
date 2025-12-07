@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pyramid of Pain - Slide 15</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">The Pyramid of Pain</h1>
+        <div class="subtitle">Quanto "dolore" causiamo all'attaccante?</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Facili (Base)</div>
+                <div class="card-text">
+                    <p><strong>Hash Values:</strong> Banali da cambiare (basta ricompilare).<br>
+                        <strong>IP Addresses:</strong> Facili da cambiare (Proxy, VPN).
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Fastidiosi (Medio)</div>
+                <div class="card-text">
+                    <p><strong>Domain Names:</strong> Richiedono registrazione, ma DGA aiutano.<br>
+                        <strong>Network/Host Artifacts:</strong> Tracce lasciate dai tool.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 20px;">
+            <div class="card-title">Difficili (Cima)</div>
+            <div class="card-text">
+                <p><strong>Tools:</strong> Costringere l'attaccante a riscrivere il software.<br>
+                    <strong>TTPs (Tactics, Techniques, Procedures):</strong> Il comportamento. Rilevare <em>come</em>
+                    operano li costringe a re-imparare il mestiere. <strong>Massimo dolore.</strong>
+                </p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <img src="img/pyramid.png" alt="Pyramid of Pain" style="max-height: 150px; border-radius: 8px;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 15;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ipotesi Iniziale - Slide 22</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Ipotesi: Download Malevolo</h1>
+        <div class="subtitle">Caccia al file "invoice.one"</div>
+
+        <div class="card border-blue">
+            <div class="card-title">Sysmon Event ID 15 (Browser Download)</div>
+            <div class="card-text">
+                <p>Cerchiamo il download del file malevolo citato nel report.</p>
+            </div>
+        </div>
+
+        <div class="code-box">
+            event.code:15 AND file.name:*invoice.one
+        </div>
+
+        <div class="card border-green" style="margin-top: 20px;">
+            <div class="card-title">Risultato</div>
+            <div class="card-text">
+                <p>Trovato! Scaricato da <strong>MSEdge</strong> nella cartella Downloads dell'utente
+                    <strong>Bob</strong>.</p>
+                <p>Timestamp: March 26, 2023 @ 22:05:47</p>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 20px;">
+            <div class="card-title">Alternativa (Event ID 11)</div>
+            <div class="card-text">
+                <p>Se il browser non logga il download, usiamo File Create (ID 11): <code>file.name:invoice.one*</code>
+                    (Notare l'asterisco per il Zone Identifier).</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 22;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

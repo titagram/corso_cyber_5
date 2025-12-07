@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Analizzare un Report - Slide 14</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Leggere un Report Tattico</h1>
+        <div class="subtitle">Come estrarre valore</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">1. Contesto</div>
+                <div class="card-text">
+                    <p>Capire la narrativa. Chi è l'attaccante? Qual è l'obiettivo? È rilevante per il mio settore?</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">2. Estrarre IoC</div>
+                <div class="card-text">
+                    <p>Identificare e classificare gli indicatori:
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Network:</strong> IP C2, Domini.</li>
+                        <li><strong>Host:</strong> File Hash, Chiavi di Registro.</li>
+                        <li><strong>Email:</strong> Oggetto, Mittente.</li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">Validazione</div>
+            <div class="card-text">
+                <p>Non fidarsi ciecamente. Verificare gli IoC su VirusTotal o OTX. Un IP potrebbe essere condiviso
+                    (Cloudflare) e bloccarlo causerebbe disservizi.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 14;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

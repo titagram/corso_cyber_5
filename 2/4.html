@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SIEM vs IDS/IPS - Slide 4</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SIEM vs Altri Strumenti</h1>
+        <div class="subtitle">Differenze con IDS e IPS</div>
+
+        <div class="grid-2-col">
+            <div class="card border-yellow">
+                <div class="card-title">IDS / IPS</div>
+                <div class="card-text">
+                    <p>Focalizzati sul monitoraggio del traffico di rete e sul blocco di attacchi noti in transito.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">SIEM</div>
+                <div class="card-text">
+                    <p><strong>Non sostituisce</strong> IDS/IPS, ma lavora con essi.</p>
+                    <p>Aggrega i log di IDS/IPS con quelli di server, auth, e app per trovare correlazioni complesse che
+                        un singolo dispositivo non vedrebbe.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-box">
+            Esempio:
+            L'IDS vede un pacchetto sospetto.
+            Il Server vede un login fallito.
+            Il SIEM unisce i due eventi: "Attacco Brute Force seguito da exploit tentativo su Host X"
+        </div>
+    </div>
+
+    <script>const slideNumero = 4;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

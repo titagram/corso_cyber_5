@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Esempi Reali: Credenziali - Slide 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Incidenti nel Mondo Reale</h1>
+        <div class="subtitle">Credenziali Compromesse e Deboli</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Colonial Pipeline</div>
+                <div class="card-text">
+                    <p class="tech-term" style="font-size: 0.9em; margin-bottom: 10px;">Leaked Credentials</p>
+                    <p>Un attacco ransomware originato da una password di un dipendente trovata nel dark web.</p>
+                    <p style="margin-top: 10px;"><strong>Causa:</strong> Accesso tramite un account VPN inattivo senza
+                        Multi-Factor Authentication (MFA).</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Mirai Botnet (2016)</div>
+                <div class="card-text">
+                    <p class="tech-term" style="font-size: 0.9em; margin-bottom: 10px;">Default / Weak Credentials</p>
+                    <p>Botnet che ha infettato dispositivi IoT usando credenziali di fabbrica (admin/admin).</p>
+                    <p style="margin-top: 10px;"><strong>Impatto:</strong> Enormi disservizi DDoS contro aziende come
+                        Dyn e OVH.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue">
+            <div class="card-title">LogicMonitor (2023)</div>
+            <div class="card-text">
+                <p>Clienti compromessi a causa di password di default deboli fornite dal vendor stesso. </p>
+                <p><strong>Lezione:</strong> Mai lasciare credenziali di default e forzare l'hardening delle password
+                    immediatamente.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 3;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

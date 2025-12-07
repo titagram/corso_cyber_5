@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Indagine Iniziale - Slide 18</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Indagine Iniziale</h1>
+        <div class="subtitle">Costruire il contesto (Who, What, When, Where, Why)</div>
+
+        <div class="card border-blue">
+            <div class="card-title">La Timeline</div>
+            <div class="card-text">
+                <p>È cruciale stabilire subito una cronologia degli eventi per capire la sequenza dell'attacco.</p>
+                <div class="code-box">
+                    Date | Time | Hostname | Event Description | Data Source
+                    09/09/2021 | 13:31 CET | SQLServer01 | Hacker tool 'Mimikatz' detected | Antivirus
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 20px;">
+            <div class="card border-red">
+                <div class="card-title">Domande Chiave</div>
+                <div class="card-text">
+                    <ul style="margin-left: 20px;">
+                        <li>Quali sistemi sono impattati?</li>
+                        <li>L'attacco è ancora in corso?</li>
+                        <li>È un falso positivo?</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card border-purple">
+                <div class="card-title">Confidenzialità</div>
+                <div class="card-text">
+                    <p>Le informazioni devono essere <strong>Need-to-know</strong>. L'attaccante potrebbe essere un
+                        insider o avere accesso alle email aziendali.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 18;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

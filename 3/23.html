@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Network Validation - Slide 23</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Conferma Network</h1>
+        <div class="subtitle">Identificare la fonte</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Problema: Sysmon ID 3 vuoto</div>
+                <div class="card-text">
+                    <p>Molte aziende disabilitano il log delle connessioni browser (troppo rumore). Sysmon non ci aiuta
+                        qui.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">Soluzione: Zeek Log</div>
+                <div class="card-text">
+                    <p>Analizziamo le query DNS fatte dall'host (WS001) nell'ora del download (22:05:00 - 22:05:48).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-box" style="margin-top: 15px;">
+            source.ip:192.168.28.130 AND dns.question.name:*
+        </div>
+
+        <div class="card border-green" style="margin-top: 15px;">
+            <div class="card-title">Analisi DNS</div>
+            <div class="card-text">
+                <p>1. Accesso a Gmail (mail.google.com).<br>
+                    2. Richiesta a <strong>file.io</strong> (Hosting provider noto).<br>
+                    3. Scansione SmartScreen (tipica di Edge).</p>
+                <p>Conclusione: Bob ha scaricato "invoice.one" da file.io tramite un link su Gmail.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 23;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

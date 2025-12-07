@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Indicatori di Compromissione - Slide 19</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Indicatori di Compromissione (IOC)</h1>
+        <div class="subtitle">Le tracce lasciate dall'attaccante</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Cosa sono?</div>
+                <div class="card-text">
+                    <p>Artefatti digitali che indicano una violazione:</p>
+                    <ul style="margin-left: 20px;">
+                        <li>Indirizzi IP malevoli.</li>
+                        <li>Hash di file (es. malware).</li>
+                        <li>Nomi di file o chiavi di registro.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Standardizzazione</div>
+                <div class="card-text">
+                    <p>Gli IOC possono essere condivisi usando formati standard come <strong>STIX</strong> (JSON) o
+                        regole <strong>YARA</strong>.</p>
+                    <p class="tech-term">OpenIOC, STIX, TAXII</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red">
+            <div class="card-title">Attenzione!</div>
+            <div class="card-text">
+                <p>Quando si cercano IOC sui sistemi, fare attenzione a non lasciare credenziali di amministrazione in
+                    cache (evitare PsExec con credenziali esplicite, preferire WinRM o esecuzione senza cache).</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 19;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

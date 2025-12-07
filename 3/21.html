@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ambiente di Caccia - Slide 21</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">L'Ambiente di Caccia</h1>
+        <div class="subtitle">Strumenti e Dati</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Fonti Dati</div>
+                <div class="card-text">
+                    <p>
+                    <ul>
+                        <li><strong>Windows Audit Logs</strong> (windows*)</li>
+                        <li><strong>Sysmon Logs</strong> (windows*)</li>
+                        <li><strong>PowerShell Logs</strong> (windows*)</li>
+                        <li><strong>Zeek Logs</strong> (zeek*) - Monitoraggio rete</li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Setup Kibana</div>
+                <div class="card-text">
+                    <p>Usiamo Kibana "Discover". Impostiamo il time range a "Last 15 years" (per vedere tutto lo storico
+                        nel laboratorio) e la timezone corretta.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 20px;">
+            <div class="card-title">Organizzazione Target</div>
+            <div class="card-text">
+                <p>Piccola azienda (~200 dipendenti). Uso massiccio di Office e Gmail. Browser: Edge. Dispositivi
+                    gestiti da GPO.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 21;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

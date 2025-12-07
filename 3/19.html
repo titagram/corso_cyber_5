@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>RAT & Persistence - Slide 19</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Funzionalità e Persistenza</h1>
+        <div class="subtitle">Cosa fanno una volta dentro?</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">RAT (Remote Access Trojan)</div>
+                <div class="card-text">
+                    <p>Modulare ed espandibile. Capacità osservate:
+                    <ul>
+                        <li>Screen Capture</li>
+                        <li>Mimikatz (furto password)</li>
+                        <li>Interactive Shell (CMD)</li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Persistenza</div>
+                <div class="card-text">
+                    <p>File EXE droppato su disco. Spesso con nomi comuni per nascondersi.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 20px;">
+            <div class="card-title">Lateral Movement</div>
+            <div class="card-text">
+                <p>Si muovono nella rete usando strumenti legittimi (LotL - Living off the Land):
+                <ul>
+                    <li><strong>PsExec</strong> (firmato Microsoft)</li>
+                    <li><strong>WinRM</strong> (Windows Remote Management)</li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 19;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

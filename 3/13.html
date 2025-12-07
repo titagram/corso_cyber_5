@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>3 Tipi di Intel - Slide 13</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">I 3 Livelli di Intelligence</h1>
+        <div class="subtitle">Strategic, Operational, Tactical</div>
+
+        <div class="grid-3-col">
+            <div class="card border-blue">
+                <div class="card-title">Strategic</div>
+                <div class="card-text">
+                    <p><strong>Per chi:</strong> C-Level, Executive.<br>
+                        <strong>Cosa:</strong> Trend a lungo termine, rischi geopolitici, motivazioni (Why/Who).<br>
+                        <strong>Esempio:</strong> "Il gruppo APT28 targettizza le aziende energetiche."
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Operational</div>
+                <div class="card-text">
+                    <p><strong>Per chi:</strong> SOC Manager, Security Team.<br>
+                        <strong>Cosa:</strong> Campagne attive e TTPs (How/Where).<br>
+                        <strong>Esempio:</strong> "Campagna ransomware REvil usa RDP per muoversi lateralmente."
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Tactical</div>
+                <div class="card-text">
+                    <p><strong>Per chi:</strong> Analisti SOC, Firewall.<br>
+                        <strong>Cosa:</strong> IoC tecnici immediati.<br>
+                        <strong>Esempio:</strong> IP malevole 192.168.1.5, Hash malware MD5.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 13;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

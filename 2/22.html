@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Esempio MSBuild 1 - Slide 22</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Esempio 1: MSBuild + Office</h1>
+        <div class="subtitle">Esecuzione Sospetta (High Severity)</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Lo scenario</div>
+                <div class="card-text">
+                    <p><strong>MSBuild.exe</strong> (parte di .NET) avviato da Word o Excel. Gli attaccanti usano
+                        MSBuild per compilare ed eseguire codice malevolo (LoLBins).</p>
+                    <p>È un comportamento anomalo per un utente normale.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">MITRE Mapping</div>
+                <div class="card-text">
+                    <p><strong>Tactic:</strong> Defense Evasion (TA0005)</p>
+                    <p><strong>Technique:</strong> Trusted Developer Utilities Proxy Execution (T1127)</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <img src="img/us1.png" alt="MSBuild Alert" style="max-height: 150px; border-radius: 8px;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 22;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

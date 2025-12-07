@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stuxbot IOCs - Slide 20</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Inventory: IOCs</h1>
+        <div class="subtitle">Cosa cercare (Indicatori di Compromissione)</div>
+
+        <div class="code-box" style="font-size: 0.85em;">
+            <strong>OneNote URLs:</strong>
+            https://transfer.sh/get/kNxU7/invoice.one
+            https://mega.io/dl9o1Dz/invoice.one
+
+            <strong>Staging (PowerShell):</strong>
+            https://pastebin.com/raw/AvHtdKb2
+
+            <strong>C&C Nodes (IPs):</strong>
+            91.90.213.14:443
+            103.248.70.64:443
+            141.98.6.59:443
+
+            <strong>File Hashes (SHA256):</strong>
+            226A723FFB4A91D9950A8B266167C5B354AB0DB1DC225578494917FE53867EF2
+            018D37CBD3878258C29DB3BC3F2988B6AE688843801B9ABC28E6151141AB66D4
+        </div>
+
+        <div class="card border-blue" style="margin-top: 15px;">
+            <div class="card-title">Il Compito</div>
+            <div class="card-text">
+                <p>Usare questi IOC per investigare nell'Elastic Stack aziendale. C'è stata compromissione?</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 20;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

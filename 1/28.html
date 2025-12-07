@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Risposta e Lezioni - Slide 28</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-nextdisabled" class="nav-btn disabled"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Risposta e Lezioni Apprese</h1>
+        <div class="subtitle">Conclusione dell'incidente</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Azioni di Risposta</div>
+                <div class="card-text">
+                    <ul style="margin-left: 20px; font-size: 0.9em;">
+                        <li>Blocco IP C2 sul firewall.</li>
+                        <li>Reset psw Admin e rotazione credenziali.</li>
+                        <li>Isolamento host gestiti e infetti.</li>
+                        <li>Analisi forense (Memoria, Disco).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">Lessons Learned</div>
+                <div class="card-text">
+                    <ul style="margin-left: 20px; font-size: 0.9em;">
+                        <li><strong>Credenziali Default:</strong> Errore banale ma devastante.</li>
+                        <li><strong>Attori Multipli:</strong> Mai sottovalutare la complessità; un "checkme.txt" può
+                            nascondere un APT.</li>
+                        <li><strong>Correlazione alert:</strong> Fondamentale unire i puntini tra team diversi.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px; color: #888;">
+            <p>Fine del Corso</p>
+            <a href="1.html" style="color: #667eea; text-decoration: none;">Torna all'inizio</a>
+        </div>
+    </div>
+
+    <script>const slideNumero = 28;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

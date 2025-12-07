@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SIEM Use Cases - Slide 19</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SIEM Use Case</h1>
+        <div class="subtitle">Definizione ed Esempio</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Cos'è un Use Case?</div>
+                <div class="card-text">
+                    <p>Una regola o scenario specifico progettato per identificare un potenziale incidente di sicurezza.
+                        Spazia da semplici tentativi di login falliti a pattern complessi come ransomware.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Esempio: Brute Force</div>
+                <div class="card-text">
+                    <p><strong>Scenario:</strong> L'utente "Rob" fallisce il login 10 volte in 4 minuti.</p>
+                    <p><strong>Azione SIEM:</strong> Correlare i 10 eventi in un <strong>unico alert</strong> "Brute
+                        Force" inviato al SOC.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <img src="img/usecase1.png" alt="Use Case Structure" style="max-height: 150px; border-radius: 8px;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 19;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

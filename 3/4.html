@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Il Team di Hunting - Slide 4</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Struttura del Team</h1>
+        <div class="subtitle">Ruoli chiave</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Threat Hunter</div>
+                <div class="card-text">
+                    <p>Il nucleo operativo. Conosce i TTPs, usa piattaforme di hunting e cerca proattivamente anomalie.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">Threat Intel Analyst</div>
+                <div class="card-text">
+                    <p>Raccoglie dati da fonti esterne (Open Source, Dark Web) e fornisce insight sugli attaccanti
+                        attuali.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 20px;">
+            <div class="card border-yellow">
+                <div class="card-title">Data Scientist</div>
+                <div class="card-text">
+                    <p>Analizza grandi moli di dati per trovare pattern statistici invisibili all'occhio umano.</p>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">Soc Manager</div>
+                <div class="card-text">
+                    <p>Coordina le operazioni e assicura la comunicazione tra Hunting, IR e Business.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 4;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

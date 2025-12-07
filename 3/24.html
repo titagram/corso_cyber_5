@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Esecuzione - Slide 24</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">La Catena di Esecuzione</h1>
+        <div class="subtitle">Da OneNote al Disastro</div>
+
+        <div class="code-box">
+            event.code:1 AND process.parent.name:"ONENOTE.EXE"
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-yellow">
+                <div class="card-title">Il Processo</div>
+                <div class="card-text">
+                    <p>OneNote.exe ha lanciato <strong>cmd.exe</strong>.<br>
+                        Il comando eseguito lanciava <code>invoice.bat</code> da una cartella temp.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Il Batch</div>
+                <div class="card-text">
+                    <p>Il file batch a sua volta ha lanciato <strong>PowerShell</strong>.<br>
+                        Argomenti sospetti: Download di contenuto da <strong>Pastebin</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 20px;">
+            <div class="card-title">Conferma</div>
+            <div class="card-text">
+                <p>URL Pastebin corrisponde al Report Intel. Lo script malevolo è stato eseguito.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 24;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

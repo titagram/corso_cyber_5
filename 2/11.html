@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KQL Avanzato - Slide 11</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Sintassi KQL</h1>
+        <div class="subtitle">Operatori Logici e Confronti</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">Operatori Logici</div>
+                <div class="card-text">
+                    <ul style="margin-left: 20px;">
+                        <li><strong>AND:</strong> Entrambe le condizioni vere.</li>
+                        <li><strong>OR:</strong> Almeno una vera.</li>
+                        <li><strong>NOT:</strong> Escludere risultati.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Query Complessa</div>
+                <div class="card-text">
+                    <p>Login falliti su account disabilitati:</p>
+                    <div class="code-box" style="font-size: 0.8em;">event.code:4625 AND
+                        winlog.event_data.SubStatus:0xC0000072</div>
+                    <p>Se un account disabilitato subisce tentativi di login, è un indicatore di compromissione grave.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue">
+            <div class="card-title">Wildcards e Range</div>
+            <div class="card-text">
+                <p><strong>Wildcard:</strong> <code>user.name: admin*</code> (trova admin, administrator, admin123).</p>
+                <p><strong>Range Temporale:</strong> <code>@timestamp >= "2023-03-03"</code>.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 11;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

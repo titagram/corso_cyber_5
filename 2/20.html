@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lifecycle Use Case - Slide 20</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Ciclo di Sviluppo Use Case</h1>
+        <div class="subtitle">Fasi Critiche</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">1. Requisiti & Dati</div>
+                <div class="card-text">
+                    <p>Capire lo scenario (es. "Rilevare brute force"). Identificare le fonti (Windows, Linux, App) e i
+                        campi necessari (user, timestamp, source ip).</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">2. Design & Implementazione</div>
+                <div class="card-text">
+                    <p>Definire Condizione, Aggregazione (10 tentativi / 4 min) e Priorità. Creare la regola nel SIEM.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">3. Documentazione & Tuning</div>
+                <div class="card-text">
+                    <p>Creare <strong>SOP</strong> (Standard Operating Procedures) per gli analisti. Testare per ridurre
+                        falsi positivi prima del deploy in produzione.</p>
+                </div>
+            </div>
+            <div class="card border-yellow">
+                <div class="card-title">Lifecycle</div>
+                <div style="text-align: center;">
+                    <img src="img/usecase2.png" alt="Use Case Lifecycle" style="max-height: 80px; border-radius: 4px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 20;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

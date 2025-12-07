@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Come Funziona un SIEM - Slide 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Come Funziona un SIEM?</h1>
+        <div class="subtitle">Il flusso dei dati</div>
+
+        <div class="grid-3-col">
+            <div class="card border-green">
+                <div class="card-title">1. Raccolta (Ingestion)</div>
+                <div class="card-text">
+                    <p>Ingestione di log da PC, server, dispositivi di rete, firewall, applicazioni.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">2. Normalizzazione</div>
+                <div class="card-text">
+                    <p>Conversione dei dati grezzi in un formato standard comune per facilitare l'analisi e la
+                        correlazione.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">3. Analisi & Alert</div>
+                <div class="card-text">
+                    <p>Gli analisti (o le regole automatiche) scrutinano i dati normalizzati per identificare minacce e
+                        generare avvisi.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple">
+            <div class="card-title">Alerting</div>
+            <div class="card-text">
+                <p>Gli alert notificano il SOC di possibili incidenti. Data la mole enorme di eventi (migliaia all'ora),
+                    il <strong>tuning</strong> delle regole è cruciale per ridurre il rumore e concentrarsi sui rischi
+                    reali.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 3;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

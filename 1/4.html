@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Esempi Reali: Software e Insider - Slide 4</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Vulnerabilità e Minacce Interne</h1>
+        <div class="subtitle">Software non aggiornato e Dipendenti</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">Equifax (2017)</div>
+                <div class="card-text">
+                    <p>Sfruttamento di una vulnerabilità nota in Apache Struts (CVE-2017-5638).</p>
+                    <p style="margin-top: 10px;"><strong>Causa:</strong> Mancata applicazione di una patch rilasciata
+                        pubblicamente.</p>
+                    <p><strong>Impatto:</strong> Dati di 147 milioni di persone esposti.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">WannaCry (2017)</div>
+                <div class="card-text">
+                    <p>Ransomware wormable tramite exploit EternalBlue (SMB).</p>
+                    <p style="margin-top: 10px;"><strong>Causa:</strong> Sistemi Windows non patchati (patch MS17-010
+                        disponibile ma non applicata).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red">
+            <div class="card-title">Cash App / Block Inc. (Insider Threat)</div>
+            <div class="card-text">
+                <p>Un ex dipendente ha avuto accesso ai dati di 8.2 milioni di utenti.</p>
+                <p><strong>Root Cause:</strong> Abuso di accessi legittimi e controlli interni insufficienti.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 4;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

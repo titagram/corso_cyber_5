@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Processo di Triage 2 - Slide 27</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Arricchimento & Valutazione</h1>
+        <div class="subtitle">Fase 2 del Triage</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Enrichment</div>
+                <div class="card-text">
+                    <p>Raccogliere dati aggiuntivi non presenti nell'alert.</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>OSINT:</strong> Reputazione IP/Hash su VirusTotal.</li>
+                        <li><strong>Asset DB:</strong> L'host è critico? È un server di produzione?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Valutazione Rischio</div>
+                <div class="card-text">
+                    <p>Based on asset value and threat severity.</p>
+                    <p>Un malware su un PC guest < un accesso admin non autorizzato sul Domain Controller.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue" style="margin-top: 20px;">
+            <div class="card-title">Decisione Finale</div>
+            <div class="card-text">
+                <p>Se confermato <strong>True Positive</strong> con impatto rilevante -> <strong>ESCALATION</strong>
+                    immediata per Incident Response.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 27;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

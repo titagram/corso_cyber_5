@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Containment, Eradication, Recovery - Slide 21</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Fasi 3: Containment, Eradication, Recovery</h1>
+        <div class="subtitle">Bloccare, Pulire e Ripristinare</div>
+
+        <div class="grid-3-col">
+            <div class="card border-red">
+                <div class="card-title">Containment (Contenimento)</div>
+                <div class="card-text">
+                    <p><strong>Short-term:</strong> Isolare VLAN, staccare cavi, bloccare C2. Minimizzare alterazioni
+                        per forensica.</p>
+                    <p><strong>Long-term:</strong> Patching, reset password globali.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Eradication (Eradicazione)</div>
+                <div class="card-text">
+                    <p>Eliminare la causa radice e i residui (malware). Reimaging dei sistemi, ripristino da backup
+                        sicuri, miglioramento hardening.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Recovery (Recupero)</div>
+                <div class="card-text">
+                    <p>Ripristino operazioni normali. Monitoraggio intensivo dei sistemi ripristinati per assicurarsi
+                        che l'attaccante non ritorni.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card border-blue" style="text-align: center;">
+            <div class="card-title">Post-Incident Activity</div>
+            <p style="padding-bottom: 10px;">Lezione apprese (Lessons Learned) e reportistica finale per migliorare le
+                capacità future.</p>
+            <img src="img/ir_stages.png" alt="IR Stages" style="max-height: 100px;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 21;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

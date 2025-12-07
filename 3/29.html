@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Conclusione - Slide 29</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-nextdisabled" class="nav-btn disabled"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Conclusione dell'Indagine</h1>
+        <div class="subtitle">Il quadro completo</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Timeline Ricostruita</div>
+                <div class="card-text">
+                    <ol>
+                        <li>Phishing su WS001 (Invoice.One).</li>
+                        <li>Esecuzione Batch -> PowerShell -> Backdoor.</li>
+                        <li>Bruteforce password (fallito Admin, riuscito svc-sql1).</li>
+                        <li>Movimento laterale su Server PKI tramite PsExec.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Azione Richiesta</div>
+                <div class="card-text">
+                    <p>Attivare il piano di Incident Response:</p>
+                    <ul>
+                        <li>Isolare WS001 e PKI.</li>
+                        <li>Resettare password di svc-sql1 (e tutti gli admin per sicurezza).</li>
+                        <li>Bloccare IoC su Firewall/EPP.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 15px; text-align: center;">
+            <div class="card-title">Obiettivo Raggiunto</div>
+            <div class="card-text">
+                <p>Grazie al Threat Hunting e all'Intel Report, abbiamo rilevato una compromissione attiva e profonda
+                    che gli allarmi automatici avevano mancato.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 29;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Processo di Triage 1 - Slide 26</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Il Processo di Triage</h1>
+        <div class="subtitle">Fase 1: Analisi e Correlazione</div>
+
+        <div class="grid-3-col">
+            <div class="card border-yellow">
+                <div class="card-title">1. Review</div>
+                <div class="card-text">
+                    <p>Revisione dell'alert nella coda del SIEM o Ticket System. Verifica del timestamp e host
+                        coinvolti.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">2. Classificazione</div>
+                <div class="card-text">
+                    <p>Determinare la categoria (es. Malware, Accesso non autorizzato, Policy Violation).</p>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">3. Correlazione</div>
+                <div class="card-text">
+                    <p>Cercare alert simili o correlati nello stesso arco temporale. Un singolo evento può sembrare
+                        innocuo, ma una sequenza rivela un attacco.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <img src="img/triaging.jpg" alt="Triaging Process" style="max-height: 200px; border-radius: 8px;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 26;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

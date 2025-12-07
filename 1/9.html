@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CKC: Esecuzione e Impatto - Slide 9</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Fasi della Cyber Kill Chain (4-7)</h1>
+        <div class="subtitle">Dall'Exploit all'Obiettivo</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">4. Exploitation</div>
+                <div class="card-text">
+                    <p>Attivazione dell'exploit per eseguire codice sul sistema target (es. sfruttando una vulnerabilità
+                        software).</p>
+                </div>
+            </div>
+            <div class="card border-purple">
+                <div class="card-title">5. Installation</div>
+                <div class="card-text">
+                    <p>Installazione di malware per mantenere l'accesso (Backdoor, Rootkit) ed evadere la rilevazione.
+                    </p>
+                </div>
+            </div>
+            <div class="card border-yellow">
+                <div class="card-title">6. Command & Control (C2)</div>
+                <div class="card-text">
+                    <p>Stabilire un canale di comunicazione remoto tra la macchina compromessa e il server
+                        dell'attaccante per ricevere istruzioni.</p>
+                </div>
+            </div>
+            <div class="card border-green">
+                <div class="card-title">7. Action on Objectives</div>
+                <div class="card-text">
+                    <p>Realizzazione dell'obiettivo finale: esfiltrazione dati, cifratura (ransomware), distruzione o
+                        spionaggio.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 9;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>
