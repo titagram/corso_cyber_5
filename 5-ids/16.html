@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Esempio Regola: Sliver (TLS)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Esempio Regola: Sliver (TLS)</h1>
+        <div class="subtitle">Rilevamento Basato su JA3 Hash</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">Regola per Sliver C2 SSL</div>
+            <div class="card-text">
+                <div class="code-box" style="margin-top: 15px;">
+alert tls any any -> any any (msg:"Sliver C2 SSL"; ja3.hash; content:"473cd7cb9faa642487833865d516e578"; sid:1002; rev:1;)
+                </div>
+                <p style="margin-top: 15px;">Questa regola Suricata è progettata per rilevare certe varianti di <strong>Sliver</strong> (un altro framework C2 open-source) ogni volta che identifica una connessione TLS con un hash JA3 specifico.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Come Funziona</div>
+                <div class="card-text">
+                    <p><strong>ja3.hash:</strong> Utilizza il buffer JA3 per match sull'hash JA3</p>
+                    <p style="margin-top: 15px;"><strong>content:</strong> Cerca l'hash JA3 specifico <code>473cd7cb9faa642487833865d516e578</code></p>
+                    <p style="margin-top: 15px;">Questo hash è unico per il client Sliver e può essere calcolato dal traffico di rete utilizzando strumenti come <code>ja3</code>.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Vantaggi del JA3</div>
+                <div class="card-text">
+                    <p>Il fingerprinting JA3 è efficace perché:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>È basato su caratteristiche del client hello che rimangono visibili anche in traffico cifrato</li>
+                        <li>Può identificare specifiche versioni o configurazioni di malware</li>
+                        <li>Non richiede decifratura del traffico</li>
+                        <li>È difficile da modificare senza cambiare il comportamento del client</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">Calcolo JA3 Hash</div>
+            <div class="card-text">
+                <p>L'hash JA3 può essere calcolato da un file PCAP utilizzando strumenti come:</p>
+                <div class="code-box" style="margin-top: 15px;">
+ja3 -a --json /path/to/file.pcap
+                </div>
+                <p style="margin-top: 15px;">Questo strumento analizza i pacchetti Client Hello e genera l'hash JA3 unico per ogni connessione TLS, permettendoci di identificare pattern specifici associati a malware o software sospetti.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 16;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

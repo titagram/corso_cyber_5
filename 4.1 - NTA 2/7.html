@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>IP Spoofing - Slide 7</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">IP Spoofing & Smurf</h1>
+        <div class="subtitle">"Perché mi sto colpendo da solo?"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">🗣️ L'Urlo nella Folla</div>
+                <div class="card-text">
+                    <p>Immagina di urlare un insulto in un bar affollato... ma con la voce di qualcun altro. Tutti si
+                        girano e picchiano lui.</p>
+                    <p>Questo è lo <strong>Smurf Attack</strong>. L'attaccante invia un ping Broadcast falsificando l'IP
+                        sorgente con quello della vittima. Tutta la rete risponde alla vittima, sommergendola.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🎯 Identificare l'Origine</div>
+                <div class="card-text">
+                    <p>In un mare di traffico ICMP, dobbiamo trovare l'unica macchina che sta orchestrando tutto.</p>
+                    <p>Cerchiamo un host che invia pacchetti ICMP frammentati continuamente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>ICMP_smurf.pcapng</code>.</p>
+                <p>1. Filtra per traffico ICMP: <code>icmp</code></p>
+                <p>2. Scorri i pacchetti. Noterai che molti host (vittime riflesse) rispondono.</p>
+                <p>3. Ma chi è che sta inviando i pacchetti Echo Request frammentati originali? C'è un solo IP
+                    "attaccante".</p>
+                <p><strong>Identifica l'IP attaccante e conta quanti host attaccanti ci sono.</strong></p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">1 (IP: 192.168.10.5)</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 7;</script>
+    <script src="main.js"></script>
+</body>
+
+</html>

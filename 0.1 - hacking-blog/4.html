@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Walkthrough "Blog" CTF - Fuzzing e Brute Force</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Accesso Iniziale: Fuzzing con OWASP ZAP</h1>
+        
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Azione Pratica</div>
+                <div class="card-text">
+                    <p><strong>Tool:</strong></p>
+                    <div class="code-box">OWASP ZAP -> Fuzzer</div>
+                    <br>
+                    <p><strong>Payload 1 (User):</strong></p>
+                    <div class="code-box">`kwheel`, `bjoel`</div>
+                    <br>
+                    <p><strong>Payload 2 (Pass):</strong></p>
+                    <div class="code-box">`rockyou.txt` (Wordlist)</div>
+                    <br>
+                    <p><strong>Risultato:</strong></p>
+                    <div class="code-box">HTTP 302 Found</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Analisi Tecnica</div>
+                <div class="card-text">
+                    <p><strong>Il Concetto:</strong> Il Fuzzing qui viene usato come un attacco a dizionario mirato.</p>
+                    <p><strong>HTTP 302:</strong> Non cerchiamo un messaggio "Login OK". Cerchiamo un codice di stato <span class="tech-term">302 (Redirect)</span>. Il protocollo HTTP usa il 302 per reindirizzare l'utente alla dashboard dopo un login corretto. Se riceviamo un 200 OK, solitamente significa che siamo ancora sulla pagina di login (tentativo fallito).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 4;</script>
+    <script src="main.js"></script>
+</body>
+</html>

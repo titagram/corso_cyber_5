@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Strange Headers - Slide 13</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Strange HTTP Headers</h1>
+        <div class="subtitle">"Richieste Malformate"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">📝 Richieste Illegali</div>
+                <div class="card-text">
+                    <p>Un browser normale invia richieste standard. Un attaccante invia richieste... creative.</p>
+                    <p>Header manipolati (Host: 127.0.0.1), CRLF injection, verbi HTTP strani. Il server, confuso, spesso risponde con codice <strong>400 Bad Request</strong>.</p>
+                    <p>Se vedi molti 400, qualcuno sta cercando di rompere la logica del server.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🔍 Analisi Errori</div>
+                <div class="card-text">
+                    <p>L'attacco spesso mira a sfruttare configurazioni errate nei Virtual Host o a fare <strong>Request Smuggling</strong> (nascondere una richiesta dentro un'altra).</p>
+                    <p>Monitorare gli errori 400 è un ottimo sistema di allerta precoce.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>CRLF_and_host_header_manipulation.pcapng</code>.</p>
+                <p>1. Filtra per le risposte di errore 400: <code>http.response.code == 400</code></p>
+                <p>2. Conta quanti pacchetti ci sono.</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">7</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 13;</script>
+    <script src="main.js"></script>
+</body>
+</html>

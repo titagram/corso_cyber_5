@@ -1,0 +1,53 @@
+splunk: https://tryhackme.com/room/investigatingwithsplunk
+
+elastic: https://tryhackme.com/room/itsybitsy
+
+
+1- Metasploit + esercizi metasploitable (opzionale, +1 ora) - 1 ora
+
+2- Thm blog - 1+ ora
+
+3- Incident Handling - 0.5 ore
+
+4- Siem - 0,5 ore
+
+esercizio: https://medium.com/@jcm3/itsybitsy-tryhackme-walkthrough-6fa47b8c0457
+
+5- Threat hunting - 0,5 ore (senza elastic)
+
+esercizio: https://medium.com/@jcm3/investigating-with-splunk-tryhackme-walkthrough-d453075355a0
+
+6- NTA - 0,5 ore
+
+7- NTA exercises - 1+ ora
+
+8- Ids - 0,5 ore (+1 se c'è l'ambiente)
+
+
+
+
+9- Malware da valutare, magari meglio per ultima puntata
+
+
+
+
+
+
+
+
+
+Todo prioritari:
+- studiare caso insight nexus
+- studiare caso Stuxbot
+- sistemare slide e immagini, e riassumere 2-SIEM
+- valutare se tagliare qualche slide da 3-Elastic
+- valutare se tenere capitolo Splunk
+- per il capitolo NTA, prepararsi esempi wireshark
+- Mettere stack elastic su kali per siem, anche con spluck e Suricata e/o Zeek. In pratica preparare stack completo.
+- prepara key per wpscan per tutti
+- /1/13.html rendere immagine ingrandibile
+
+
+Todo secondari:
+- far funzionare metasploitable
+- docker-compose con: theHive, 

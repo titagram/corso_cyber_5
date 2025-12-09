@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Modalità Operative di Suricata</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Modalità Operative di Suricata</h1>
+        <div class="subtitle">Quattro Modalità Distinte</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">1. IDS Mode</div>
+                <div class="card-text">
+                    <p>Suricata si posiziona come <strong>osservatore silenzioso</strong>. Esamina meticolosamente il traffico, segnalando potenziali attacchi ma astenendosi da qualsiasi forma di intervento.</p>
+                    <p style="margin-top: 15px;">Fornisce una visione approfondita delle attività di rete e accelera i tempi di risposta, aumentando la visibilità della rete senza offrire protezione diretta.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">2. IPS Mode</div>
+                <div class="card-text">
+                    <p>Suricata adotta un <strong>approccio proattivo</strong>. Tutto il traffico di rete deve passare attraverso i controlli rigorosi di Suricata ed è concesso l'accesso alla rete interna solo con l'approvazione di Suricata.</p>
+                    <p style="margin-top: 15px;"><strong>Nota:</strong> Richiede una comprensione intima del panorama di rete per prevenire il blocco accidentale di traffico legittimo. Il processo di ispezione può introdurre latenza.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">3. IDPS Mode</div>
+                <div class="card-text">
+                    <p>Porta insieme il meglio di IDS e IPS. Mentre Suricata continua a monitorare passivamente il traffico, possiede la capacità di trasmettere attivamente pacchetti <span class="tech-term">RST</span> in risposta ad attività anomale.</p>
+                    <p style="margin-top: 15px;">Questo modo bilancia protezione attiva e mantenimento di bassa latenza, cruciale per operazioni di rete senza interruzioni.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">4. NSM Mode</div>
+                <div class="card-text">
+                    <p>Suricata si trasforma in un <strong>meccanismo di logging dedicato</strong>, evitando capacità di analisi o prevenzione attiva o passiva del traffico.</p>
+                    <p style="margin-top: 15px;">Registra meticolosamente ogni frammento di informazione di rete che incontra, fornendo una ricchezza di dati per investigazioni retrospettive di incidenti di sicurezza, nonostante l'alto volume di dati generati.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 4;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

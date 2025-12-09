@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 20</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Analisi Stringhe</h1>
+        <div class="subtitle">Testo in chiaro</div>
+
+        
+        <div class="card border-blue">
+            <div class="card-title">strings.exe</div>
+            <div class="card-text">
+                <p>Estrae sequenze di caratteri stampabili (ASCII e Unicode). Spesso è la prima cosa che si fa.</p>
+                <p>Cosa cerchiamo?</p>
+                <ul>
+                    <li>Indirizzi IP, URL, Email.</li>
+                    <li>Nomi di file, percorsi di registro.</li>
+                    <li>Messaggi di errore (che rivelano il compilatore o la logica).</li>
+                    <li>Percorsi PDB (es. <code>C:\Users\Hacker\Project\virus.pdb</code>).</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 20;</script>
+    <script src="main.js"></script>
+</body>
+</html>

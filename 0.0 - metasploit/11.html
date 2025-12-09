@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Selezione e Utilizzo Moduli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🎯 Selezione e Utilizzo Moduli</h1>
+        <div class="subtitle">Come selezionare e configurare un exploit</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🔧 Selezionare un Modulo</div>
+            <div class="card-text">
+                <p>Dopo aver trovato l'exploit desiderato, possiamo selezionarlo usando il <strong>numero indice</strong> o il <strong>percorso completo</strong>.</p>
+                <br>
+                <p><strong>Metodo 1 - Usando l'indice:</strong></p>
+                <div class="code-box">msf6 > use 0</div>
+                <br>
+                <p><strong>Metodo 2 - Usando il percorso:</strong></p>
+                <div class="code-box">msf6 > use exploit/windows/smb/ms17_010_psexec</div>
+                <br>
+                <p style="color: #4CAF50;">Il prompt cambierà per indicare il modulo selezionato:</p>
+                <div class="code-box">msf6 exploit(windows/smb/ms17_010_psexec) ></div>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">📋 Comando INFO</div>
+                <div class="card-text">
+                    <p>Per ottenere informazioni dettagliate sul modulo:</p>
+                    <div class="code-box">msf6 exploit(...) > info</div>
+                    <br>
+                    <p><strong>Mostra:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Nome e descrizione</li>
+                        <li>Autori</li>
+                        <li>Target disponibili</li>
+                        <li>Opzioni base</li>
+                        <li>Riferimenti (CVE, URL)</li>
+                        <li>Rank di affidabilità</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">⚙️ Comando SHOW OPTIONS</div>
+                <div class="card-text">
+                    <p>Per vedere le opzioni configurabili:</p>
+                    <div class="code-box">msf6 exploit(...) > show options</div>
+                    <br>
+                    <p><strong>Mostra:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Nome opzione</li>
+                        <li>Valore corrente</li>
+                        <li>Se è richiesta (Required)</li>
+                        <li>Descrizione</li>
+                    </ul>
+                    <br>
+                    <p style="color: #FFD54F;">💡 Cerca "Yes" nella colonna Required!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🎪 Esempio Completo</div>
+            <div class="card-text">
+                <p><strong>Scenario:</strong> Vogliamo usare l'exploit MS17-010 EternalRomance</p>
+                <div class="code-box">msf6 > search ms17_010
+msf6 > use 1
+msf6 exploit(windows/smb/ms17_010_psexec) > info
+msf6 exploit(windows/smb/ms17_010_psexec) > show options
+
+Module options (exploit/windows/smb/ms17_010_psexec):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   RHOSTS                     yes       The target host(s)
+   RPORT     445              yes       The target port (TCP)
+   
+Payload options (windows/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   LHOST                      yes       The listen address
+   LPORT     4444             yes       The listen port</div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 11;</script>
+    <script src="main.js"></script>
+</body>
+</html>

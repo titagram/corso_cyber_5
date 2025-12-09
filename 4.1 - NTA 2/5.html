@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Rogue AP - Slide 5</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Evil Twin & Rogue AP</h1>
+        <div class="subtitle">"Quel WiFi aziendale sembra... diverso"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">🎭 Il Gemello Cattivo</div>
+                <div class="card-text">
+                    <p>Un attaccante ha creato un Access Point con lo stesso nome (SSID) del nostro, ma non è il nostro.</p>
+                    <p>È un <strong>Evil Twin</strong>. Se un utente si collega, l'attaccante vede tutto. Come distinguerli? Il nostro AP legittimo invia informazioni di sicurezza <strong>RSN</strong>. Il loro no.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🧐 Differenze Sottili</div>
+                <div class="card-text">
+                    <p>Guardiamo i <strong>Beacon Frames</strong> (fari di segnalazione dell'AP).</p>
+                    <p>Filtro: <code>wlan.fc.type == 00 && wlan.fc.type_subtype == 8</code></p>
+                    <p>Dobbiamo trovare chi si è connesso all'AP falso.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>rogueap.cap</code>.</p>
+                <p>1. L'AP legittimo ha tag RSN. L'Evil Twin no. L'Evil Twin ha MAC: <code>f8:14:fe:4d:e6:f2</code>.</p>
+                <p>2. Filtriamo per vedere chi sta parlando con l'Evil Twin (destination address):<br><code>wlan.da == f8:14:fe:4d:e6:f2</code></p>
+                <p>3. A parte il router legittimo, c'è un dispositivo vittima che sta comunicando. Qual è il suo MAC?</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">2c:6d:c1:af:eb:91</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 5;</script>
+    <script src="main.js"></script>
+</body>
+</html>

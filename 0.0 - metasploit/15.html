@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Introduzione ai Payloads</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">📦 Introduzione ai Payloads</h1>
+        <div class="subtitle">Il codice che viene eseguito dopo l'exploit</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Cos'è un Payload?</div>
+            <div class="card-text">
+                <p>Un <strong>Payload</strong> in Metasploit è un modulo che assiste l'exploit restituendo tipicamente una shell all'attacker.</p>
+                <br>
+                <p><strong>Il processo completo:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>1️⃣ <strong>Exploit</strong> - Sfrutta la vulnerabilità e bypassa le funzionalità standard del servizio</li>
+                    <li>2️⃣ <strong>Payload</strong> - Viene eseguito sul sistema target</li>
+                    <li>3️⃣ <strong>Connessione</strong> - Stabilisce un foothold (tipicamente reverse connection)</li>
+                </ul>
+                <br>
+                <p style="color: #667eea; font-weight: 600;">💡 Exploit e Payload lavorano insieme ma hanno ruoli distinti!</p>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-bottom: 25px;">
+            <div class="card-title">🔀 Staged vs Non-Staged Payloads</div>
+            <div class="card-text">
+                <p>La differenza è rappresentata dal simbolo <span class="tech-term">/</span> nel nome del payload:</p>
+                <br>
+                <div class="grid-2-col">
+                    <div>
+                        <p><strong>❌ Non-Staged (Single):</strong></p>
+                        <div class="code-box">windows/shell_bind_tcp</div>
+                        <p style="margin-top: 10px; color: #FFD54F;">Nessuno <span class="tech-term">/</span> dopo windows = Single payload</p>
+                    </div>
+                    <div>
+                        <p><strong>✅ Staged:</strong></p>
+                        <div class="code-box">windows/shell/bind_tcp</div>
+                        <p style="margin-top: 10px; color: #4CAF50;">Presenza di <span class="tech-term">/</span> = Staged (stager + stage)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-3-col">
+            <div class="card border-yellow">
+                <div class="card-title">1️⃣ Singles</div>
+                <div class="card-text">
+                    <p><strong>Payload tutto-in-uno</strong></p>
+                    <br>
+                    <p>Contiene exploit e shellcode completo in un unico payload.</p>
+                    <br>
+                    <p><strong>Vantaggi:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Più stabili</li>
+                        <li>Self-contained</li>
+                        <li>Risultato immediato</li>
+                    </ul>
+                    <br>
+                    <p><strong>Svantaggi:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Dimensioni maggiori</li>
+                        <li>Alcuni exploit non supportano payload grandi</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">2️⃣ Stagers</div>
+                <div class="card-text">
+                    <p><strong>Primo stadio del payload</strong></p>
+                    <br>
+                    <p>Piccolo payload che stabilisce una connessione di rete tra attacker e vittima.</p>
+                    <br>
+                    <p><strong>Caratteristiche:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Piccoli e affidabili</li>
+                        <li>Stabiliscono il canale</li>
+                        <li>Attendono lo stage successivo</li>
+                    </ul>
+                    <br>
+                    <p>Esempi: <span class="tech-term">reverse_tcp</span>, <span class="tech-term">bind_tcp</span></p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">3️⃣ Stages</div>
+                <div class="card-text">
+                    <p><strong>Secondo stadio - Funzionalità avanzate</strong></p>
+                    <br>
+                    <p>Componenti scaricati dagli stager, senza limiti di dimensione.</p>
+                    <br>
+                    <p><strong>Esempi:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li><span class="tech-term">Meterpreter</span></li>
+                        <li><span class="tech-term">VNC Injection</span></li>
+                        <li><span class="tech-term">Shell avanzate</span></li>
+                    </ul>
+                    <br>
+                    <p>Usano middle stagers per download completi e prestazioni migliori.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 15;</script>
+    <script src="main.js"></script>
+</body>
+</html>

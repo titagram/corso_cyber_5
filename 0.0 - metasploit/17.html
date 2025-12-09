@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Ricerca e Selezione Payloads</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🔎 Ricerca e Selezione Payloads</h1>
+        <div class="subtitle">Come trovare e selezionare il payload giusto</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">📋 Visualizzare i Payloads</div>
+            <div class="card-text">
+                <p>Dopo aver selezionato un exploit, possiamo vedere i payloads compatibili:</p>
+                <div class="code-box">msf6 exploit(windows/smb/ms17_010_eternalblue) > show payloads
+
+Payloads
+========
+   #   Name                                                   Rank
+   -   ----                                                   ----
+   0   generic/custom                                         normal
+   1   generic/shell_bind_tcp                                 normal
+   2   generic/shell_reverse_tcp                              normal
+   6   windows/x64/meterpreter/bind_tcp                       normal
+   15  windows/x64/meterpreter/reverse_tcp                    normal
+   16  windows/x64/meterpreter/reverse_tcp_rc4                normal
+   17  windows/x64/meterpreter/reverse_tcp_uuid               normal</div>
+                <br>
+                <p style="color: #4CAF50;">✅ I payloads mostrati sono automaticamente filtrati per essere compatibili con l'exploit selezionato e il sistema target.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">🔍 Filtrare con GREP</div>
+                <div class="card-text">
+                    <p>Quando ci sono molti payloads, usa <span class="tech-term">grep</span> per filtrare:</p>
+                    <br>
+                    <p><strong>Cercare Meterpreter:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > grep meterpreter show payloads
+
+   6   windows/x64/meterpreter/bind_tcp
+   15  windows/x64/meterpreter/reverse_tcp
+   16  windows/x64/meterpreter/reverse_tcp_rc4</div>
+                    <br>
+                    <p><strong>Doppio filtro:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > grep meterpreter grep reverse_tcp show payloads
+
+   15  windows/x64/meterpreter/reverse_tcp
+   16  windows/x64/meterpreter/reverse_tcp_rc4</div>
+                    <br>
+                    <p><strong>Contare risultati:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > grep -c meterpreter show payloads
+[*] 14</div>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">⚙️ Selezionare un Payload</div>
+                <div class="card-text">
+                    <p><strong>Per numero indice:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > set payload 15
+payload => windows/x64/meterpreter/reverse_tcp</div>
+                    <br>
+                    <p><strong>Per nome completo:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > set payload windows/x64/meterpreter/reverse_tcp
+payload => windows/x64/meterpreter/reverse_tcp</div>
+                    <br>
+                    <p><strong>Verificare:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > show options
+
+Payload options (windows/x64/meterpreter/reverse_tcp):
+   Name      Current Setting  Required
+   ----      ---------------  --------
+   EXITFUNC  thread           yes
+   LHOST                      yes
+   LPORT     4444             yes</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🎯 Payloads Comuni per Windows</div>
+            <div class="card-text">
+                <div class="grid-3-col">
+                    <div>
+                        <p><strong>🔷 Shell Standard:</strong></p>
+                        <div class="code-box">windows/shell_reverse_tcp
+windows/shell_bind_tcp
+windows/x64/shell_reverse_tcp</div>
+                    </div>
+                    <div>
+                        <p><strong>👻 Meterpreter:</strong></p>
+                        <div class="code-box">windows/meterpreter/reverse_tcp
+windows/meterpreter/reverse_https
+windows/x64/meterpreter/reverse_tcp</div>
+                    </div>
+                    <div>
+                        <p><strong>🔧 Utility:</strong></p>
+                        <div class="code-box">windows/exec
+windows/adduser
+windows/x64/powershell_reverse_tcp</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">💡 Consigli per la Selezione</div>
+            <div class="card-text">
+                <p><strong>1. Reverse TCP vs Bind TCP:</strong> Preferisci reverse_tcp (meno rilevabile)</p>
+                <p><strong>2. Architettura:</strong> x64 per sistemi a 64-bit, x86 per 32-bit</p>
+                <p><strong>3. Evasione:</strong> Considera reverse_https o reverse_http per bypassare firewall</p>
+                <p><strong>4. Funzionalità:</strong> Usa Meterpreter per post-exploitation avanzata</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 17;</script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 21</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Offuscamento</h1>
+        <div class="subtitle">Nascondere il testo</div>
+
+        
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Stack Strings</div>
+                <div class="card-text">
+                    <p>Invece di scrivere "password" nel file, il malware costruisce la parola carattere per carattere in memoria durante l'esecuzione.</p>
+                    <p><code>strings</code> non la vedrà mai.</p>
+                </div>
+            </div>
+            <div class="card border-green">
+                <div class="card-title">FLOSS</div>
+                <div class="card-text">
+                    <p>Tool di FireEye che simula l'esecuzione del codice per estrarre stringhe offuscate.</p>
+                    <p>Se <code>strings</code> non trova nulla di interessante, prova <code>floss</code>.</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 21;</script>
+    <script src="main.js"></script>
+</body>
+</html>

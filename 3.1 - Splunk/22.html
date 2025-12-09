@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>DCSync e LSASS Dumping - Slide 22</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Detection di Attacchi Avanzati</h1>
+        <div class="subtitle">DCSync e LSASS Dumping</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">DCSync Attack Detection</div>
+                <div class="card-text">
+                    <p><strong>Query:</strong></p>
+                    <div class="code-box">index="main" EventCode=4662 Access_Mask=0x100 Account_Name!=*$</div>
+                    <p style="margin-top: 15px;"><strong>Spiegazione:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><strong>EventCode 4662:</strong> Triggerato quando un oggetto AD viene accessato</li>
+                        <li><strong>Access_Mask 0x100:</strong> Richiede Control Access tipicamente necessario per DCSync</li>
+                        <li><strong>Account_Name!=*$:</strong> Verifica dove oggetti AD sono accessati direttamente da utenti invece che da account macchina</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Validazione DCSync</div>
+                <div class="card-text">
+                    <p>Per validare che siano tentativi DCSync, valutiamo basandoci sul campo <code>properties</code>.</p>
+                    <p style="margin-top: 15px;">Ricercando i GUID trovati, scopriamo che il primo è collegato a <strong>DS-Replication-Get-Changes-All</strong>, che "...permette la replica di dati di dominio segreti".</p>
+                    <p style="margin-top: 15px;"><strong>Implicazioni:</strong> Questo conferma che un tentativo DCSync è stato fatto ed eseguito con successo. L'attaccante ha probabilmente estratto tutti gli account all'interno di AD!</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/14.png" alt="Linux Syslog" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/15.png" alt="Linux Host" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/16.png" alt="Command Lines" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/17.png" alt="Hosts Affected" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+
+        <div class="card border-purple" style="margin-top: 30px;">
+            <div class="card-title">LSASS Dumping Detection</div>
+            <div class="card-text">
+                <p>Per individuare lsass dumping, identifichiamo processi che aprono handle a lsass:</p>
+                <div class="code-box">index="main" EventCode=10 lsass | stats count by SourceImage</div>
+                <p style="margin-top: 15px;">Sysmon event code 10 fornisce dati su process access o processi che aprono handle ad altri processi.</p>
+                <p style="margin-top: 15px;">I più evidenti sono <code>notepad</code> (data la sua assurdità) e <code>rundll32</code> (data la sua frequenza limitata).</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/18.png" alt="DCSync Query" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/19.png" alt="GUIDs" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/20.png" alt="GUID Search 1" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/21.png" alt="GUID Search 2" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/22.png" alt="GUID Search 3" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 22;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

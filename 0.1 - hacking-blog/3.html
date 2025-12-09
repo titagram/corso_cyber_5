@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Walkthrough "Blog" CTF - Enumerazione Utenti WordPress</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Enumerazione: Ridurre il campo di battaglia</h1>
+        
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Azione Pratica</div>
+                <div class="card-text">
+                    <p><strong>Comando:</strong></p>
+                    <div class="code-box">wpscan --url http://blog.thm -e u</div>
+                    <br>
+                    <p><strong>Risultato:</strong></p>
+                    <div class="code-box">Trovati utenti `kwheel`, `bjoel`.</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Analisi Tecnica</div>
+                <div class="card-text">
+                    <p><strong>Come funziona:</strong> WPScan non "indovina". Interroga le <span class="tech-term">REST API</span> (`/wp-json/wp/v2/users`) che, di default, espongono la lista utenti pubblica in formato JSON. Alternativamente, analizza i redirect degli archivi autore (`/?author=1`).</p>
+                    <p><strong>Perché è critico:</strong> Conoscere gli username validi trasforma un attacco Brute Force esponenziale (indovina User + Password) in uno lineare (indovina solo la Password).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 3;</script>
+    <script src="main.js"></script>
+</body>
+</html>

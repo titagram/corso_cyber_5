@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>XSS Analysis - Slide 14</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Cross-Site Scripting (XSS)</h1>
+        <div class="subtitle">"Chi ha rubato i miei biscotti?"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">🍪 Cookie Theft</div>
+                <div class="card-text">
+                    <p>Un amministratore visita una pagina interna e... il suo account viene compromesso all'istante.</p>
+                    <p>Causa: <strong>XSS</strong>. Un attaccante ha iniettato JavaScript malevolo nella pagina. Lo script ha letto i cookie dell'admin e li ha spediti al server dell'attaccante.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🕵️‍♂️ Forensics</div>
+                <div class="card-text">
+                    <p>In Wireshark, vediamo la richiesta HTTP generata dallo script malevolo.</p>
+                    <p>Vedremo una richiesta verso un host esterno che contiene, nei parametri o nell'URL, i dati sensibili della vittima (spesso il session cookie).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>XSS_Simple.pcapng</code>.</p>
+                <p>1. Ispeziona il <strong>primo pacchetto</strong> (o segui il primo stream HTTP).</p>
+                <p>2. Cerca i dati inviati. Troverai un valore che sembra un token o un cookie.</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">mZjQ17NLXY8ZNBbJCS0O</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 14;</script>
+    <script src="main.js"></script>
+</body>
+</html>

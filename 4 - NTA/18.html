@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tcpdump - Filtri</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Tcpdump - Filtri</h1>
+        <div class="subtitle">Filtraggio Avanzato del Traffico</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Filtri Base</div>
+                <div class="card-text">
+                    <p><span class="tech-term">host</span> - Filtra traffico che coinvolge l'host designato (bidirezionale)</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">src/dest</span> - Modificatori per designare host o porta sorgente/destinazione</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">net</span> - Mostra traffico da/verso la rete designata (usa notazione /)</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">proto</span> - Filtra per tipo di protocollo (tcp, udp, icmp)</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Filtri Porte</div>
+                <div class="card-text">
+                    <p><span class="tech-term">port</span> - Bidirezionale, mostra traffico con la porta specificata come sorgente o destinazione</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">portrange</span> - Permette di specificare un range di porte (es. 0-1024)</p>
+                    <p style="margin-top: 15px;"><strong>Nota:</strong> I filtri porta funzionano meglio quando combinati con il protocollo (es. tcp port 80 per HTTP)</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Filtri Dimensione</div>
+                <div class="card-text">
+                    <p><span class="tech-term">less/greater</span> - Cerca pacchetti o opzioni di protocollo di una dimensione specifica</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong> <code>less 64</code> mostra solo pacchetti piccoli (spesso SYN, FIN, KeepAlive)</p>
+                    <p style="margin-top: 10px;"><strong>Esempio:</strong> <code>greater 500</code> mostra solo pacchetti grandi (utile per trasferimenti file)</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Operatori Logici</div>
+                <div class="card-text">
+                    <p><span class="tech-term">and/&&</span> - Concatena due filtri diversi (entrambe le condizioni devono essere soddisfatte)</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">or</span> - Match su una delle due condizioni (non devono essere entrambe soddisfatte)</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">not/!</span> - Modificatore che dice "tutto tranne x" (es. not udp)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">Esempi Pratici</div>
+            <div class="card-text">
+                <div class="code-box" style="margin-top: 15px;">
+# Cattura traffico da un host specifico
+sudo tcpdump -i eth0 host 192.168.1.100
+
+# Solo traffico TCP sulla porta 443
+sudo tcpdump -i eth0 tcp port 443
+
+# Traffico da una rete specifica
+sudo tcpdump -i eth0 dest net 192.168.1.0/24
+
+# Escludi ICMP
+sudo tcpdump -i eth0 not icmp
+
+# Combinazione di filtri
+sudo tcpdump -i eth0 host 192.168.1.100 and tcp port 80
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 18;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

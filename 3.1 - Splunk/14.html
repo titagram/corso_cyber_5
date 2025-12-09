@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Identificare Dati - Approccio UI - Slide 14</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Identificare i Dati Disponibili</h1>
+        <div class="subtitle">Approccio 2: Utilizzare l'Interfaccia Utente</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Data Sources</div>
+                <div class="card-text">
+                    <p>Per identificare le fonti dati:</p>
+                    <ol style="margin-top: 10px; padding-left: 20px;">
+                        <li>Naviga al menu <strong>Settings</strong> (angolo superiore destro)</li>
+                        <li>Seleziona <strong>Data inputs</strong></li>
+                        <li>Vedrai una lista di vari metodi di input dati:
+                            <ul style="margin-top: 5px; padding-left: 20px;">
+                                <li>Files & directories</li>
+                                <li>HTTP event collector</li>
+                                <li>Forwarders</li>
+                                <li>Scripts</li>
+                                <li>E molti altri...</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Data (Events)</div>
+                <div class="card-text">
+                    <p>Per identificare gli eventi:</p>
+                    <ol style="margin-top: 10px; padding-left: 20px;">
+                        <li>Naviga all'app <strong>Search & Reporting</strong></li>
+                        <li>Esplora gli eventi in <strong>Fast mode</strong> per scansione rapida</li>
+                        <li>Usa <strong>Verbose mode</strong> per dettagli approfonditi di ogni evento, inclusi dati raw e tutti i campi estratti</li>
+                        <li>Nella barra di ricerca, puoi inserire <code>*</code> per vedere tutti i dati indicizzati (usa il time picker per selezionare un intervallo più piccolo)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-purple">
+                <div class="card-title">Fields</div>
+                <div class="card-text">
+                    <p>Per identificare i campi:</p>
+                    <ol style="margin-top: 10px; padding-left: 20px;">
+                        <li>Clicca su qualsiasi evento nei risultati per espanderlo</li>
+                        <li>Sul lato sinistro vedrai due categorie:
+                            <ul style="margin-top: 5px; padding-left: 20px;">
+                                <li><strong>Selected Fields:</strong> Campi sempre mostrati (host, source, sourcetype)</li>
+                                <li><strong>Interesting Fields:</strong> Campi che appaiono in almeno il 20% degli eventi</li>
+                            </ul>
+                        </li>
+                        <li>Cliccando <strong>All fields</strong>, vedrai tutti i campi presenti negli eventi</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Data Models</div>
+                <div class="card-text">
+                    <p>I Data Models forniscono una vista organizzata e gerarchica dei dati.</p>
+                    <p style="margin-top: 15px;"><strong>Per accedere:</strong></p>
+                    <ol style="margin-top: 10px; padding-left: 20px;">
+                        <li>Settings → Data Models (sezione Knowledge)</li>
+                        <li>Visualizza la struttura gerarchica divisa in oggetti</li>
+                        <li>Ogni oggetto rappresenta una parte specifica dei dati e contiene campi rilevanti</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 14;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

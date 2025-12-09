@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>FTP - File Transfer Protocol</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">FTP - File Transfer Protocol</h1>
+        <div class="subtitle">Protocollo di Trasferimento File</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Caratteristiche FTP</div>
+                <div class="card-text">
+                    <p>Protocollo del livello Applicativo che abilita il trasferimento rapido di dati tra dispositivi informatici.</p>
+                    <p style="margin-top: 15px;"><strong>Nota:</strong> FTP è stabilito come protocollo non sicuro. La maggior parte degli utenti è passata a strumenti come <span class="tech-term">SFTP</span> per trasferire file attraverso canali sicuri.</p>
+                    <p style="margin-top: 15px;">La maggior parte dei browser web moderni ha eliminato il supporto per FTP a partire dal 2020.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Porte e Modalità</div>
+                <div class="card-text">
+                    <p><strong>Porte utilizzate:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><span class="tech-term">Porta 20:</span> Trasferimento dati</li>
+                        <li><span class="tech-term">Porta 21:</span> Comandi di controllo</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Modalità:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><strong>Attiva:</strong> Default, server ascolta comando PORT dal client</li>
+                        <li><strong>Passiva:</strong> Client invia PASV, server risponde con IP e porta</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <img src="img/ftp-example.png" alt="FTP Command & Response Examples" style="max-width: 900px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Comandi FTP Comuni</div>
+            <div class="card-text">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <th style="padding: 10px; text-align: left;">Comando</th>
+                        <th style="padding: 10px; text-align: left;">Descrizione</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">USER</span></td>
+                        <td style="padding: 10px;">Specifica l'utente per il login</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">PASS</span></td>
+                        <td style="padding: 10px;">Invia la password per l'utente</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">LIST</span></td>
+                        <td style="padding: 10px;">Mostra lista file nella directory corrente</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">RETR</span></td>
+                        <td style="padding: 10px;">Recupera un file dal server FTP</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><span class="tech-term">QUIT</span></td>
+                        <td style="padding: 10px;">Termina la sessione</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 13;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

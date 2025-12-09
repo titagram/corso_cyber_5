@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Rilevamento Intrusioni con Zeek</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Rilevamento Intrusioni con Zeek</h1>
+        <div class="subtitle">Esempi Pratici</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Esempio 1: Rilevamento Beaconing</div>
+                <div class="card-text">
+                    <p>Il <strong>beaconing</strong> è un processo mediante il quale il malware comunica con il suo server C2 per ricevere istruzioni o esfiltrare dati.</p>
+                    <p style="margin-top: 15px;">Analizzando i log di connessione (conn.log), possiamo cercare pattern nel traffico in uscita:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Connessioni ripetute allo stesso IP/dominio di destinazione</li>
+                        <li>Dimensione dati costante nei dati inviati</li>
+                        <li>Timing della connessione (es. ogni 5 secondi)</li>
+                    </ul>
+                    <p style="margin-top: 15px;">Questi sono tutti indicativi di potenziale comportamento di beaconing.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Esempio 2: Rilevamento DNS Exfiltration</div>
+                <div class="card-text">
+                    <p>Zeek è utile quando sospettiamo esfiltrazione di dati. L'esfiltrazione di dati può essere difficile da rilevare poiché spesso imita traffico di rete normale.</p>
+                    <p style="margin-top: 15px;">Possiamo utilizzare:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><span class="tech-term">files.log</span> - Identificare grandi quantità di dati inviati a destinazioni esterne insolite</li>
+                        <li><span class="tech-term">dns.log</span> - Identificare potenziali canali di esfiltrazione covert come DNS tunneling</li>
+                        <li><span class="tech-term">http.log</span> - Identificare richieste POST HTTP a domini sospetti</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Esempio 3: Rilevamento TLS Exfiltration</div>
+                <div class="card-text">
+                    <p>Per rilevare esfiltrazione di dati su TLS, possiamo analizzare <span class="tech-term">conn.log</span> per identificare connessioni con volumi insolitamente alti di dati inviati.</p>
+                    <p style="margin-top: 15px;">Utilizzando <code>zeek-cut</code> e strumenti come <code>datamash</code>, possiamo aggregare e analizzare i dati per identificare pattern sospetti.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Esempio 4: Rilevamento PsExec</div>
+                <div class="card-text">
+                    <p>PsExec è frequentemente usato per amministrazione remota in ambienti Active Directory, ma è anche preferito dagli avversari per attacchi di esecuzione remota di codice.</p>
+                    <p style="margin-top: 15px;">Possiamo identificare l'uso tipico di PsExec utilizzando i log Zeek:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><span class="tech-term">smb_files.log</span> - Trasferimenti SMB</li>
+                        <li><span class="tech-term">dce_rpc.log</span> - Operazioni DCE-RPC</li>
+                        <li><span class="tech-term">smb_mapping.log</span> - Mapping di share SMB</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 20;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>IP TTL - Slide 8</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">IP TTL Attacks</h1>
+        <div class="subtitle">"Pacchetti a orologeria"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">⏳ Time To Live</div>
+                <div class="card-text">
+                    <p>Il <strong>TTL (Time To Live)</strong> è un contatore che decresce a ogni salto (router) che il pacchetto fa. Se arriva a 0, il pacchetto muore.</p>
+                    <p>Serve a evitare che i pacchetti girino all'infinito. Ma un attaccante può usarlo per <strong>evadere l'IDS</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">🕵️‍♂️ Evasione IDS</div>
+                <div class="card-text">
+                    <p>Immagina: L'attaccante sa che l'IDS è a 2 salti di distanza, e la vittima a 3.</p>
+                    <p>Invia un pacchetto malevolo con TTL=2. L'IDS lo riceve, lo analizza (magari non lo blocca subito), ma il pacchetto muore PRIMA di arrivare alla vittima.</p>
+                    <p>Poi invia frammenti diversi con TTL diversi per confondere i sistemi di sicurezza.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-green">
+            <div class="card-title">🛡️ Difesa</div>
+            <div class="card-text">
+                <p>In Wireshark, controlla sempre la colonna TTL o il campo IPv4 Header.</p>
+                <p>Se vedi pacchetti con <strong>TTL molto bassi (1, 2, 3)</strong> che non sono traceroute, è un segnale di allarme rosso.</p>
+                <p><em>Setup: Configura il tuo firewall per scartare pacchetti con TTL sospettosamente bassi.</em></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 8;</script>
+    <script src="main.js"></script>
+</body>
+</html>

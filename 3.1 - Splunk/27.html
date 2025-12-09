@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Altri Esempi Detection TTPs - Slide 27</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Altri Esempi di Detection TTP</h1>
+        <div class="subtitle">Pattern di Evasione e Comportamenti Sospetti</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Esecuzione da Location Atipiche</div>
+                <div class="card-text">
+                    <p><strong>Detection di esecuzione dalla cartella Downloads:</strong></p>
+                    <div class="code-box">index="main" EventCode=1 | regex Image="C:\\\\Users\\\\.*\\\\Downloads\\\\.*" | stats count by Image</div>
+                    <p style="margin-top: 15px;">Identifica qualsiasi creazione processo (EventCode=1) che si verifica nella cartella Downloads di un utente.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Creazione Executables/DLLs</div>
+                <div class="card-text">
+                    <p><strong>Detection di creazione di .exe o .dll fuori dalla directory Windows:</strong></p>
+                    <div class="code-box">index="main" EventCode=11 (TargetFilename="*.exe" OR TargetFilename="*.dll") TargetFilename!="*\\windows\\*" | stats count by User, TargetFilename | sort + count</div>
+                    <p style="margin-top: 15px;">Identifica potenziale attività malware controllando la creazione di file eseguibili e DLL fuori dalla directory Windows.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 30px;">
+            <div class="card border-purple">
+                <div class="card-title">Misspelling di Binari Legittimi</div>
+                <div class="card-text">
+                    <p><strong>Detection di errori ortografici di PSEXESVC.exe:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 (CommandLine="*psexe*.exe" NOT (CommandLine="*PSEXESVC.exe" OR CommandLine="*PsExec64.exe")) OR (ParentCommandLine="*psexe*.exe" NOT (ParentCommandLine="*PSEXESVC.exe" OR ParentCommandLine="*PsExec64.exe")) OR (ParentImage="*psexe*.exe" NOT (ParentImage="*PSEXESVC.exe" OR ParentImage="*PsExec64.exe")) OR (Image="*psexe*.exe" NOT (Image="*PSEXESVC.exe" OR Image="*PsExec64.exe")) | table Image, CommandLine, ParentImage, ParentCommandLine</div>
+                    <p style="margin-top: 15px;">Gli attaccanti spesso camuffano i loro binari malevoli intenzionalmente scrivendo male binari legittimi.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Porte Non-Standard</div>
+                <div class="card-text">
+                    <p><strong>Detection di connessioni a porte non-standard:</strong></p>
+                    <div class="code-box">index="main" EventCode=3 NOT (DestinationPort=80 OR DestinationPort=443 OR DestinationPort=22 OR DestinationPort=21) | stats count by SourceIp, DestinationIp, DestinationPort | sort - count</div>
+                    <p style="margin-top: 15px;">Gli attaccanti spesso utilizzano porte non-standard durante le loro operazioni, escludendo porte web standard (80, 443) e file transfer (22, 21).</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/145.png" alt="Archive Files" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/155.png" alt="PowerShell Downloads" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/147.png" alt="MS Edge Downloads" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/148.png" alt="Downloads Execution" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/149.png" alt="Exe DLL Creation" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 27;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

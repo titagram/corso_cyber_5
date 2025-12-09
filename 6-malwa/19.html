@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 19</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Section Hashing</h1>
+        <div class="subtitle">Analisi mirata</div>
+
+        
+        <div class="card border-blue">
+            <div class="card-text">
+                <p>A volte l'attaccante modifica solo la sezione dati (es. cambia l'IP del C2), ma il codice (.text) resta identico.</p>
+                <p>Facendo l'hash delle singole sezioni, possiamo vedere cosa è cambiato.</p>
+            </div>
+        </div>
+        <div class="card border-yellow" style="margin-top:20px;">
+            <div class="card-title">⚡ Esercizio</div>
+            <div class="card-text">
+                <p>Usa lo script <code>section_hashing.py</code> su <code>Ransomware.wannacry.exe</code>.</p>
+                <p>Qual è l'MD5 della sezione <code>.rsrc</code>?</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">12e1bd7375d82cca3a51ca48fe22d1a9</span></p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 19;</script>
+    <script src="main.js"></script>
+</body>
+</html>

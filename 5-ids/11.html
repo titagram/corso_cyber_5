@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Opzioni Avanzate delle Regole</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Opzioni Avanzate delle Regole</h1>
+        <div class="subtitle">Modificatori e PCRE</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Rule Buffers</div>
+                <div class="card-text">
+                    <p>Non dobbiamo cercare l'intero pacchetto per ogni match di contenuto. I <span class="tech-term">Rule Buffers</span> risparmiano tempo e risorse.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box" style="margin-top: 10px;">
+alert http any any -> any any (http.accept; content:"image/gif"; sid:1;)
+                    </div>
+                    <p style="margin-top: 15px;"><code>http.accept</code> è uno sticky buffer per match sull'header HTTP Accept. Contiene solo il valore dell'header.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">offset e depth</div>
+                <div class="card-text">
+                    <p><strong>offset:</strong> Informa Suricata sulla posizione di inizio all'interno del pacchetto per il matching.</p>
+                    <p style="margin-top: 15px;"><strong>depth:</strong> Specifica una lunghezza di byte da considerare per il matching.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box" style="margin-top: 10px;">
+content:"|01 02 03|"; offset:0; depth:5;
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">distance e within</div>
+                <div class="card-text">
+                    <p><strong>distance:</strong> Specifica dove Suricata dovrebbe iniziare a cercare il prossimo pattern di contenuto, misurato dalla fine del match di contenuto precedente.</p>
+                    <p style="margin-top: 15px;"><strong>within:</strong> Limita la ricerca a una finestra di ricerca delimitata.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box" style="margin-top: 10px;">
+content:"GET"; offset:0; depth:4; 
+content:"/admin"; distance:10; within:80;
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">dsize</div>
+                <div class="card-text">
+                    <p><strong>dsize:</strong> Match usando la dimensione del payload del pacchetto. Si basa sulla lunghezza del segmento TCP, non sulla lunghezza totale del pacchetto.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box" style="margin-top: 10px;">
+alert http any any -> any any (msg:"Large HTTP response"; dsize:>10000; content:"HTTP/1.1 200 OK"; sid:2003;)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">PCRE - Perl Compatible Regular Expression</div>
+            <div class="card-text">
+                <p>Utilizzare <span class="tech-term">PCRE</span> può essere un game-changer quando si creano regole. Per impiegare PCRE, usiamo l'istruzione <code>pcre</code> seguita da un'espressione regolare.</p>
+                <p style="margin-top: 15px;"><strong>Nota:</strong> Il PCRE dovrebbe essere racchiuso tra barre forward slash iniziali e finali, con eventuali flag posizionati dopo l'ultima barra. Gli anchor sono posizionati dopo e prima delle barre racchiudenti.</p>
+                <p style="margin-top: 15px;"><strong>Consiglio:</strong> Evitare di creare una regola che si basa esclusivamente su PCRE.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 11;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

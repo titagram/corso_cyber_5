@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 14</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Analisi Statica: Workflow</h1>
+        <div class="subtitle">Da dove iniziamo?</div>
+
+        
+        <img src="img/static_analysis_flow.png" class="slide-image" alt="Static Analysis Workflow">
+        <div class="card border-blue">
+            <div class="card-text">
+                <ol>
+                    <li><strong>Identificazione:</strong> Che cos'è veramente questo file?</li>
+                    <li><strong>Fingerprinting:</strong> Calcoliamo gli Hash.</li>
+                    <li><strong>Stringhe:</strong> Cerchiamo testo in chiaro.</li>
+                    <li><strong>Packing:</strong> È compresso o offuscato?</li>
+                    <li><strong>PE Header:</strong> Analizziamo importazioni e sezioni.</li>
+                </ol>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 14;</script>
+    <script src="main.js"></script>
+</body>
+</html>

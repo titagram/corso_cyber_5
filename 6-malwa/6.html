@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 6</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Obiettivi dell'Analisi</h1>
+        <div class="subtitle">Cosa cerchiamo?</div>
+
+        
+        <p>L'analisi non serve solo a dire "è un virus". Dobbiamo rispondere a:</p>
+        <div class="grid-3-col" style="margin-top:20px;">
+            <div class="card border-red">
+                <div class="card-title">1. Comportamento</div>
+                <div class="card-text">
+                    <p>Cosa fa? Cifra file? Ruba password? Attacca la rete?</p>
+                </div>
+            </div>
+            <div class="card border-yellow">
+                <div class="card-title">2. Persistenza</div>
+                <div class="card-text">
+                    <p>Come sopravvive al riavvio? Chiavi di registro? Servizi pianificati?</p>
+                </div>
+            </div>
+            <div class="card border-blue">
+                <div class="card-title">3. Indicatori (IOC)</div>
+                <div class="card-text">
+                    <p>Come lo trovo sugli altri 1000 PC? (Hash, Domini C2, Nomi file).</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 6;</script>
+    <script src="main.js"></script>
+</body>
+</html>

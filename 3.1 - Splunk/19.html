@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Searching Effectively - Slide 19</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Ricerca Efficace</h1>
+        <div class="subtitle">Ottimizzazione delle Query</div>
+
+        <div class="card border-blue">
+            <div class="card-title">Identificare Source Types</div>
+            <div class="card-text">
+                <p>Iniziamo elencando tutti i nostri sourcetypes per approcciare questo come un ambiente sconosciuto da zero.</p>
+                <p style="margin-top: 15px;"><strong>Query:</strong></p>
+                <div class="code-box">index="main" | stats count by sourcetype</div>
+                <p style="margin-top: 15px;">Questo elencherà tutti i sourcetypes disponibili nel tuo ambiente Splunk.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/2.png" alt="Source Types" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/3.png" alt="Sysmon Data" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/4.png" alt="Event Details" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 30px;">
+            <div class="card border-green">
+                <div class="card-title">Performance delle Query</div>
+                <div class="card-text">
+                    <p><strong>Query generica (lenta):</strong></p>
+                    <div class="code-box">index="main" *uniwaldo.local*</div>
+                    <p style="margin-top: 15px;">Questa query restituisce risultati molto più lentamente, anche se il numero di risultati è esattamente lo stesso!</p>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">Query Mirata (veloce)</div>
+                <div class="card-text">
+                    <p><strong>Query mirata al campo:</strong></p>
+                    <div class="code-box">index="main" ComputerName="*uniwaldo.local"</div>
+                    <p style="margin-top: 15px;">Questa query restituisce risultati molto più rapidamente!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 30px;">
+            <div class="card-title">Lezione Importante</div>
+            <div class="card-text">
+                <p><strong>Le ricerche mirate nel tuo SIEM:</strong></p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Si eseguono e restituiscono risultati molto più velocemente</li>
+                    <li>Riducono il consumo di risorse</li>
+                    <li>Permettono ai colleghi di usare il SIEM con meno interruzioni</li>
+                    <li>Sono cruciali quando si convertono query in alert</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Regola d'oro:</strong> Se puoi mirare la ricerca a utenti, reti, macchine specifiche, ecc., sarà sempre a tuo vantaggio farlo, poiché riduce anche molti dati irrilevanti, permettendoti di concentrarti su ciò che conta davvero.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 19;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

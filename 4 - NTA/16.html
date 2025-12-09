@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Approccio all'Analisi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Approccio all'Analisi</h1>
+        <div class="subtitle">Strategie per Trovare Problemi</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">1. Inizia con Protocolli Standard</div>
+            <div class="card-text">
+                <p>Inizia con protocolli standard e lavora verso quelli specifici dell'organizzazione. La maggior parte degli attacchi proviene da internet, quindi deve accedere alla rete interna in qualche modo.</p>
+                <p style="margin-top: 15px;"><strong>Protocolli comuni da controllare:</strong> HTTP/S, FTP, Email, traffico TCP e UDP di base. Poi controlla protocolli che permettono comunicazioni tra reti come SSH, RDP o Telnet.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">2. Cerca Pattern</div>
+                <div class="card-text">
+                    <p>Un host o un insieme di host controlla qualcosa su internet alla stessa ora ogni giorno? Questo è un tipico profilo di Command and Control che può essere facilmente individuato cercando pattern nei dati del traffico.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">3. Controlla Comunicazioni Host-to-Host</div>
+                <div class="card-text">
+                    <p>In una configurazione standard, gli host utente raramente comunicano tra loro. Sii sospettoso di qualsiasi traffico che appare così. Tipicamente gli host comunicano con l'infrastruttura per lease IP, richieste DNS, servizi enterprise.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">4. Cerca Eventi Unici</div>
+                <div class="card-text">
+                    <p>Cose come un host che di solito visita un sito specifico dieci volte al giorno che cambia pattern e lo fa solo una volta è curioso. Vedere una stringa User-Agent diversa o host che parlano con un server su internet è anche qualcosa di cui preoccuparsi.</p>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">5. Non Aver Paura di Chiedere Aiuto</div>
+                <div class="card-text">
+                    <p>Dopo un po' di tempo a guardare catture di pacchetti, le cose possono fondersi insieme e potremmo non vedere il quadro completo. Avere un secondo paio di occhi sui dati può essere di grande aiuto.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 16;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

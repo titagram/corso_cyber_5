@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>HTTP Enumeration - Slide 12</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">HTTP/S Serivce Enumeration</h1>
+        <div class="subtitle">"Chi bussa alla porta 80?"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">🤖 Fuzzing in Corso</div>
+                <div class="card-text">
+                    <p>Il webserver è bombardato. Non sono clienti umani.</p>
+                    <p>Un attaccante sta usando strumenti di <strong>Fuzzing (o directory busting)</strong>. Provano migliaia di indirizzi: <code>/admin</code>, <code>/backup</code>, <code>/conf</code>, sperando di trovare qualcosa che abbiamo dimenticato di proteggere.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">📊 Analisi del Traffico</div>
+                <div class="card-text">
+                    <p>Vedremo una pioggia di richieste <strong>GET</strong>. Molte riceveranno un 404 (Not Found), ma l'attaccante cerca quel singolo 200 OK.</p>
+                    <p>Isolare questo traffico ci permette di bloccare l'IP sorgente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>basic_fuzzing.pcapng</code>.</p>
+                <p>1. Vogliamo quantificare l'attacco sulla porta standard HTTP (80).</p>
+                <p>2. Filtra per metodo GET e porta 80: <code>http.request.method == GET && tcp.port == 80</code></p>
+                <p>3. Conta i pacchetti visualizzati.</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">204</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 12;</script>
+    <script src="main.js"></script>
+</body>
+</html>

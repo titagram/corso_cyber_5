@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Componenti Chiave Splunk - Slide 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Componenti Chiave di Splunk</h1>
+        <div class="subtitle">Elementi Fondamentali della Piattaforma</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Splunk Web Interface</div>
+                <div class="card-text">
+                    <p>Interfaccia grafica attraverso cui gli utenti interagiscono con Splunk.</p>
+                    <p><strong>Funzionalità:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Ricerca dati</li>
+                        <li>Creazione di alert</li>
+                        <li>Dashboard personalizzate</li>
+                        <li>Report e visualizzazioni</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Search Processing Language (SPL)</div>
+                <div class="card-text">
+                    <p>Il linguaggio di query per Splunk, contenente oltre cento comandi, funzioni, argomenti e clausole.</p>
+                    <p><strong>Utilizzo:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Ricerca dati indicizzati</li>
+                        <li>Filtraggio eventi</li>
+                        <li>Trasformazione dati</li>
+                        <li>Visualizzazione risultati</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Backbone dell'analisi dati in Splunk.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-purple">
+                <div class="card-title">Apps e Add-ons</div>
+                <div class="card-text">
+                    <p><strong>Apps:</strong> Forniscono funzionalità specifiche all'interno di Splunk. Consentono la coesistenza di più workspace su una singola istanza Splunk.</p>
+                    <p><strong>Technology Add-ons:</strong> Strato di astrazione per metodi di raccolta dati. Includono estrazioni di campi rilevanti, file di configurazione (props/transforms) e script/binari di supporto.</p>
+                    <p><strong>Splunkbase:</strong> Repository di app pronte all'uso e soluzioni pre-configurate.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Knowledge Objects</div>
+                <div class="card-text">
+                    <p>Oggetti che arricchiscono i dati in Splunk, facilitando ricerca e analisi:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><strong>Fields:</strong> Campi estratti o definiti manualmente</li>
+                        <li><strong>Tags:</strong> Etichette per categorizzare eventi</li>
+                        <li><strong>Event Types:</strong> Classificazioni di eventi</li>
+                        <li><strong>Lookups:</strong> Tabelle di riferimento</li>
+                        <li><strong>Macros:</strong> Query riutilizzabili</li>
+                        <li><strong>Data Models:</strong> Modelli strutturati</li>
+                        <li><strong>Alerts:</strong> Notifiche automatiche</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 3;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

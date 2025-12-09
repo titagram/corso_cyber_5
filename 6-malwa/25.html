@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 25</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Caccia alle API</h1>
+        <div class="subtitle">Dimmi chi chiami e ti dirò chi sei</div>
+
+        
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Process Injection</div>
+                <div class="card-text">
+                    <p>Se un malware importa queste funzioni in sequenza, sta probabilmente iniettando codice in un altro processo:</p>
+                    <ol>
+                        <li><code>OpenProcess</code> (Apre il target)</li>
+                        <li><code>VirtualAllocEx</code> (Crea spazio)</li>
+                        <li><code>WriteProcessMemory</code> (Scrive il payload)</li>
+                        <li><code>CreateRemoteThread</code> (Esegue)</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="card border-yellow">
+                <div class="card-title">Keylogger</div>
+                <div class="card-text">
+                    <p>Se vedi <code>GetAsyncKeystate</code> o <code>SetWindowsHookEx</code> in un "Notepad.exe", è sicuramente un keylogger.</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 25;</script>
+    <script src="main.js"></script>
+</body>
+</html>

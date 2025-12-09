@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Meterpreter Payload</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">👻 Meterpreter Payload</h1>
+        <div class="subtitle">Il payload più potente e versatile di Metasploit</div>
+
+        <div class="card border-purple" style="margin-bottom: 25px;">
+            <div class="card-title">🌟 Cos'è Meterpreter?</div>
+            <div class="card-text">
+                <p>Meterpreter è un <strong>payload multi-faceted avanzato</strong> che utilizza DLL injection per garantire una connessione stabile, difficile da rilevare e persistente.</p>
+                <br>
+                <p><strong>Caratteristiche uniche:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>🔷 <strong>Residente in memoria</strong> - Non lascia tracce sul disco</li>
+                    <li>🔷 <strong>DLL Injection</strong> - Iniettato nei processi esistenti</li>
+                    <li>🔷 <strong>Difficile da rilevare</strong> - Elude i controlli forensi convenzionali</li>
+                    <li>🔷 <strong>Estendibile</strong> - Script e plugin caricabili dinamicamente</li>
+                    <li>🔷 <strong>Persistente</strong> - Può sopravvivere a riavvii</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">🎯 Funzionalità Core</div>
+                <div class="card-text">
+                    <p><strong>File System:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Upload/download files</li>
+                        <li>Navigazione directory</li>
+                        <li>Ricerca files</li>
+                    </ul>
+                    <br>
+                    <p><strong>Processo & Sistema:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Process listing e migrazione</li>
+                        <li>Keylogging</li>
+                        <li>Screenshot e webcam</li>
+                        <li>Hash dumping</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">🚀 Funzionalità Avanzate</div>
+                <div class="card-text">
+                    <p><strong>Network & Privilege:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Port forwarding e pivoting</li>
+                        <li>Privilege escalation</li>
+                        <li>Token impersonation</li>
+                        <li>Route manipulation</li>
+                    </ul>
+                    <br>
+                    <p><strong>Post-Exploitation:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Credential harvesting</li>
+                        <li>Persistence mechanisms</li>
+                        <li>Microphone tapping</li>
+                        <li>Packet sniffing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">🔌 Plugin e Estensibilità</div>
+            <div class="card-text">
+                <p>Meterpreter supporta il caricamento dinamico di script e plugin aggiuntivi:</p>
+                <br>
+                <div class="grid-2-col">
+                    <div>
+                        <p><strong>Plugin Popolari:</strong></p>
+                        <ul style="margin-top: 10px; line-height: 1.8;">
+                            <li><span class="tech-term">Mimikatz</span> - Credential extraction</li>
+                            <li><span class="tech-term">Kiwi</span> - Versione integrata di Mimikatz</li>
+                            <li><span class="tech-term">Incognito</span> - Token manipulation</li>
+                            <li><span class="tech-term">Priv</span> - Privilege escalation</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Caricare un plugin:</strong></p>
+                        <div class="code-box">meterpreter > load kiwi
+Loading extension kiwi...
+  .#####.   mimikatz 2.2.0
+Success.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">💎 Perché Meterpreter?</div>
+            <div class="card-text">
+                <p>Meterpreter offre una <strong>base funzionale vasta e influente</strong> che, combinata con plugin come Mimikatz, ci permette di automatizzare e consegnare rapidamente parti del pentest mantenendo un assessment organizzato ed efficiente nel tempo.</p>
+                <br>
+                <p style="color: #F44336; font-weight: 600;">🔥 È il payload di scelta per la maggior parte degli assessment professionali!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 16;</script>
+    <script src="main.js"></script>
+</body>
+</html>

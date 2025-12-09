@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Intrusion Detection - Introduzione - Slide 18</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Intrusion Detection con Splunk</h1>
+        <div class="subtitle">Scenario Reale</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Contesto</div>
+                <div class="card-text">
+                    <p>Passiamo dall'esplorazione di log su una singola macchina all'investigazione su scala molto più ampia, attraverso numerose macchine per scoprire attività irregolari nell'intera rete.</p>
+                    <p style="margin-top: 15px;"><strong>Strumenti:</strong> Ancora Windows Event logs, ma con uno scope significativamente più ampio.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Obiettivi</div>
+                <div class="card-text">
+                    <p>In questo modulo:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Ci concentreremo su macchine specifiche malevole</li>
+                        <li>Padroneggeremo l'arte di creare query precise</li>
+                        <li>Attiveremo alert per migliorare proattivamente la sicurezza dell'ambiente</li>
+                        <li>Identificheremo e scarteremo falsi positivi</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue" style="margin-top: 30px;">
+            <div class="card-title">Strategia</div>
+            <div class="card-text">
+                <p>La strategia che seguiremo per identificare eventi rispecchierà le lezioni iniziali. Tuttavia, ora ci confrontiamo con un dataset molto più grande invece di una singola collezione di log eventi.</p>
+                <p style="margin-top: 15px;">Dal punto di vista della dashboard Splunk, mireremo a eliminare i falsi positivi.</p>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 30px;">
+            <div class="card-title">Ingesting Data Sources</div>
+            <div class="card-text">
+                <p>Per procedere, abbiamo bisogno di accesso a dati che possiamo analizzare per threat hunting.</p>
+                <p style="margin-top: 15px;"><strong>Fonti disponibili:</strong></p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li><strong>BOTS:</strong> Fornito da Splunk con istruzioni di installazione</li>
+                    <li><strong>nginx_json_logs:</strong> Risorsa utile che fornisce log dummy in formato JSON</li>
+                    <li><strong>Dataset personalizzato:</strong> Oltre 500.000 eventi con multiple infezioni</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Query per recuperare tutti gli eventi:</strong></p>
+                <div class="code-box">index="main" earliest=0</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/1.png" alt="Data Overview" style="width: 100%; max-width: 800px; border-radius: 8px; margin: 20px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 18;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

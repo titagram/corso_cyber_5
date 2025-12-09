@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 15</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Identificazione File</h1>
+        <div class="subtitle">L'abito non fa il monaco</div>
+
+        
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">Double Extension Trick</div>
+                <div class="card-text">
+                    <p>Un attaccante può rinominare <code>virus.exe</code> in <code>fattura.pdf.exe</code>. Se Windows nasconde le estensioni, l'utente vede solo <code>fattura.pdf</code>.</p>
+                    <p>Ancora peggio: rinominare in <code>foto.jpg</code>. Se ci clicchi, Windows prova ad aprirlo come foto e fallisce. Ma se è un exploit...</p>
+                </div>
+            </div>
+            <div class="card border-blue">
+                <div class="card-title">Magic Numbers</div>
+                <div class="card-text">
+                    <p>I primi byte del file dicono la verità.</p>
+                    <p><strong>MZ (4D 5A)</strong> = Windows Executable (PE).</p>
+                    <p><strong>PK (50 4B)</strong> = Zip (o docx/xlsx).</p>
+                    <p><strong>%PDF</strong> = PDF.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio</div>
+            <div class="card-text">
+                <p>Controlla <code>Ransomware.wannacry.exe</code>. Qual è il suo vero tipo?</p>
+                <div class="code-box">file Ransomware.wannacry.exe</div>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">PE32 executable (GUI) Intel 80386</span></p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 15;</script>
+    <script src="main.js"></script>
+</body>
+</html>

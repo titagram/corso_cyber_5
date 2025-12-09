@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Workflow NTA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Workflow NTA</h1>
+        <div class="subtitle">Processo di Analisi del Traffico</div>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="img/workflow.png" alt="NTA Workflow" style="max-width: 800px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">1. Ingest Traffic</div>
+                <div class="card-text">
+                    <p>Una volta decisa la posizione, iniziare a catturare il traffico. Utilizzare filtri di cattura se abbiamo già un'idea di cosa stiamo cercando.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">2. Reduce Noise by Filtering</div>
+                <div class="card-text">
+                    <p>Catturare traffico su un link, specialmente in produzione, può essere estremamente rumoroso. Filtrare il traffico non necessario (es. Broadcast e Multicast) facilita l'analisi.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">3. Analyze and Explore</div>
+                <div class="card-text">
+                    <p>Iniziare a estrarre dati pertinenti al problema. Guardare host specifici, protocolli, flag TCP. Domande chiave:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Il traffico è cifrato o in chiaro?</li>
+                        <li>Utenti accedono a risorse non autorizzate?</li>
+                        <li>Host che normalmente non comunicano lo fanno ora?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">4. Detect and Alert</div>
+                <div class="card-text">
+                    <p>Vediamo errori? Un dispositivo non risponde quando dovrebbe?</p>
+                    <p style="margin-top: 10px;">Utilizzare l'analisi per decidere se ciò che vediamo è benigno o potenzialmente malizioso. Strumenti IDS/IPS possono essere utili qui.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">5. Fix and Monitor</div>
+            <div class="card-text">
+                <p>Non fa parte del loop ma dovrebbe essere incluso in qualsiasi workflow. Se facciamo una modifica o risolviamo un problema, continuare a monitorare la fonte per determinare se il problema è stato risolto.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 5;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,1448 @@
+Introduction to YARA & Sigma
+YARA and Sigma are two essential tools used by SOC analysts to enhance their threat detection and incident response capabilities. They empower analysts with improved threat detection capabilities, efficient log analysis, malware detection and classification, IOC identification, collaboration, customization, and integration with existing security tools.
+
+Both YARA and Sigma rules grant SOC analysts potent capabilities to detect and respond to security threats. YARA excels in file and memory analysis, as well as pattern matching, whereas Sigma is particularly adept at log analysis and SIEM systems.
+
+These detection rules utilize conditional logic applied to logs or files. Analysts craft these rules to pinpoint suspicious activities in logs or match patterns in files. These rules are pivotal in making detections more straightforward to compose, and thus, they constitute a crucial element of an effective threat detection strategy. Both YARA and Sigma adhere to standard formats that facilitate the creation and sharing of detection rules within the cybersecurity community.
+
+Importance of YARA and Sigma rules for SOC Analysts
+Let's explore the key reasons why YARA and Sigma are invaluable for SOC analysts:
+
+Enhanced Threat Detection: YARA and Sigma rules allow SOC analysts to develop customized detection rules tailored to their unique environment and security needs. These rules empower analysts to discern patterns, behaviors, or indicators linked to security threats, thus enabling them to proactively detect and address potential incidents. Various Github repositories provide a wealth of examples of YARA and Sigma rules.
+YARA rules: https://github.com/Yara-Rules/rules/tree/master/malware, https://github.com/mikesxrs/Open-Source-YARA-rules/tree/master
+Sigma rules https://github.com/SigmaHQ/sigma/tree/master/rules, https://github.com/joesecurity/sigma-rules, https://github.com/mdecrevoisier/SIGMA-detection-rules
+Efficient Log Analysis: Sigma rules are essential for log analysis in a SOC setting. Utilizing Sigma rules, analysts can filter and correlate log data from disparate sources, concentrating on events pertinent to security monitoring. This minimizes irrelevant data and enables analysts to prioritize their investigative efforts, leading to more efficient and effective incident response. An open-source tool called Chainsaw can be used to apply Sigma rules to event log files.
+Collaboration and Standardization: YARA and Sigma offer standardized formats and rule structures, fostering collaboration among SOC analysts and tapping into the collective expertise of the broader cybersecurity community. This encourages knowledge sharing, the formulation of best practices, and keeps analysts abreast of cutting-edge threat intelligence and detection methodologies. For instance, "The DFIR Report" shares YARA and Sigma rules derived from their investigations.
+https://github.com/The-DFIR-Report/Yara-Rules
+https://github.com/The-DFIR-Report/Sigma-Rules
+Integration with Security Tools: YARA and Sigma rules can be integrated seamlessly with a plethora of security tools, including SIEM platforms, log analysis systems, and incident response platforms. This integration enables automation, correlation, and enrichment of security events, allowing SOC analysts to incorporate the rules into their existing security infrastructure. As an example, Uncoder.io facilitates the conversion of Sigma rules into tailor-made, performance-optimized queries ready for deployment in the chosen SIEM and XDR systems.
+Malware Detection and Classification: YARA rules are particularly useful for SOC analysts in pinpointing and classifying malware. Leveraging YARA rules, analysts can create specific patterns or signatures that correspond to known malware traits or behaviors. This aids in the prompt detection and mitigation of malware threats, bolstering the organization's overall security posture.
+Indicator of Compromise (IOC) Identification: Both YARA and Sigma rules empower SOC analysts to locate and identify IOCs, which are distinct artifacts or behaviors linked to security incidents or breaches. By embedding IOCs into their rules, analysts can swiftly detect and counter potential threats, thus mitigating the consequences of security incidents and curtailing the duration of attackers' presence within the network.
+
+
+YARA and YARA Rules
+YARA is a powerful pattern-matching tool and rule format used for identifying and classifying files based on specific patterns, characteristics, or content. SOC analysts commonly use YARA rules to detect and classify malware samples, suspicious files, or indicators of compromise (IOCs).
+
+YARA rules are typically written in a rule syntax that defines the conditions and patterns to be matched within files. These rules can include various elements, such as strings, regular expressions, and Boolean logic operators, allowing analysts to create complex and precise detection rules. It's important to note that YARA rules can recognize both textual and binary patterns, and they can be applied to memory forensics activities as well.
+
+When applied, YARA scans files or directories and matches them against the defined rules. If a file matches a specific pattern or condition, it can trigger an alert or warrant further examination as a potential security threat.
+
+Image showing process of detecting malware: identify suspicious pattern, create YARA rule, and scan for similar malware.
+
+YARA rules are especially useful for SOC analysts when analyzing malware samples, conducting forensic investigations, or performing threat hunting activities. The flexibility and extensibility of YARA make it a valuable tool in the cybersecurity community.
+
+Usages of Yara
+Malware Detection and Classification: YARA is commonly used for detecting and identifying malware samples based on specific patterns, characteristics, or indicators. YARA rules can be created to match against known malware signatures, behaviors, or file properties, aiding in the identification of malicious files and potentially preventing further compromise. Within the scope of digital forensics, YARA can also identify suspicious or malicious patterns in captured memory images.
+File Analysis and Classification: YARA is valuable for analyzing and classifying files based on specific patterns or attributes. Analysts can create YARA rules to categorize files by different file formats or file type, version, metadata, packers or other characteristics. This capability is useful in forensic analysis, malware research, or identifying specific file types within large datasets.
+Indicator of Compromise (IOC) Detection: YARA can be employed to search for specific indicators of compromise (IOCs) within files or directories. By defining YARA rules that target specific IOC patterns, such as file names, registry keys, or network artifacts, security teams can identify potential security breaches or ongoing attacks.
+Community-driven Rule Sharing: With YARA, we have the ability to tap into a community that regularly contributes and shares their detection rules. This ensures that we constantly update and refine our detection mechanisms.
+Create Custom Security Solutions: By combining YARA rules with other techniques like static and dynamic analysis, sandboxing, and behavior monitoring, effective security solutions can be created.
+Custom Yara Signatures/Rules: YARA allows us to create custom rules tailored to our organization's specific needs and environment. By deploying these custom rules in our security infrastructure, such as antivirus or endpoint detection and response (EDR) solutions, we can enhance our defense capabilities. Custom YARA rules can help identify unique or targeted threats that are specific to our organization's assets, applications, or industry.
+Incident Response: YARA aids in incident response by enabling analysts to quickly search and analyze files or memory images for specific patterns or indicators. By applying YARA rules during the investigation process, analysts can identify relevant artifacts, determine the scope of an incident, and gather critical information to aid in remediation efforts.
+Proactive Threat Hunting: Instead of waiting for an alert, we can leverage YARA to perform proactive searches across our environments, searching for potential threats or remnants of past infections.
+How Does YARA Work?
+In summary, the YARA scan engine, equipped with YARA modules, scans a set of files by comparing their content against the patterns defined in a set of rules. When a file matches the patterns and conditions specified in a YARA rule, it is considered a detected file. This process allows analysts to efficiently identify files that exhibit specific behaviors or characteristics, aiding in malware detection, IOC identification, and threat hunting. This flow is demonstrated in the diagram below.
+
+Image showing YARA malware detection process: identify suspicious patterns, create YARA rules, scan files, and detect matches using YARA scan engine.
+[yara_working.png]
+
+
+In the above diagram, we can see that the YARA scan engine, using YARA modules, matches patterns defined in a set of rules against a set of files, resulting in the detection of files that meet the specified patterns and conditions. This is how YARA rules are helpful to identify threats. Let's understand this in more detail.
+
+Set of Rules (containing suspicious patterns): First of all, we have one or more YARA rules, which are created by security analysts. These rules define specific patterns, characteristics, or indicators that need to be matched within files. Rules can include strings, regular expressions, byte sequences, and other indicators of interest. The rules are typically stored in a YARA rule file format (e.g., .yara or .yar file) for easy management and reuse.
+Set of Files (for scanning): A set of files, such as executables, documents, or other binary or text-based files, are provided as input to the YARA scan engine. The files can be stored on a local disk, within a directory, or even within memory images or network traffic captures.
+YARA Scan Engine: The YARA scan engine is the core component responsible for performing the actual scanning and matching of files against the defined YARA rules. It utilizes YARA modules, which are sets of algorithms and techniques, to efficiently compare the content of files against the patterns specified in the rules.
+Scanning and Matching: The YARA scan engine iterates through each file in the set, one at a time. For each file, it analyzes the content byte by byte, looking for matches against the patterns defined in the YARA rules. The YARA scan engine uses various matching techniques, including string matching, regular expressions, and binary matching, to identify patterns and indicators within the files.
+Detection of Files: When a file matches the patterns and conditions specified in a YARA rule, it is considered a detected file. The YARA scan engine records information about the match, such as the matched rule, the file path, and the offset within the file where the match occurred and provides output indicating the detection, which can be further processed, logged, or used for subsequent actions.
+YARA Rule Structure
+Let's dive into the structure of a YARA rule. YARA rules consist of several components that define the conditions and patterns to be matched within files. An example of a YARA rule is as follows:
+
+Code: yara
+rule my_rule {
+
+    meta:
+        author = "Author Name"
+        description = "example rule"
+        hash = ""
+    
+    strings: 
+        $string1 = "test"
+        $string2 = "rule"
+        $string3 = "htb"
+
+    condition: 
+        all of them
+} 
+Each rule in YARA starts with the keyword rule followed by a rule identifier. Rule identifiers are case sensitive where the first character cannot be a digit, and cannot exceed 128 characters.
+
+The following keywords are reserved and cannot be used as an identifier:
+
+Image showing a table of YARA keywords including 'all', 'and', 'any', 'ascii', 'at', 'base64', 'condition', 'contains', 'endswith', 'entrypoint', 'false', 'filesize', 'for', 'global', 'import', 'int32', 'matches', 'meta', 'nocase', 'none', 'not', 'or', 'private', 'rule', 'startswith', 'strings', 'true', 'uint16', 'wide', 'xor', 'defined'.
+[yara_keywords.png]
+
+Now, let's go over the YARA rule structure using a rule that identifies strings associated with the WannaCry ransomware as an example. The rule below instructs YARA to flag any file containing all three specified strings as Ransomware_WannaCry.
+
+Code: yara
+rule Ransomware_WannaCry {
+
+    meta:
+        author = "Madhukar Raina"
+        version = "1.0"
+        description = "Simple rule to detect strings from WannaCry ransomware"
+        reference = "https://www.virustotal.com/gui/file/ed01ebfbc9eb5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa/behavior" 
+    
+    strings:
+        $wannacry_payload_str1 = "tasksche.exe" fullword ascii
+        $wannacry_payload_str2 = "www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com" ascii
+        $wannacry_payload_str3 = "mssecsvc.exe" fullword ascii
+    
+    condition:
+        all of them
+}
+That's a basic structure of a YARA rule. It starts with a header containing metadata, followed by conditions that define the context of the files to be matched, and a body that specifies the patterns or indicators to be found. The use of metadata and tags helps in organizing and documenting the rules effectively.
+
+YARA Rule Breakdown:
+
+Rule Header: The rule header provides metadata and identifies the rule. It typically includes:
+
+Rule name: A descriptive name for the rule.
+Rule tags: Optional tags or labels to categorize the rule.
+Rule metadata: Additional information such as author, description, and creation date.
+Example:
+
+Code: yara
+rule Ransomware_WannaCry {
+    meta:
+  ...
+}    
+Rule Meta: The rule meta section allows for the definition of additional metadata for the rule. This metadata can include information about the rule's author, references, version, etc.
+
+Example:
+
+Code: yara
+rule Ransomware_WannaCry {
+    meta:
+        author = "Madhukar Raina"
+        version = "1.0"
+        description = "Simple rule to detect strings from WannaCry ransomware"
+        reference = 	"https://www.virustotal.com/gui/file/ed01ebfbc9eb5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa/behavior" 
+    ...
+}
+Rule Body: The rule body contains the patterns or indicators to be matched within the files. This is where the actual detection logic is defined.
+
+Example:
+
+Code: yara
+rule Ransomware_WannaCry {
+
+    ...    
+
+    strings:
+        $wannacry_payload_str1 = "tasksche.exe" fullword ascii
+        $wannacry_payload_str2 = "www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com" ascii
+        $wannacry_payload_str3 = "mssecsvc.exe" fullword ascii
+
+    ...
+
+}
+Rule Conditions: Rule conditions define the context or characteristics of the files to be matched. Conditions can be based on file properties, strings, or other indicators. Conditions are specified within the condition section.
+
+Example:
+
+Code: yara
+rule Ransomware_WannaCry {
+    ...
+
+    condition:
+        all of them
+}
+In this YARA rule, the condition section simply states all of them, which means that all the strings defined in the rule must be present for the rule to trigger a match.
+
+Let us provide one more example of a condition which specifies that the file size of the analyzed file must be less than 100 kilobytes (KB).
+
+Code: yara
+    condition:
+        filesize < 100KB and (uint16(0) == 0x5A4D or uint16(0) == 0x4D5A)
+This condition also specifies that the first 2 bytes of the file must be either 0x5A4D (ASCII MZ) or 0x4D5A (ASCII ZM), by using uint16(0):
+
+Code: yara
+uint16(offset)
+Here's how uint16(0) works:
+
+uint16: This indicates the data type to be extracted, which is a 16-bit unsigned integer (2 bytes).
+(0): The value inside the parentheses represents the offset from where the extraction should start. In this case, 0 means the function will extract the 16-bit value starting from the beginning of the data being scanned. The condition uses uint16(0) to compare the first 2 bytes of the file with specific values.
+It's important to note that YARA provides a flexible and extensible syntax, allowing for more advanced features and techniques such as modifiers, logical operators, and external modules. These features can enhance the expressiveness and effectiveness of YARA rules for specific detection scenarios.
+
+Remember that YARA rules can be customized to suit our specific use cases and detection needs. Regular practice and experimentation will further enhance our understanding and proficiency with YARA rule creation. YARA documentation contain more details in depth.
+
+
+Developing YARA Rules
+In this section, we'll cover manual and automated YARA rule development.
+
+Let's now navigate to the bottom of this section and click on "Click here to spawn the target system!". Then, let's SSH into the Target IP using the provided credentials. The vast majority of the actions/commands covered from this point up to end of this section can be replicated inside the target, offering a more comprehensive grasp of the topics presented.
+
+Let's dive into the world of YARA rules using a sample named svchost.exe residing in the /home/htb-student/Samples/YARASigma directory of this section's target as an illustration. We want to understand the process behind crafting a YARA rule, so let's get our hands dirty.
+
+Initially, we need to conduct a string analysis on our malware sample.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ strings svchost.exe
+!This program cannot be run in DOS mode.
+UPX0
+UPX1
+UPX2
+3.96
+UPX!
+8MZu
+HcP<H
+<1~o
+VDgxt
+D$ /
+OAUATUWVSH
+15384
+[^_]A\A]
+^$<V
+---SNIP---
+X]_^[H
+QRAPH
+(AXZY
+KERNEL32.DLL
+msvcrt.dll
+ExitProcess
+GetProcAddress
+LoadLibraryA
+VirtualProtect
+exit
+From the first few strings, it becomes evident that the file is packed using the UPX (Ultimate Packer for eXecutables) packer. Given this discovery, we can incorporate UPX-related strings to formulate a basic YARA rule targeting samples packed via UPX.
+
+Code: yara
+rule UPX_packed_executable
+{
+    meta:
+    description = "Detects UPX-packed executables"
+
+    strings: 
+    $string_1 = "UPX0"
+    $string_2 = "UPX1"
+    $string_3 = "UPX2"
+
+    condition:
+    all of them
+}
+Here's a brief breakdown of our YARA rule crafted for detecting UPX-packed executables:
+
+Rule Name: UPX_packed_executable
+Meta Description: Provides a description of the rule, stating that it detects UPX-packed executables.
+Strings Section: strings defines the strings that the rule will search for within the files.
+$string_1 = "UPX0": Matches the string UPX0 within the file.
+$string_2 = "UPX1": Matches the string UPX1 within the file.
+$string_3 = "UPX2": Matches the string UPX2 within the file.
+Condition: condition specifies the criteria that must be met for the rule to trigger a match.
+all of them: Specifies that all the defined strings ($string_1, $string_2, and $string_3) must be found within the file.
+In essence, our UPX_packed_executable rule (located inside this section's target at /home/htb-student/Rules/yara/upx_packed.yar) scans for the strings UPX0, UPX1, and UPX2 inside a file. If the rule finds all three strings, it raises an alert, hinting that the file might be packed with the UPX packer. This rule is a handy tool when we're on the lookout for executables that have undergone compression or obfuscation using the UPX method.
+
+Developing a YARA Rule Through yarGen
+Let's continue our dive into the world of YARA rules using a sample named dharma_sample.exe residing in the /home/htb-student/Samples/YARASigma directory of this section's target.
+
+Once again, we need to conduct a string analysis on our malware sample.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ strings dharma_sample.exe
+!This program cannot be run in DOS mode.
+Rich
+.text
+`.rdata
+@.data
+9A s
+---SNIP---
+~?h@
+~?hP
+hz-A
+u       jd
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>@@@?456789:;<=@@@@@@@
+@@@@@@
+ !"#$%&'()*+,-./0123@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+---SNIP---
+GetProcAddress
+LoadLibraryA
+WaitForSingleObject
+InitializeCriticalSectionAndSpinCount
+LeaveCriticalSection
+GetLastError
+EnterCriticalSection
+ReleaseMutex
+CloseHandle
+KERNEL32.dll
+RSDS%~m
+C:\crysis\Release\PDB\payload.pdb
+---SNIP---
+After we execute the strings command on dharma_sample.exe, we spot C:\crysis\Release\PDB\payload.pdb, which is pretty unique. Alongside other distinct strings, we can craft a more refined YARA rule. Let's employ yarGen to expedite this process.
+
+yarGen is our go-to tool when we need an automatic YARA rule generator. What makes it a gem is its ability to churn out YARA rules based on strings found in malicious files while sidestepping strings common in benign software. This is possible because yarGen comes equipped with a vast database of goodware strings and opcodes. Before diving in, we need to unpack the ZIP archives containing these databases.
+
+Here's how we get yarGen up and running:
+
+Download the latest release from the release section
+Install all dependencies with pip install -r requirements.txt
+Run python yarGen.py --update to automatically download the built-in databases. They will be saved into the './dbs' subfolder (Download: 913 MB).
+See help with python yarGen.py --help for more information on the command line parameters.
+Note: yarGen can be found inside the /home/htb-student/yarGen-0.23.4 directory of this section's target.
+
+Let's place our sample in a temp directory (there is one available at /home/htb-student/temp inside this section's target) and specify the path using the following command-line arguments.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ python3 yarGen.py -m /home/htb-student/temp -o htb_sample.yar
+
+------------------------------------------------------------------------
+                   _____
+    __ _____ _____/ ___/__ ___
+   / // / _ `/ __/ (_ / -_) _ \
+   \_, /\_,_/_/  \___/\__/_//_/
+  /___/  Yara Rule Generator
+         Florian Roth, July 2020, Version 0.23.3
+
+  Note: Rules have to be post-processed
+  See this post for details: https://medium.com/@cyb3rops/121d29322282
+------------------------------------------------------------------------
+[+] Using identifier 'temp'
+[+] Using reference 'https://github.com/Neo23x0/yarGen'
+[+] Using prefix 'temp'
+[+] Processing PEStudio strings ...
+[+] Reading goodware strings from database 'good-strings.db' ...
+    (This could take some time and uses several Gigabytes of RAM depending on your db size)
+[+] Loading ./dbs/good-imphashes-part3.db ...
+[+] Total: 4029 / Added 4029 entries
+[+] Loading ./dbs/good-strings-part9.db ...
+[+] Total: 788 / Added 788 entries
+[+] Loading ./dbs/good-strings-part8.db ...
+[+] Total: 332082 / Added 331294 entries
+[+] Loading ./dbs/good-imphashes-part4.db ...
+[+] Total: 6426 / Added 2397 entries
+[+] Loading ./dbs/good-strings-part2.db ...
+[+] Total: 1703601 / Added 1371519 entries
+[+] Loading ./dbs/good-exports-part2.db ...
+[+] Total: 90960 / Added 90960 entries
+[+] Loading ./dbs/good-strings-part4.db ...
+[+] Total: 3860655 / Added 2157054 entries
+[+] Loading ./dbs/good-exports-part4.db ...
+[+] Total: 172718 / Added 81758 entries
+[+] Loading ./dbs/good-exports-part7.db ...
+[+] Total: 223584 / Added 50866 entries
+[+] Loading ./dbs/good-strings-part6.db ...
+[+] Total: 4571266 / Added 710611 entries
+[+] Loading ./dbs/good-strings-part7.db ...
+[+] Total: 5828908 / Added 1257642 entries
+[+] Loading ./dbs/good-exports-part1.db ...
+[+] Total: 293752 / Added 70168 entries
+[+] Loading ./dbs/good-exports-part3.db ...
+[+] Total: 326867 / Added 33115 entries
+[+] Loading ./dbs/good-imphashes-part9.db ...
+[+] Total: 6426 / Added 0 entries
+[+] Loading ./dbs/good-exports-part9.db ...
+[+] Total: 326867 / Added 0 entries
+[+] Loading ./dbs/good-imphashes-part5.db ...
+[+] Total: 13764 / Added 7338 entries
+[+] Loading ./dbs/good-imphashes-part8.db ...
+[+] Total: 13947 / Added 183 entries
+[+] Loading ./dbs/good-imphashes-part6.db ...
+[+] Total: 13976 / Added 29 entries
+[+] Loading ./dbs/good-strings-part1.db ...
+[+] Total: 6893854 / Added 1064946 entries
+[+] Loading ./dbs/good-imphashes-part7.db ...
+[+] Total: 17382 / Added 3406 entries
+[+] Loading ./dbs/good-exports-part6.db ...
+[+] Total: 328525 / Added 1658 entries
+[+] Loading ./dbs/good-imphashes-part2.db ...
+[+] Total: 18208 / Added 826 entries
+[+] Loading ./dbs/good-exports-part8.db ...
+[+] Total: 332359 / Added 3834 entries
+[+] Loading ./dbs/good-strings-part3.db ...
+[+] Total: 9152616 / Added 2258762 entries
+[+] Loading ./dbs/good-strings-part5.db ...
+[+] Total: 12284943 / Added 3132327 entries
+[+] Loading ./dbs/good-imphashes-part1.db ...
+[+] Total: 19764 / Added 1556 entries
+[+] Loading ./dbs/good-exports-part5.db ...
+[+] Total: 404321 / Added 71962 entries
+[+] Processing malware files ...
+[+] Processing /home/htb-student/temp/dharma_sample.exe ...
+[+] Generating statistical data ...
+[+] Generating Super Rules ... (a lot of magic)
+[+] Generating Simple Rules ...
+[-] Applying intelligent filters to string findings ...
+[-] Filtering string set for /home/htb-student/temp/dharma_sample.exe ...
+[=] Generated 1 SIMPLE rules.
+[=] All rules written to htb_sample.yar
+[+] yarGen run finished
+Command Breakdown:
+
+yarGen.py: This is the name of the yarGen Python script that will be executed.
+-m /home/htb-student/temp: This option specifies the source directory where the sample files (e.g., malware or suspicious files) are located. The script will analyze these samples to generate YARA rules.
+-o htb_sample.yar: This option indicates the output file name for the generated YARA rules. In this case, the YARA rules will be saved to a file named htb_sample.yar.
+The resulting YARA rules will be written to the htb_sample.yar file inside the /home/htb-student/yarGen-0.23.4 directory of this section's target. Let's see the content of the generated rule.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ cat htb_sample.yar
+/*
+   YARA Rule Set
+   Author: yarGen Rule Generator
+   Date: 2023-08-24
+   Identifier: temp
+   Reference: https://github.com/Neo23x0/yarGen
+*/
+
+/* Rule Set ----------------------------------------------------------------- */
+
+rule dharma_sample {
+   meta:
+      description = "temp - file dharma_sample.exe"
+      author = "yarGen Rule Generator"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2023-08-24"
+      hash1 = "bff6a1000a86f8edf3673d576786ec75b80bed0c458a8ca0bd52d12b74099071"
+   strings:
+      $x1 = "C:\\crysis\\Release\\PDB\\payload.pdb" fullword ascii
+      $s2 = "sssssbs" fullword ascii
+      $s3 = "sssssbsss" fullword ascii
+      $s4 = "RSDS%~m" fullword ascii
+      $s5 = "{RDqP^\\" fullword ascii
+      $s6 = "QtVN$0w" fullword ascii
+      $s7 = "Ffsc<{" fullword ascii
+      $s8 = "^N3Y.H_K" fullword ascii
+      $s9 = "tb#w\\6" fullword ascii
+      $s10 = "-j6EPUc" fullword ascii
+      $s11 = "8QS#5@3" fullword ascii
+      $s12 = "h1+LI;d8" fullword ascii
+      $s13 = "H;B cl" fullword ascii
+      $s14 = "Wy]z@p]E" fullword ascii
+      $s15 = "ipgypA" fullword ascii
+      $s16 = "+>^wI{H" fullword ascii
+      $s17 = "mF@S/]" fullword ascii
+      $s18 = "OA_<8X-|" fullword ascii
+      $s19 = "s+aL%M" fullword ascii
+      $s20 = "sXtY9P" fullword ascii
+   condition:
+      uint16(0) == 0x5a4d and filesize < 300KB and
+      1 of ($x*) and 4 of them
+}
+Now, for the moment of truth. We'll unleash YARA with our newly minted rule to see if it sniffs out any matches when run against a malware sample repository located at home/htb-student/Samples/YARASigma inside this section's target.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ yara htb_sample.yar /home/htb-student/Samples/YARASigma 
+dharma_sample /home/htb-student/Samples/YARASigma/dharma_sample.exe
+dharma_sample /home/htb-student/Samples/YARASigma/pdf_reader.exe
+dharma_sample /home/htb-student/Samples/YARASigma/microsoft.com
+dharma_sample /home/htb-student/Samples/YARASigma/check_updates.exe
+dharma_sample /home/htb-student/Samples/YARASigma/KB5027505.exe
+As we can see, the pdf_reader.exe, microsoft.com, check_updates.exe, and KB5027505.exe files are detected by this rule (in addition to dharma_sample.exe of course).
+
+Manually Developing a YARA Rule
+Example 1: ZoxPNG RAT Used by APT17
+Let's now go a bit deeper...
+
+We want to develop a YARA rule to scan for a specific variation of the ZoxPNG RAT used by APT17 based on:
+
+A sample named legit.exe residing in the /home/htb-student/Samples/YARASigma directory of this section's target
+A post from Intezer
+String analysis
+Imphash
+Common sample file size
+Let's start with our string analysis endeavors as follows.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ strings legit.exe
+!This program cannot be run in DOS mode.
+Rich
+.text
+`.rdata
+@.data
+---SNIP---
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+ deflate 1.1.4 Copyright 1995-2002 Jean-loup Gailly
+
+ inflate 1.1.4 Copyright 1995-2002 Mark Adler
+Sleep
+LocalAlloc
+CloseHandle
+GetLastError
+VirtualFree
+VirtualAlloc
+GetProcAddress
+LoadLibraryA
+GetCurrentProcessId
+GlobalMemoryStatusEx
+GetCurrentProcess
+GetACP
+GetVersionExA
+GetComputerNameA
+GetTickCount
+GetSystemTime
+LocalFree
+CreateProcessA
+CreatePipe
+TerminateProcess
+ReadFile
+PeekNamedPipe
+WriteFile
+SetFilePointer
+CreateFileA
+GetFileSize
+GetDiskFreeSpaceExA
+GetDriveTypeA
+GetLogicalDriveStringsA
+CreateDirectoryA
+FindClose
+FindNextFileA
+FindFirstFileA
+MoveFileExA
+OpenProcess
+KERNEL32.dll
+LookupAccountSidA
+ADVAPI32.dll
+SHFileOperationA
+SHELL32.dll
+strcpy
+rand
+sprintf
+memcpy
+strncpy
+srand
+_snprintf
+atoi
+strcat
+strlen
+printf
+memset
+strchr
+memcmp
+MSVCRT.dll
+_exit
+_XcptFilter
+exit
+__p___initenv
+__getmainargs
+_initterm
+__setusermatherr
+_adjust_fdiv
+__p__commode
+__p__fmode
+__set_app_type
+_except_handler3
+_controlfp
+InternetCrackUrlA
+InternetCloseHandle
+InternetReadFile
+HttpQueryInfoA
+HttpSendRequestA
+InternetSetOptionA
+HttpAddRequestHeadersA
+HttpOpenRequestA
+InternetConnectA
+InternetOpenA
+WININET.dll
+ObtainUserAgentString
+urlmon.dll
+WTSFreeMemory
+WTSEnumerateProcessesA
+WTSAPI32.dll
+GetModuleFileNameExA
+PSAPI.DLL
+calloc
+free
+http://%s/imgres?q=A380&hl=en-US&sa=X&biw=1440&bih=809&tbm=isus&tbnid=aLW4-J8Q1lmYBM:&imgrefurl=http://%s&docid=1bi0Ti1ZVr4bEM&imgurl=http://%s/%04d-%02d/%04d%02d%02d%02d%02d%02d.png&w=800&h=600&ei=CnJcUcSBL4rFkQX444HYCw&zoom=1&ved=1t:3588,r:1,s:0,i:92&iact=rc&dur=368&page=1&tbnh=184&tbnw=259&start=0&ndsp=20&tx=114&ty=58
+http://0.0.0.0/1
+http://0.0.0.0/2
+Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NETCLR 2.0.50727)
+image/pjpeg
+image/jpeg
+image/x-xbitmap
+image/gif
+Content-Type: application/x-www-form-urlencoded
+B64:[%s]
+Step 11
+Step 10
+Step 9
+Step 8
+Step 7
+Step 6
+Content-Type: image/x-png
+Step 5
+Step 4
+Connection: close
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US
+Pragma: no-cache
+User-Agent:
+Cookie: SESSIONID=%s
+Step 3
+HTTP/1.1
+Step 2
+POST
+Step 1
+Get URL Info Error
+[IISEND=0x%08X][Recv:] 0x%08X %s
+IISCMD Error:%d
+hWritePipe2 Error:%d
+kernel32.dll
+QueryFullProcessImageName
+Not Support This Function!
+1.1.4
+need dictionary
+incorrect data check
+incorrect header check
+invalid window size
+unknown compression method
+incompatible version
+buffer error
+insufficient memory
+data error
+stream error
+file error
+stream end
+invalid bit length repeat
+too many length or distance symbols
+invalid stored block lengths
+invalid block type
+invalid distance code
+invalid literal/length code
+incomplete dynamic bit lengths tree
+oversubscribed dynamic bit lengths tree
+incomplete literal/length tree
+oversubscribed literal/length tree
+empty distance tree with lengths
+incomplete distance tree
+oversubscribed distance tree
+Z0X03
+>0!0
+Western Cape1
+Durbanville1
+Thawte1
+Thawte Certification1
+Thawte Timestamping CA0
+121221000000Z
+201230235959Z0^1
+Symantec Corporation100.
+'Symantec Time Stamping Services CA - G20
+"W*o
+]jxdE
+`F~T
+&0$0"
+http://ocsp.thawte.com0
+80604
+.http://crl.thawte.com/ThawteTimestampingCA.crl0
+TimeStamp-2048-10
+y@b%
+thawte, Inc.1(0&
+Certification Services Division1806
+/(c) 2006 thawte, Inc. - For authorized use only1
+thawte Primary Root CA0
+061117000000Z
+360716235959Z0
+thawte, Inc.1(0&
+Certification Services Division1806
+/(c) 2006 thawte, Inc. - For authorized use only1
+thawte Primary Root CA0
+l[HhIY7
+tf/j8
+S}+
+>n)i
+B0@0
+WHP0
+Thawte, Inc.1$0"
+Thawte Code Signing CA - G20
+110622000000Z
+130721235959Z0
+Seoul1
+Seongdong-gu1
+        4NB Corp.1"0
+tigation Development Team1
+        4NB Corp.0
+LO'%
+oWx6
+IB-8l3
+40200
+*http://cs-g2-crl.thawte.com/ThawteCSG2.crl0
+&0$0"
+http://ocsp.thawte.com0
+}1JBAe
+^b/1
+a{b2
+Ti,[\{
+thawte, Inc.1(0&
+Certification Services Division1806
+/(c) 2006 thawte, Inc. - For authorized use only1
+thawte Primary Root CA0
+100208000000Z
+200207235959Z0J1
+Thawte, Inc.1$0"
+Thawte Code Signing CA - G20
+,p&7E
+rqD=X
+n8}v
+-0+0)
+#http://crl.thawte.com/ThawtePCA.crl0
+&0$0"
+http://ocsp.thawte.com0
+VeriSignMPKI-2-100
+---SNIP---
+Symantec Corporation100.
+'Symantec Time Stamping Services CA - G20
+121018000000Z
+201229235959Z0b1
+Symantec Corporation1402
++Symantec Time Stamping Services Signer - G40
+2oNW
+a;EQ
+g0e0*
+http://ts-ocsp.ws.symantec.com07
++http://ts-aia.ws.symantec.com/tss-ca-g2.cer0<
+50301
++http://ts-crl.ws.symantec.com/tss-ca-g2.crl0(
+TimeStamp-2048-20
+---SNIP---
+Thawte, Inc.1$0"
+Thawte Code Signing CA - G2
+1(0&
+www.4nb.co.kr 0
+#Ak_
+$>X[hL
+0r0^1
+Symantec Corporation100.
+'Symantec Time Stamping Services CA - G2
+130529085845Z0#
+*PU19
+mOLT
+}Jdf6
+K%&J
+(E~Q
+Eev7aSp
+Let's then use the hashes mentioned in Intezer's post to identify common sample sizes. It looks like there are no related samples whose size is bigger than 200KB. An example of an identified sample is the following. https://www.hybrid-analysis.com/sample/ee362a8161bd442073775363bf5fa1305abac2ce39b903d63df0d7121ba60550.
+
+Finally, the sample's Imphash can be calculated as follows, using the imphash_calc.py script that resides in the /home/htb-student directory of this section's target.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ python3 imphash_calc.py /home/htb-student/Samples/YARASigma/legit.exe
+414bbd566b700ea021cfae3ad8f4d9b9
+A good YARA rule to detect the aforementioned variation of ZoxPNG resides in the /home/htb-student/Rules/yara directory of this section's target, saved as apt_apt17_mal_sep17_2.yar.
+
+Code: yara
+/*
+   Yara Rule Set
+   Author: Florian Roth
+   Date: 2017-10-03
+   Identifier: APT17 Oct 10
+   Reference: https://goo.gl/puVc9q
+*/
+
+/* Rule Set ----------------------------------------------------------------- */
+
+import "pe"
+
+rule APT17_Malware_Oct17_Gen {
+   meta:
+      description = "Detects APT17 malware"
+      license = "Detection Rule License 1.1 https://github.com/Neo23x0/signature-base/blob/master/LICENSE"
+      author = "Florian Roth (Nextron Systems)"
+      reference = "https://goo.gl/puVc9q"
+      date = "2017-10-03"
+      hash1 = "0375b4216334c85a4b29441a3d37e61d7797c2e1cb94b14cf6292449fb25c7b2"
+      hash2 = "07f93e49c7015b68e2542fc591ad2b4a1bc01349f79d48db67c53938ad4b525d"
+      hash3 = "ee362a8161bd442073775363bf5fa1305abac2ce39b903d63df0d7121ba60550"
+   strings:
+      $x1 = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NETCLR 2.0.50727)" fullword ascii
+      $x2 = "http://%s/imgres?q=A380&hl=en-US&sa=X&biw=1440&bih=809&tbm=isus&tbnid=aLW4-J8Q1lmYBM" ascii
+
+      $s1 = "hWritePipe2 Error:%d" fullword ascii
+      $s2 = "Not Support This Function!" fullword ascii
+      $s3 = "Cookie: SESSIONID=%s" fullword ascii
+      $s4 = "http://0.0.0.0/1" fullword ascii
+      $s5 = "Content-Type: image/x-png" fullword ascii
+      $s6 = "Accept-Language: en-US" fullword ascii
+      $s7 = "IISCMD Error:%d" fullword ascii
+      $s8 = "[IISEND=0x%08X][Recv:] 0x%08X %s" fullword ascii
+   condition:
+      ( uint16(0) == 0x5a4d and filesize < 200KB and (
+            pe.imphash() == "414bbd566b700ea021cfae3ad8f4d9b9" or
+            1 of ($x*) or
+            6 of them
+         )
+      )
+}
+YARA Rule Breakdown:
+
+Rule Imports: Modules are extensions to YARA's core functionality.
+import "pe": By importing the PE module the YARA rule gains access to a set of specialized functions and structures that can inspect and analyze the details of PE files. This makes the rule more precise when it comes to detecting characteristics in Windows executables.
+Rule Meta:
+description: Tells us the main purpose of the rule, which is to detect APT17 malware.
+license: Points to the location and version of the license governing the use of this YARA rule.
+author: The rule was written by Florian Roth from Nextron Systems.
+reference: Provides a link that goes into more detail about the malware or context of this rule.
+date: The date the rule was either created or last updated, in this case, 3rd October 2017.
+hash1, hash2, hash3: Hash values, probably of samples related to APT17, which the author used as references or as foundational data to create the rule.
+Rule Body: The rule contains a series of strings, which are potential indicators of the APT17 malware. These strings are split into two categories
+$x* strings
+$s* strings
+Rule Condition: This is the heart of the rule, where the actual detection logic resides.
+uint16(0) == 0x5a4d: Checks if the first two bytes of the file are MZ, which is the magic number for Windows executables. So, we're focusing on detecting Windows binaries.
+filesize < 200KB: Limits the rule to scan only small files, specifically those smaller than 200KB.
+pe.imphash() == "414bbd566b700ea021cfae3ad8f4d9b9": This checks the import hash (imphash) of the PE (Portable Executable) file. Imphashes are great for categorizing and clustering malware samples based on the libraries they import.
+1 of ($x*): At least one of the $x strings (from the strings section) must be present in the file.
+6 of them: Requires that at least six of the strings (from both $x and $s categories) be found within the scanned file.
+Example 2: Neuron Used by Turla
+We want to develop a YARA rule to scan for instances of Neuron Service used by Turla based on:
+
+A sample named Microsoft.Exchange.Service.exe residing in the /home/htb-student/Samples/YARASigma directory of this section's target
+An analysis report from the National Cyber Security Centre
+Since the report mentions that both the Neuron client and Neuron service are written using the .NET framework we will perform .NET "reversing" instead of string analysis.
+
+This can be done using the monodis tool as follows.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ monodis --output=code Microsoft.Exchange.Service.exe
+  Developing YARA Rules
+titagram@htb[/htb]$ cat code
+.assembly extern System.Configuration.Install
+{
+  .ver 4:0:0:0
+  .publickeytoken = (B0 3F 5F 7F 11 D5 0A 3A ) // .?_....:
+}
+---SNIP---
+  .class public auto ansi abstract sealed beforefieldinit StorageUtils
+  } // end of class Utils.StorageUtils
+---SNIP---
+           default void ExecCMD (string path, string key, unsigned int8[] cmd, class Utils.Config cfg, class [mscorlib]System.Threading.ManualResetEvent mre)  cil managed
+        IL_0028:  ldsfld class [System.Core]System.Runtime.CompilerServices.CallSite`1<class [mscorlib]System.Func`5<class [System.Core]System.Runtime.CompilerServices.CallSite,class [mscorlib]System.Type,object,class Utils.Config,class Utils.CommandScript>> Utils.Storage/'<ExecCMD>o__SiteContainer0'::'<>p__Site1'
+        IL_0070:  stsfld class [System.Core]System.Runtime.CompilerServices.CallSite`1<class [mscorlib]System.Func`5<class [System.Core]System.Runtime.CompilerServices.CallSite,class [mscorlib]System.Type,object,class Utils.Config,class Utils.CommandScript>> Utils.Storage/'<ExecCMD>o__SiteContainer0'::'<>p__Site1'
+        IL_0075:  ldsfld class [System.Core]System.Runtime.CompilerServices.CallSite`1<class [mscorlib]System.Func`5<class [System.Core]System.Runtime.CompilerServices.CallSite,class [mscorlib]System.Type,object,class Utils.Config,class Utils.CommandScript>> Utils.Storage/'<ExecCMD>o__SiteContainer0'::'<>p__Site1'
+        IL_007f:  ldsfld class [System.Core]System.Runtime.CompilerServices.CallSite`1<class [mscorlib]System.Func`5<class [System.Core]System.Runtime.CompilerServices.CallSite,class [mscorlib]System.Type,object,class Utils.Config,class Utils.CommandScript>> Utils.Storage/'<ExecCMD>o__SiteContainer0'::'<>p__Site1'
+    } // end of method Storage::ExecCMD
+  .class nested private auto ansi abstract sealed beforefieldinit '<ExecCMD>o__SiteContainer0'
+  } // end of class <ExecCMD>o__SiteContainer0
+        IL_0077:  call void class Utils.Storage::ExecCMD(string, string, unsigned int8[], class Utils.Config, class [mscorlib]System.Threading.ManualResetEvent)
+---SNIP---
+        IL_0029:  ldftn void class Utils.Storage::KillOldThread()
+           default void KillOldThread ()  cil managed
+    } // end of method Storage::KillOldThread
+---SNIP---
+
+        IL_0201:  ldstr "EncryptScript"
+        IL_04a4:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+        IL_0eff:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+        IL_0f4e:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+        IL_0fec:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+        IL_102f:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+        IL_0018:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+        IL_00b1:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+          IL_009a:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+          IL_0142:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+           default unsigned int8[] EncryptScript (unsigned int8[] pwd, unsigned int8[] data)  cil managed
+    } // end of method Crypt::EncryptScript
+            IL_00a0:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+          IL_0052:  call unsigned int8[] class Utils.Crypt::EncryptScript(unsigned int8[], unsigned int8[])
+---SNIP---
+By going through the above we can identify functions and classes within the .NET assembly.
+
+Note: A better reversing solution would be to load the .NET assembly (Microsoft.Exchange.Service.exe) into a .NET debugger and assembly editor like dnSpy.
+
+Visual Studio interface showing decompiled C# code with highlighted method 'ExecCMD' in 'neuro_service' class, displaying parameters for executing commands.
+
+A good YARA rule to identify instances of Neuron Service resides in the /home/htb-student/Rules/yara directory of this section's target, saved as neuron_1.yar.
+
+Code: yara
+rule neuron_functions_classes_and_vars {
+ meta:
+   description = "Rule for detection of Neuron based on .NET functions and class names"
+   author = "NCSC UK"
+   reference = "https://www.ncsc.gov.uk/file/2691/download?token=RzXWTuAB"
+   reference2 = "https://www.ncsc.gov.uk/alerts/turla-group-malware"
+   hash = "d1d7a96fcadc137e80ad866c838502713db9cdfe59939342b8e3beacf9c7fe29"
+ strings:
+   $class1 = "StorageUtils" ascii
+   $class2 = "WebServer" ascii
+   $class3 = "StorageFile" ascii
+   $class4 = "StorageScript" ascii
+   $class5 = "ServerConfig" ascii
+   $class6 = "CommandScript" ascii
+   $class7 = "MSExchangeService" ascii
+   $class8 = "W3WPDIAG" ascii
+   $func1 = "AddConfigAsString" ascii
+   $func2 = "DelConfigAsString" ascii
+   $func3 = "GetConfigAsString" ascii
+   $func4 = "EncryptScript" ascii
+   $func5 = "ExecCMD" ascii
+   $func6 = "KillOldThread" ascii
+   $func7 = "FindSPath" ascii
+   $dotnetMagic = "BSJB" ascii
+ condition:
+   (uint16(0) == 0x5A4D and uint16(uint32(0x3c)) == 0x4550) and $dotnetMagic and 6 of them
+}
+YARA Rule Breakdown:
+
+Strings Section:
+$class1 = "StorageUtils" ascii to $class8 = "W3WPDIAG" ascii: These are eight ASCII strings corresponding to class names within the .NET assembly.
+$func1 = "AddConfigAsString" ascii to $func7 = "FindSPath" ascii: These seven ASCII strings represent class or function names within the .NET assembly.
+$dotnetMagic = "BSJB" ascii: This signature is present in the CLI (Common Language Infrastructure) header of .NET binaries, and its presence can be used to indicate the file is a .NET assembly. Specifically, it's in the Signature field of the CLI header, which follows the PE header and additional tables.
+Condition Section:
+uint16(0) == 0x5A4D: This checks if the first two bytes at the start of the file are MZ, a magic number indicating a Windows Portable Executable (PE) format.
+uint16(uint32(0x3c)) == 0x4550: A two-step check. First, it reads a 32-bit (4 bytes) value from offset 0x3c of the file. In PE files, this offset typically contains a pointer to the PE header. It then checks whether the two bytes at that pointer are PE (0x4550), indicating a valid PE header. This ensures the file is a legitimate PE format and not a corrupted or obfuscated one.
+$dotnetMagic: Verifies the presence of the BSJB string. This signature is present in the CLI (Common Language Infrastructure) header of .NET binaries, and its presence can be used to indicate the file is a .NET assembly.
+6 of them: This condition states that at least six of the previously defined strings (either classes or functions) must be found within the file. This ensures that even if a few signatures are absent or have been modified, the rule will still trigger if a substantial number remain.
+Example 3: Stonedrill Used in Shamoon 2.0 Attacks
+We want to develop a YARA rule to scan for instances of Stonedrill used in Shamoon 2.0 attacks based on:
+
+A sample named sham2.exe residing in the /home/htb-student/Samples/YARASigma directory of this section's target
+An analysis report from Kaspersky
+The report mentions: ... many samples had one additional encrypted resource with a specific, although non-unique name 101.
+
+Encrypted/compressed/obfuscated in PE files usually means high entropy. We can use the entropy_pe_section.py script that resides in the /home/htb-student directory of this section's target to check if our sample's resource section contains anything encrypted/compressed as follows.
+
+  Developing YARA Rules
+titagram@htb[/htb]$ python3 entropy_pe_section.py -f /home/htb-student/Samples/YARASigma/sham2.exe
+        virtual address: 0x1000
+        virtual size: 0x25f86
+        raw size: 0x26000
+        entropy: 6.4093453613451885
+.rdata
+        virtual address: 0x27000
+        virtual size: 0x62d2
+        raw size: 0x6400
+        entropy: 4.913675128870228
+.data
+        virtual address: 0x2e000
+        virtual size: 0xb744
+        raw size: 0x9000
+        entropy: 1.039771174750106
+.rsrc
+        virtual address: 0x3a000
+        virtual size: 0xc888
+        raw size: 0xca00
+        entropy: 7.976847940518103
+We notice that the resource section (.rsrc) has high entropy (8.0 is the maximum entropy value). We can take for granted that the resource section contains something suspicious.
+
+A good YARA rule to identify instances of Stonedrill resides in the /home/htb-student/Rules/yara directory of this section's target, saved as stonedrill.yar.
+
+Code: yara
+import "pe"
+import "math"
+
+rule susp_file_enumerator_with_encrypted_resource_101 {
+meta:
+  copyright = "Kaspersky Lab"
+  description = "Generic detection for samples that enumerate files with encrypted resource called 101"
+  reference = "https://securelist.com/from-shamoon-to-stonedrill/77725/"
+  hash = "2cd0a5f1e9bcce6807e57ec8477d222a"
+  hash = "c843046e54b755ec63ccb09d0a689674"
+  version = "1.4"
+strings:
+  $mz = "This program cannot be run in DOS mode."
+  $a1 = "FindFirstFile" ascii wide nocase
+  $a2 = "FindNextFile" ascii wide nocase
+  $a3 = "FindResource" ascii wide nocase
+  $a4 = "LoadResource" ascii wide nocase
+
+condition:
+uint16(0) == 0x5A4D and
+all of them and
+filesize < 700000 and
+pe.number_of_sections > 4 and
+pe.number_of_signatures == 0 and
+pe.number_of_resources > 1 and pe.number_of_resources < 15 and for any i in (0..pe.number_of_resources - 1):
+( (math.entropy(pe.resources[i].offset, pe.resources[i].length) > 7.8) and pe.resources[i].id == 101 and
+pe.resources[i].length > 20000 and
+pe.resources[i].language == 0 and
+not ($mz in (pe.resources[i].offset..pe.resources[i].offset + pe.resources[i].length))
+)
+}
+YARA Rule Breakdown:
+
+Rule Imports: Modules are extensions to YARA's core functionality.
+import "pe": By importing the PE module the YARA rule gains access to a set of specialized functions and structures that can inspect and analyze the details of PE files. This makes the rule more precise when it comes to detecting characteristics in Windows executables.
+import "math": Imports the math module, providing mathematical functions like entropy calculations.
+Rule Meta:
+copyright = "Kaspersky Lab": The rule was authored or copyrighted by Kaspersky Lab.
+description = "Generic detection for samples that enumerate files with encrypted resource called 101": The rule aims to detect samples that list files and have an encrypted resource with the identifier "101".
+reference = "https://securelist.com/from-shamoon-to-stonedrill/77725/": Provides an URL for additional context or information about the rule.
+hash: Two hashes are given, probably as examples of known malicious files that match this rule.
+version = "1.4": The version number of the YARA rule.
+Strings Section:
+$mz = "This program cannot be run in DOS mode.": The ASCII string that typically appears in the DOS stub part of a PE file.
+$a1 = "FindFirstFile", $a2 = "FindNextFile": Strings for Windows API functions used to enumerate files. The usage of FindFirstFileW and FindNextFileW API functions can be idenfitied through string analysis.
+$a3 = "FindResource", $a4 = "LoadResource": As already mentioned Stonedrill samples feature encrypted resources. These strings can be found through string analysis and they are related to Windows API functions used for handling resources within the executable.
+Rule Condition:
+uint16(0) == 0x5A4D: Checks if the first two bytes of the file are "MZ," indicating a Windows PE file.
+all of them: All the strings $a1, $a2, $a3, $a4 must be present in the file.
+filesize < 700000: The file size must be less than 700,000 bytes.
+pe.number_of_sections > 4: The PE file must have more than four sections.
+pe.number_of_signatures == 0: The file must not be digitally signed.
+pe.number_of_resources > 1 and pe.number_of_resources < 15: The file must contain more than one but fewer than 15 resources.
+for any i in (0..pe.number_of_resources - 1): ( (math.entropy(pe.resources[i].offset, pe.resources[i].length) > 7.8) and pe.resources[i].id == 101 and pe.resources[i].length > 20000 and pe.resources[i].language == 0 and not ($mz in (pe.resources[i].offset..pe.resources[i].offset + pe.resources[i].length))): Go through each resource in the file and check if the entropy of the resource data is more than 7.8 and the resource identifier is 101 and the resource length is greater than 20,000 bytes and the language identifier of the resource is 0 and the DOS stub string is not present in the resource. It's not required for all resources to match the condition; only one resource meeting all the criteria is sufficient for the overall YARA rule to be a match.
+YARA Rule Development Resources
+As you can imagine, the best YARA rule development resource is the official documentation, which can be found at the following link.
+
+The next best resource on effective YARA rule developement comes from Kaspersky.
+
+Below are some blog posts that offer a more detailed explanation on how to use yarGen for YARA rule development:
+
+How to Write Simple but Sound Yara Rules - Part 1
+How to Write Simple but Sound Yara Rules - Part 2
+How to Write Simple but Sound Yara Rules - Part 3
+yarGen is a great tool to develop some good yara rules by extracting unique patterns. Once the rule is developed with the help of yarGen, we definitely need to review and add/remove some more patterns to make it an effective rule.
+
+In this blogpost, Florian Roth has mentioned that the main purpose of yarGen is to develop the best possible rules for manual post-processing which might sound like a tedious task, but the combination of clever automatic preselection and a critical human analyst beats both the fully manual and fully automatic generation process.
+
+Continuing forward, we'll dig deeper into using YARA, expanding our hunt for threats from our filesystem to memory and also within memory images.
+
+Hunting Evil with YARA (Linux Edition)
+Let's face the reality of cybersecurity operations: often, as Security Analysts, we don’t get the luxury of direct access to a potentially compromised system. Imagine, we've got suspicious flags waving from a remote machine, but due to organizational boundaries, permissions, or logistical issues, we just can't lay our hands on it. It feels like knowing there's a potential fire but not being able to see or touch it directly. This situation can be nerve-wracking, but it's a challenge we've learned to tackle.
+
+Here's where things get interesting. Even if we can't access the machine, in many cases, a memory capture (or memory dump) from the suspicious system can be handed over to us in the Security Operations Center (SOC). It's akin to receiving a snapshot of everything happening in the system at a particular moment. And just because we have this snapshot, doesn't mean our hands are tied.
+
+Luckily, our trusty tool YARA comes to the rescue. We can run YARA-based scans directly on these memory images. It's like having x-ray vision: we can peer into the state of the system, looking for signs of malicious activity or compromised indicators, all without ever having direct access to the machine itself. This capability not only enhances our investigative prowess but also ensures that even remote, inaccessible systems don't remain black boxes to us. So, while the direct path may be blocked, with tools like YARA and our expertise, we always find a way to shine a light into the shadows.
+
+Hunting for Evil Within Memory Images with YARA
+Incorporating YARA extends the capabilities of memory forensics, a pivotal technique in malware analysis and incident response. It equips us to traverse memory content, hunting for telltale signs or compromise indicators.
+
+YARA's memory image scanning mirrors its disk-based counterpart. Let's map out the process:
+
+Create YARA Rules: Either develop bespoke YARA rules or lean on existing ones that target memory-based malware traits or dubious behaviors.
+Compile YARA Rules: Compile the YARA rules into a binary format using the yarac tool (YARA Compiler). This step creates a file containing the compiled YARA rules with a .yrc extension. This step is optional, as we can use the normal rules in text format as well. While it is possible to use YARA in its human-readable format, compiling the rules is a best practice when deploying YARA-based detection systems or working with a large number of rules to ensure optimal performance and effectiveness. Also, compiling rules provides some level of protection by converting them into binary format, making it harder for others to view the actual rule content.
+Obtain Memory Image: Capture a memory image using tools such as DumpIt, MemDump, Belkasoft RAM Capturer, Magnet RAM Capture, FTK Imager, and LiME (Linux Memory Extractor).
+Memory Image Scanning with YARA: Use the yara tool and the compiled YARA rules to scan the memory image for possible matches.
+Let's now navigate to the bottom of this section and click on "Click here to spawn the target system!". Then, let's SSH into the Target IP using the provided credentials. The vast majority of the actions/commands covered from this point up to end of this section can be replicated inside the target, offering a more comprehensive grasp of the topics presented.
+
+For instance, we have a memory snapshot named compromised_system.raw (residing in the /home/htb-student/MemoryDumps directory of this section's target) originating from a system under the siege of WannaCry ransomware. Let's confront this image with the wannacry_artifacts_memory.yar YARA rule (residing in the /home/htb-student/Rules/yara directory of this section's target).
+
+Here's an example command for YARA-based memory scanning:
+
+  Hunting Evil with YARA (Linux Edition)
+titagram@htb[/htb]$ yara /home/htb-student/Rules/yara/wannacry_artifacts_memory.yar /home/htb-student/MemoryDumps/compromised_system.raw --print-strings
+Ransomware_WannaCry /home/htb-student/MemoryDumps/compromised_system.raw
+0x4e140:$wannacry_payload_str1: tasksche.exe
+0x1cb9b24:$wannacry_payload_str1: tasksche.exe
+0xdb564d8:$wannacry_payload_str1: tasksche.exe
+0x13bac36c:$wannacry_payload_str1: tasksche.exe
+0x16a2ae44:$wannacry_payload_str1: tasksche.exe
+0x16ce55d8:$wannacry_payload_str1: tasksche.exe
+0x17bf1fe6:$wannacry_payload_str1: tasksche.exe
+0x17cb8002:$wannacry_payload_str1: tasksche.exe
+0x17cb80d0:$wannacry_payload_str1: tasksche.exe
+0x17cb80f8:$wannacry_payload_str1: tasksche.exe
+0x18a68f50:$wannacry_payload_str1: tasksche.exe
+0x18a9b4b8:$wannacry_payload_str1: tasksche.exe
+0x18dc15a8:$wannacry_payload_str1: tasksche.exe
+0x18df37d0:$wannacry_payload_str1: tasksche.exe
+0x19a4b522:$wannacry_payload_str1: tasksche.exe
+0x1aac0600:$wannacry_payload_str1: tasksche.exe
+0x1c07ed9a:$wannacry_payload_str1: tasksche.exe
+0x1c59cd32:$wannacry_payload_str1: tasksche.exe
+0x1d1593f0:$wannacry_payload_str1: tasksche.exe
+0x1d1c6fe2:$wannacry_payload_str1: tasksche.exe
+0x1d92632a:$wannacry_payload_str1: tasksche.exe
+0x1dd65c34:$wannacry_payload_str1: tasksche.exe
+0x1e607a1e:$wannacry_payload_str1: tasksche.exe
+0x1e607dca:$wannacry_payload_str1: tasksche.exe
+0x13bac3d7:$wannacry_payload_str2: www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+0x197ba5e0:$wannacry_payload_str2: www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+0x1a07cedf:$wannacry_payload_str2: www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+0x1a2cb300:$wannacry_payload_str2: www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+0x1b644cd8:$wannacry_payload_str2: www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+0x1d15945b:$wannacry_payload_str2: www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+0x1dd65c9f:$wannacry_payload_str2: www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+0x450b048:$wannacry_payload_str3: mssecsvc.exe
+0x5a7f3d4:$wannacry_payload_str3: mssecsvc.exe
+0xda1c350:$wannacry_payload_str3: mssecsvc.exe
+0x12481048:$wannacry_payload_str3: mssecsvc.exe
+0x17027910:$wannacry_payload_str3: mssecsvc.exe
+0x17f0dc18:$wannacry_payload_str3: mssecsvc.exe
+0x18c360cc:$wannacry_payload_str3: mssecsvc.exe
+0x1a2a02f0:$wannacry_payload_str3: mssecsvc.exe
+0x13945408:$wannacry_payload_str4: diskpart.exe
+0x19a28480:$wannacry_payload_str4: diskpart.exe
+Beyond standalone tools, diving deeper into memory forensics offers a plethora of avenues. Integrating YARA within memory forensics frameworks amplifies its potential. With the Volatility framework and YARA operating in tandem, WannaCry-specific IOCs can be detected seamlessly.
+
+The Volatility framework is a powerful open-source memory forensics tool used to analyze memory images from various operating systems. YARA can be integrated into the Volatility framework as a plugin called yarascan allowing for the application of YARA rules to memory analysis.
+
+The Volatility framework is covered in detail inside HTB Academy's Introduction to Digital Forensics module.
+
+For now, let's only discuss how YARA can be used as a plugin in the Volatility framework.
+
+Single Pattern YARA Scanning Against a Memory Image
+In this case, we'll specify a YARA rule pattern directly in the command-line which is searched within the memory image by the yarascan plugin of Volatility. The string should be enclosed in quotes (") after the -U option. This is useful when we have a specific YARA rule or pattern that we want to apply without creating a separate YARA rules file.
+
+From previous analysis we know that WannaCry malware attempt to connect to the following hard-coded URI www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com
+
+Introducing this pattern within the command line using -U "www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com" prompts a search within the compromised_system.raw memory image.
+
+  Hunting Evil with YARA (Linux Edition)
+titagram@htb[/htb]$ vol.py -f /home/htb-student/MemoryDumps/compromised_system.raw yarascan -U "www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+Volatility Foundation Volatility Framework 2.6.1
+/usr/local/lib/python2.7/dist-packages/volatility/plugins/community/YingLi/ssh_agent_key.py:12: CryptographyDeprecationWarning: Python 2 is no longer supported by the Python core team. Support for it is now deprecated in cryptography, and will be removed in the next release.
+  from cryptography.hazmat.backends.openssl import backend
+Rule: r1
+Owner: Process svchost.exe Pid 1576
+0x004313d7  77 77 77 2e 69 75 71 65 72 66 73 6f 64 70 39 69   www.iuqerfsodp9i
+0x004313e7  66 6a 61 70 6f 73 64 66 6a 68 67 6f 73 75 72 69   fjaposdfjhgosuri
+0x004313f7  6a 66 61 65 77 72 77 65 72 67 77 65 61 2e 63 6f   jfaewrwergwea.co
+0x00431407  6d 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00   m...............
+0x00431417  00 f0 5d 17 00 ff ff ff ff 00 00 00 00 00 00 00   ..].............
+0x00431427  00 00 00 00 00 00 00 00 00 20 00 00 00 04 00 00   ................
+0x00431437  00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431447  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431457  00 00 00 00 00 50 51 17 00 00 00 00 00 00 00 00   .....PQ.........
+0x00431467  00 13 00 00 00 b8 43 03 00 00 00 00 00 00 00 00   ......C.........
+0x00431477  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431487  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431497  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x004314a7  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x004314b7  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x004314c7  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+Rule: r1
+Owner: Process svchost.exe Pid 1576
+0x0013dcd8  77 77 77 2e 69 75 71 65 72 66 73 6f 64 70 39 69   www.iuqerfsodp9i
+0x0013dce8  66 6a 61 70 6f 73 64 66 6a 68 67 6f 73 75 72 69   fjaposdfjhgosuri
+0x0013dcf8  6a 66 61 65 77 72 77 65 72 67 77 65 61 2e 63 6f   jfaewrwergwea.co
+0x0013dd08  6d 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   m...............
+---SNIP---
+This option allows us to directly specify a YARA rule string within the command-line itself. Let's see how we can search for the content of a whole YARA rule file (i.e. .yar rule file) in memory image files.
+
+Multiple YARA Rule Scanning Against a Memory Image
+When we have multiple YARA rules or a set of complex rules that we want to apply to a memory image, we can use the -y option followed by the rule file path in the Volatility framework, which allows us to specify the path to a YARA rules file. The YARA rules file (wannacry_artifacts_memory.yar in our case) should contain one or more YARA rules in a separate file.
+
+The YARA rules file we will use for demostration purposes is the following.
+
+  Hunting Evil with YARA (Linux Edition)
+titagram@htb[/htb]$ cat /home/htb-student/Rules/yara/wannacry_artifacts_memory.yar
+rule Ransomware_WannaCry {
+
+    meta:
+        author = "Madhukar Raina"
+        version = "1.1"
+        description = "Simple rule to detect strings from WannaCry ransomware"
+        reference = "https://www.virustotal.com/gui/file/ed01ebfbc9eb5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa/behavior"
+
+
+    strings:
+        $wannacry_payload_str1 = "tasksche.exe" fullword ascii
+        $wannacry_payload_str2 = "www.iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com" ascii
+        $wannacry_payload_str3 = "mssecsvc.exe" fullword ascii
+        $wannacry_payload_str4 = "diskpart.exe" fullword ascii
+        $wannacry_payload_str5 = "lhdfrgui.exe" fullword ascii
+
+    condition:
+        3 of them
+Let's run Volatility with the rule wannacry_artifacts_memory.yar (residing in the /home/htb-student/Rules/yara directory) to scan the memory image compromised_system.raw (residing in the /home/htb-student/MemoryDumps directory)
+
+  Hunting Evil with YARA (Linux Edition)
+titagram@htb[/htb]$ vol.py -f /home/htb-student/MemoryDumps/compromised_system.raw yarascan -y /home/htb-student/Rules/yara/wannacry_artifacts_memory.yar
+Volatility Foundation Volatility Framework 2.6.1
+/usr/local/lib/python2.7/dist-packages/volatility/plugins/community/YingLi/ssh_agent_key.py:12: CryptographyDeprecationWarning: Python 2 is no longer supported by the Python core team. Support for it is now deprecated in cryptography, and will be removed in the next release.
+  from cryptography.hazmat.backends.openssl import backend
+Rule: Ransomware_WannaCry
+Owner: Process svchost.exe Pid 1576
+0x0043136c  74 61 73 6b 73 63 68 65 2e 65 78 65 00 00 00 00   tasksche.exe....
+0x0043137c  52 00 00 00 43 6c 6f 73 65 48 61 6e 64 6c 65 00   R...CloseHandle.
+0x0043138c  57 72 69 74 65 46 69 6c 65 00 00 00 43 72 65 61   WriteFile...Crea
+0x0043139c  74 65 46 69 6c 65 41 00 43 72 65 61 74 65 50 72   teFileA.CreatePr
+0x004313ac  6f 63 65 73 73 41 00 00 6b 00 65 00 72 00 6e 00   ocessA..k.e.r.n.
+0x004313bc  65 00 6c 00 33 00 32 00 2e 00 64 00 6c 00 6c 00   e.l.3.2...d.l.l.
+0x004313cc  00 00 00 00 68 74 74 70 3a 2f 2f 77 77 77 2e 69   ....http://www.i
+0x004313dc  75 71 65 72 66 73 6f 64 70 39 69 66 6a 61 70 6f   uqerfsodp9ifjapo
+0x004313ec  73 64 66 6a 68 67 6f 73 75 72 69 6a 66 61 65 77   sdfjhgosurijfaew
+0x004313fc  72 77 65 72 67 77 65 61 2e 63 6f 6d 00 00 00 00   rwergwea.com....
+0x0043140c  00 00 00 00 01 00 00 00 00 00 00 00 f0 5d 17 00   .............]..
+0x0043141c  ff ff ff ff 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0043142c  00 00 00 00 20 00 00 00 04 00 00 00 01 00 00 00   ................
+0x0043143c  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0043144c  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0043145c  50 51 17 00 00 00 00 00 00 00 00 00 13 00 00 00   PQ..............
+Rule: Ransomware_WannaCry
+Owner: Process svchost.exe Pid 1576
+0x004313d7  77 77 77 2e 69 75 71 65 72 66 73 6f 64 70 39 69   www.iuqerfsodp9i
+0x004313e7  66 6a 61 70 6f 73 64 66 6a 68 67 6f 73 75 72 69   fjaposdfjhgosuri
+0x004313f7  6a 66 61 65 77 72 77 65 72 67 77 65 61 2e 63 6f   jfaewrwergwea.co
+0x00431407  6d 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00   m...............
+0x00431417  00 f0 5d 17 00 ff ff ff ff 00 00 00 00 00 00 00   ..].............
+0x00431427  00 00 00 00 00 00 00 00 00 20 00 00 00 04 00 00   ................
+0x00431437  00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431447  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431457  00 00 00 00 00 50 51 17 00 00 00 00 00 00 00 00   .....PQ.........
+0x00431467  00 13 00 00 00 b8 43 03 00 00 00 00 00 00 00 00   ......C.........
+0x00431477  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431487  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x00431497  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x004314a7  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x004314b7  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x004314c7  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+Rule: Ransomware_WannaCry
+Owner: Process svchost.exe Pid 1576
+0x0040e048  6d 73 73 65 63 73 76 63 2e 65 78 65 00 00 00 00   mssecsvc.exe....
+0x0040e058  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e068  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e078  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e088  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e098  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e0a8  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e0b8  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e0c8  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e0d8  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e0e8  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e0f8  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e108  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e118  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e128  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0x0040e138  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+Rule: Ransomware_WannaCry
+Owner: Process svchost.exe Pid 1576
+---SNIP---
+We can see in the results that the yarascan plugin in Volatility is able to find the process svchost.exe with PID 1576 in the memory image of the compromised system.
+
+In summary, the -U option allows us to directly specify a YARA rule string within the command-line, while the -y option is used to specify the path to a file containing one or more YARA rules. The choice between the two options depends on our specific requirements and whether we have a single rule or a set of rules to apply during the analysis.
+
+Hunting Evil with YARA (Web Edition)
+Unpac.Me is tool tailored for malware unpacking. The great thing about Unpac.Me is that it grants us the capability to run our YARA rules over their amassed database of malware submissions. Considering the hurdles of gaining access to commercialized malware datasets, Unpac.Me emerges as a prime asset for those dedicated SOC analysts and persistent malware enthusiasts.
+
+Sigma and Sigma Rules
+Sigma is a generic signature format used for describing detection rules for log analysis and SIEM systems. It allows SOC analysts to create and share rules that help identify specific patterns or behaviors indicative of security threats or malicious activities. Sigma rules are typically written in YAML format and can be used with various security tools and platforms.
+
+SOC analysts use Sigma rules to define and detect security events by analyzing log data generated by various systems, such as firewalls, intrusion detection systems, and endpoint protection solutions. These rules can be customized to match specific use cases and can include conditions, filters, and other parameters to determine when an event should trigger an alert.
+
+The main advantage of Sigma rules is their portability and compatibility with multiple SIEM and log analysis systems, enabling analysts to write rules once and use them across different platforms.
+
+Sigma can be considered as standardized format for analysts to create and share detection rules. It helps in converting the IOCs into queries and can be easily integrated with security tools, including SIEM and EDRs. Sigma rules can be used to detect suspicious activities in various log sources. This also helps in building efficient processes for Detection as Code by automating the creation and deployment of detection rules.
+
+[sigma_intro.png]
+
+
+Usages of Sigma
+Universal Log Analytics Tool: We can write detection rules once and then convert them to various SIEM and log analytics tool formats, sparing us the repetitive task of rewriting logic across different platforms.
+Community-driven Rule Sharing: With Sigma, we have the ability to tap into a community that regularly contributes and shares their detection rules. This ensures that we constantly update and refine our detection mechanisms.
+Incident Response: Sigma aids in incident response by enabling analysts to quickly search and analyze logs for specific patterns or indicators.
+Proactive Threat Hunting: We can use Sigma rules for proactive threat hunting sessions. By leveraging specific patterns, we can comb through our datasets to pinpoint anomalies or signs of adversarial activity.
+Seamless Integration with Automation Tools: By converting Sigma rules into appropriate formats, we can seamlessly integrate them with our SOAR platforms and other automation tools, enabling automated responses based on specific detections.
+Customization for Specific Environments: The flexibility of Sigma rules means that we can tailor them according to the unique characteristics of our environment. Custom rules can address the specific threats or scenarios we're concerned about.
+Gap Identification: By aligning our rule set with the broader community, we can perform gap analysis, identifying areas where our detection capabilities might need enhancement.
+How Does Sigma Work?
+At its heart, Sigma is about expressing patterns found in log events in a structured manner. So, instead of having a variety of rule descriptions scattered in various proprietary formats, with Sigma, we have a unified, open standard. This unified format becomes the lingua franca for log-based threat detection.
+
+Sigma rules are written in YAML. Each Sigma rule describes a particular pattern of log events which might correlate with malicious activity. The rule encompasses a title, description, log source, and the pattern itself.
+
+But here comes the magic. The true power of Sigma lies in its convertibility. We might ask, "If it's a standard format, how do we use it with our specific logging tools and platforms?" That's where the Sigma converter (sigmac) steps in. This converter is the linchpin of our workflow, transforming our Sigma rules into queries or configurations compatible with a multitude of SIEMs, log management solutions, and other security analytics tools.
+
+With sigmac, we can take a rule written in the Sigma format and translate it for ElasticSearch, QRadar, Splunk, and many more, almost instantaneously.
+
+Note: pySigma is increasingly becoming the go-to option for rule translation, as sigmac is now considered obsolete.
+
+Sigma Rule Structure
+As mentioned already, Sigma rule files are written in YAML format. Below is the structure of a Sigma rule.
+
+[sigma_structure.png]
+
+Source: https://github.com/SigmaHQ/sigma/wiki/Specification
+
+Let's understand the structure of a Sigma rule with an example.
+
+Code: yaml
+title: Potential LethalHTA Technique Execution 
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471 
+status: test 
+description: Detects potential LethalHTA technique where "mshta.exe" is spawned by an "svchost.exe" process
+references:
+    - https://codewhitesec.blogspot.com/2018/07/lethalhta.html
+author: Markus Neis 
+date: 2018/06/07 
+tags: 
+    - attack.defense_evasion 
+    - attack.t1218.005 
+logsource: 
+    category: process_creation  
+    product: windows
+detection:
+    selection: 
+        ParentImage|endswith: '\svchost.exe'
+        Image|endswith: '\mshta.exe'
+    condition: selection
+falsepositives: 
+    - Unknown
+level: high
+The below screenshot shows the different components that form a Sigma Rule:
+
+[sigma_structure_example.png]
+
+Sigma Rule Breakdown (based on Sigma's specification):
+
+title: A brief title for the rule that should contain what the rule is supposed to detect (max. 256 characters)
+Code: yaml
+title: Potential LethalHTA Technique Execution
+...
+id: Sigma rules should be identified by a globally unique identifier in the id attribute. For this purpose randomly generated UUIDs (version 4) are recommended but not mandatory.
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+...
+status (optional): Declares the status of the rule.
+stable: The rule didn't produce any obvious false positives in multiple environments over a long period of time
+test: The rule doesn't show any obvious false positives on a limited set of test systems
+experimental: A new rule that hasn't been tested outside of lab environments and could lead to many false positives
+deprecated: The rule is to replace or cover another one. The link between rules is made via the related field.
+unsupported: The rule can not be used in its current state (special correlation log, home-made fields, etc.)
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+status: test
+...
+description (optional): A short description of the rule and the malicious activity that can be detected (max. 65,535 characters)
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+status: test
+description: Detects potential LethalHTA technique where "mshta.exe" is spawned by an "svchost.exe" process
+...
+references (optional): Citations to the original source from which the rule was inspired. These might include blog posts, academic articles, presentations, or even tweets.
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+status: test
+description: Detects potential LethalHTA technique where "mshta.exe" is spawned by an "svchost.exe" process
+references:
+    - https://codewhitesec.blogspot.com/2018/07/lethalhta.html
+...
+author (optional): Creator of the rule (can be a name, nickname, twitter handle, etc).
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+status: test
+description: Detects potential LethalHTA technique where "mshta.exe" is spawned by an "svchost.exe" process
+references:
+    - https://codewhitesec.blogspot.com/2018/07/lethalhta.html
+author: Markus Neis
+...
+date (optional): Rule creation date. Use the format YYYY/MM/DD.
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+status: test
+description: Detects potential LethalHTA technique where "mshta.exe" is spawned by an "svchost.exe" process
+references:
+    - https://codewhitesec.blogspot.com/2018/07/lethalhta.html
+author: Markus Neis
+date: 2018/06/07
+...
+logsource: This section describes the log data on which the detection is meant to be applied to. It describes the log source, the platform, the application and the type that is required in the detection. More information can be found in the following link: https://github.com/SigmaHQ/sigma/tree/master/documentation/logsource-guides
+
+It consists of three attributes that are evaluated automatically by the converters and an arbitrary number of optional elements. We recommend using a "definition" value when further explanation is necessary.
+
+category: The category value is used to select all log files written by a certain group of products, like firewalls or web server logs. The automatic converter will use the keyword as a selector for multiple indices. Examples: firewall, web, antivirus, etc.
+product: The product value is used to select all log outputs of a certain product, e.g. all Windows event log types including Security, System, Application and newer types like AppLocker and Windows Defender. Examples: windows, apache, check point fw1, etc.
+service: The service value is used to select only a subset of a product's logs, like the sshd on Linux or the Security event log on Windows systems. Examples: sshd, applocker, etc.
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+status: test
+description: Detects potential LethalHTA technique where "mshta.exe" is spawned by an "svchost.exe" process
+references:
+    - https://codewhitesec.blogspot.com/2018/07/lethalhta.html
+author: Markus Neis
+date: 2018/06/07
+logsource:
+	category: process_creation
+	product: windows
+...
+detection: A set of search-identifiers that represent properties of searches on log data. Detection is made up of two components:
+
+Search Identifiers
+Condition
+
+Code: yaml
+title: Potential LethalHTA Technique Execution
+id: ed5d72a6-f8f4-479d-ba79-02f6a80d7471
+status: test
+description: Detects potential LethalHTA technique where "mshta.exe" is spawned by an "svchost.exe" process
+references:
+    - https://codewhitesec.blogspot.com/2018/07/lethalhta.html
+author: Markus Neis
+date: 2018/06/07
+logsource:
+	category: process_creation
+	product: windows
+detection:
+	selection:
+		ParentImage|endswith: '\svchost.exe'
+        Image|endswith: '\mshta.exe'
+    condition: selection
+...
+The values contained in Sigma rules can be modified by value modifiers. Value modifiers are appended after the field name with a pipe character (|) as separator and can also be chained, e.g. fieldname|mod1|mod2: value. The value modifiers are applied in the given order to the value.
+
+The behavior of search identifiers is changed by value modifiers as shown in the table below :
+
+Value Modifier	Explanation	Example
+contains	Adds wildcard (*) characters around the value(s)	CommandLine|contains
+all	Links all elements of a list with a logical "AND" (instead of the default "OR")	CommandLine|contains|all
+startswith	Adds a wildcard (*) character at the end of the field value	ParentImage|startswith
+endswith	Adds a wildcard (*) character at the begining of the field value	Image|endswith
+re:	This value is handled as regular expression by backends	CommandLine|re: '\[String\]\s*\$VerbosePreference
+Source: blusapphire.io
+
+Search identifiers include multiple values in two different data structures:
+
+Lists, which can contain:
+
+strings that are applied to the full log message and are linked with a logical OR.
+maps (see below). All map items of a list are linked with a logical OR.
+Image showing detection examples with lists and maps. Lists include cmd.exe, powershell.exe, winword.exe, excel.exe, powerpnt.exe. Maps include wmic.exe and command line containing '/node:'.
+
+Source: blusapphire.io
+
+Example list of strings that matches on evilservice or svchost.exe -n evil.
+
+Code: yaml
+detection:
+ 	keywords:
+		- evilservice
+ 		- svchost.exe -n evil
+Example list of maps that matches on image file example.exe or on a executable whose description contains the string Test executable.
+
+Code: yaml
+detection:
+	selection:
+ 		- Image|endswith: '\example.exe'
+		- Description|contains: 'Test executable'
+Maps: Maps (or dictionaries) consist of key/value pairs, in which the key is a field in the log data and the value a string or integer value. All elements of a map are joined with a logical AND.
+Example that matches on event log Security and (Event ID 517 or Event ID 1102)
+
+Code: yaml
+detection:
+    selection:
+  	    EventLog: Security
+  	    EventID:
+  	      - 517
+     	  - 1102
+	condition: selection
+Example that matches on event log Security and Event ID 4679 and TicketOptions 0x40810000 and TicketEncryption 0x17.
+
+Code: yaml
+detection:
+	selection:
+		EventLog: Security
+		EventID: 4769
+		TicketOptions: '0x40810000'
+		TicketEncryption: '0x17'
+	condition: selection	
+Condition: Condition defines how fields are related to each other. If there's anything to filter, it can be defined in the condition. It uses various operators to define relationships for multiple fields which are explained below.
+Operator	Example
+Logical AND/OR	keywords1 or keywords2
+1/all of them	all of them
+1/all of search-identifier-pattern	all of selection*
+1/all of search-id-pattern	all of filter_*
+Negation with 'not'	keywords and not filters
+Brackets - Order of operation '()'	selection1 and (keywords1 or keywords2)
+Source: blusapphire.io
+
+Example of a condition:
+
+Code: yaml
+condition: selection1 or selection2 or selection3
+Sigma Rule Development Best Practices
+Sigma's specification repository contains everything you may need around Sigma rules.
+
+Sigma rule development best practices and common pitfalls can be found on Sigma's Rule Creation Guide.
+

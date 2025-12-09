@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>ARP Spoofing - Slide 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">ARP Spoofing</h1>
+        <div class="subtitle">"Qualcuno sta intercettando le chiamate?"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">🚨 Incidente in Corso</div>
+                <div class="card-text">
+                    <p><strong>Ore 10:42.</strong> Il dipartimento HR segnala errori SSL e lentezza. Il traffico sembra prendere una "deviazione".</p>
+                    <p>Sospettiamo un <strong>ARP Spoofing</strong> (Man-in-the-Middle). Un dispositivo sta gridando "SONO IO IL ROUTER!" a tutti.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🔍 Indagine</div>
+                <div class="card-text">
+                    <p>Un ARP Poisoning inonda la rete di pacchetti <strong>ARP Reply</strong> falsi, ma spesso inizia con molte <strong>Requests</strong>.</p>
+                    <p><strong>Obiettivo:</strong> Contare le richieste ARP sospette.</p>
+                    <div class="code-box">Filtro: arp.opcode == 1 && eth.src == 08:00:27:53:0c:ba</div>
+                </div>
+            </div>
+        </div>
+
+         <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>ARP_Poison.pcapng</code>.</p>
+                <p>1. Applica il filtro sopra per isolare le richieste REQUEST (opcode 1) di quel MAC sospetto.</p>
+                <p>2. Guarda il numero di pacchetti visualizzati (Displayed) i basso a destra.</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">507</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 2;</script>
+    <script src="main.js"></script>
+</body>
+</html>

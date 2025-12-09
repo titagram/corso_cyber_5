@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Best Practices e Tips Avanzati</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">💡 Best Practices e Tips Avanzati</h1>
+        <div class="subtitle">Ottimizzare il workflow con Metasploit</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">⚡ Tips per la Produttività</div>
+                <div class="card-text">
+                    <p><strong>1. Tab Completion:</strong></p>
+                    <p>Usa TAB per autocompletare comandi, moduli e opzioni</p>
+                    <div class="code-box">msf6 > use exploit/win[TAB]
+msf6 > set RHOS[TAB]</div>
+                    <br>
+                    <p><strong>2. Comando "back":</strong></p>
+                    <p>Torna al contesto principale</p>
+                    <div class="code-box">msf6 exploit(...) > back
+msf6 ></div>
+                    <br>
+                    <p><strong>3. Comandi OS diretti:</strong></p>
+                    <div class="code-box">msf6 > ifconfig
+msf6 > ping 10.10.10.8
+msf6 > cat /etc/passwd</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">🔍 Ricerca Efficiente</div>
+                <div class="card-text">
+                    <p><strong>Uso combinato di grep:</strong></p>
+                    <div class="code-box">msf6 > grep meterpreter grep reverse_tcp show payloads</div>
+                    <br>
+                    <p><strong>Contare risultati:</strong></p>
+                    <div class="code-box">msf6 > grep -c windows show exploits</div>
+                    <br>
+                    <p><strong>Ricerca con filtri multipli:</strong></p>
+                    <div class="code-box">msf6 > search type:exploit platform:windows rank:excellent cve:2021</div>
+                    <br>
+                    <p><strong>Esclusione pattern:</strong></p>
+                    <div class="code-box">msf6 > search platform:-linux type:exploit</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🎯 Gestione Sessioni Avanzata</div>
+            <div class="card-text">
+                <p><strong>Comandi sessioni essenziali:</strong></p>
+                <div class="grid-2-col">
+                    <div>
+                        <div class="code-box">msf6 > sessions           # Lista tutte le sessioni
+msf6 > sessions -i 1      # Interagisci con sessione 1
+msf6 > sessions -k 1      # Uccidi sessione 1
+msf6 > sessions -K        # Uccidi tutte le sessioni
+msf6 > sessions -u 1      # Upgrade a Meterpreter
+msf6 > sessions -v        # Modalità verbose</div>
+                    </div>
+                    <div>
+                        <p><strong>Jobs in background:</strong></p>
+                        <div class="code-box">msf6 > exploit -j         # Lancia come job
+msf6 > jobs               # Lista jobs attivi
+msf6 > jobs -k 1          # Uccidi job 1
+msf6 > jobs -K            # Uccidi tutti i jobs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-yellow">
+                <div class="card-title">📝 Resource Scripts</div>
+                <div class="card-text">
+                    <p>Automatizza sequenze di comandi con resource scripts (.rc):</p>
+                    <br>
+                    <p><strong>Esempio file scan.rc:</strong></p>
+                    <div class="code-box">workspace -a target_company
+db_nmap -sV -sC 10.10.10.0/24
+hosts
+services</div>
+                    <br>
+                    <p><strong>Eseguire resource script:</strong></p>
+                    <div class="code-box">msf6 > resource /root/scan.rc</div>
+                    <br>
+                    <p><strong>Al lancio di msfconsole:</strong></p>
+                    <div class="code-box">$ msfconsole -r scan.rc</div>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">🔐 Sicurezza Operativa</div>
+                <div class="card-text">
+                    <p><strong>1. Cleanup tracce:</strong></p>
+                    <div class="code-box">meterpreter > clearev    # Cancella event log</div>
+                    <br>
+                    <p><strong>2. Process migration:</strong></p>
+                    <p>Migra da processi instabili a stabili</p>
+                    <br>
+                    <p><strong>3. Timestomp:</strong></p>
+                    <div class="code-box">meterpreter > timestomp file.exe -v</div>
+                    <br>
+                    <p><strong>4. Kill AV:</strong></p>
+                    <div class="code-box">meterpreter > run killav</div>
+                    <br>
+                    <p style="color: #F44336;">⚠️ Usa solo con autorizzazione esplicita!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue" style="margin-top: 25px;">
+            <div class="card-title">🚀 Pro Tips</div>
+            <div class="card-text">
+                <div class="grid-3-col">
+                    <div>
+                        <p><strong>💾 Logging:</strong></p>
+                        <div class="code-box">msf6 > spool /tmp/msf.log</div>
+                        <p>Registra tutto l'output</p>
+                    </div>
+                    <div>
+                        <p><strong>🔄 setg vs set:</strong></p>
+                        <p>Usa <span class="tech-term">setg</span> per valori globali (LHOST, LPORT)</p>
+                        <p>Usa <span class="tech-term">set</span> per valori specifici</p>
+                    </div>
+                    <div>
+                        <p><strong>📊 Verbose mode:</strong></p>
+                        <div class="code-box">msf6 > set VERBOSE true</div>
+                        <p>Più dettagli durante exploitation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 24;</script>
+    <script src="main.js"></script>
+</body>
+</html>

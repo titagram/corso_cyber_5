@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Walkthrough "Blog" CTF - Setup dell'Ambiente e DNS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Preparazione: Virtual Hosting e Risoluzione Nomi</h1>
+        
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Azione Pratica</div>
+                <div class="card-text">
+                    <p><strong>Comando:</strong></p>
+                    <div class="code-box">sudo nano /etc/hosts</div>
+                    <br>
+                    <p><strong>Input:</strong></p>
+                    <div class="code-box">10.10.x.x blog.thm</div>
+                    <br>
+                    <p class="security-insight"><strong>Screenshot:</strong> Terminale con l'editor nano aperto.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Analisi Tecnica</div>
+                <div class="card-text">
+                    <p><strong>Il Problema:</strong> I server web moderni usano il <span class="tech-term">Virtual Hosting</span> per ospitare più siti su un solo IP. Se navighiamo solo tramite IP, il server non sa quale sito servire e restituisce la pagina di default o un errore.</p>
+                    <p><strong>La Soluzione:</strong> Modificando <span class="tech-term">/etc/hosts</span> (il DNS locale), forziamo il browser a inviare l'header HTTP <span class="tech-term">Host: blog.thm</span>. Questo dice al web server (Apache/Nginx) esattamente quale "Virtual Host" vogliamo visualizzare.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 1;</script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>PDU e Incapsulamento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">PDU e Incapsulamento</h1>
+        <div class="subtitle">Protocol Data Unit</div>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="img/net_models_pdu2.png" alt="PDU Example" style="max-width: 800px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Cos'è un PDU?</div>
+                <div class="card-text">
+                    <p>Un <span class="tech-term">Protocol Data Unit (PDU)</span> è un pacchetto di dati composto da:</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>Informazioni di controllo</li>
+                        <li>Dati incapsulati</li>
+                        <li>Header di ogni livello del modello OSI</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Incapsulamento</div>
+                <div class="card-text">
+                    <p>Mentre i dati si muovono lungo lo stack del protocollo, ogni livello avvolge i dati del livello precedente in una nuova "bolla" chiamata <span class="tech-term">incapsulamento</span>.</p>
+                    <p style="margin-top: 15px;">Ogni header aggiunge informazioni necessarie di quel livello: flag operativi, opzioni, indirizzi IP sorgente/destinazione, porte, protocolli di trasporto e applicazione.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <img src="img/pdu-wireshark.png" alt="PDU Breakdown in Wireshark" style="max-width: 900px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Nota Importante</div>
+            <div class="card-text">
+                <p>In Wireshark, il breakdown del PDU è mostrato <strong>in ordine inverso</strong> perché è nell'ordine in cui è stato de-incapsulato. Questo aiuta a capire come i dati sono stati processati durante la trasmissione.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 7;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

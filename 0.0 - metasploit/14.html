@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Targets in Metasploit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🎯 Targets in Metasploit</h1>
+        <div class="subtitle">Selezionare il target giusto per l'exploit</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🔍 Cosa sono i Targets?</div>
+            <div class="card-text">
+                <p>I <strong>targets</strong> rappresentano configurazioni specifiche del sistema vulnerabile per cui l'exploit è stato ottimizzato.</p>
+                <br>
+                <p>Ogni target può variare per:</p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li><strong>Service Pack</strong> del sistema operativo</li>
+                    <li><strong>Versione OS</strong> specifica</li>
+                    <li><strong>Versione linguaggio</strong> (es. EN, IT, DE)</li>
+                    <li><strong>Return address</strong> e parametri specifici</li>
+                    <li><strong>Architettura</strong> (x86, x64)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">📋 Visualizzare i Targets</div>
+                <div class="card-text">
+                    <p><strong>Vedere targets disponibili:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > show targets
+
+Exploit targets:
+
+   Id  Name
+   --  ----
+   0   Automatic
+   1   Windows 7 SP0/SP1
+   2   Windows Server 2008 R2
+   3   Windows 8
+   4   Windows 8.1
+   5   Windows 10</div>
+                    <br>
+                    <p style="color: #4CAF50;">Di solito il target <span class="tech-term">0 (Automatic)</span> prova a identificare automaticamente il sistema.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">⚙️ Selezionare un Target</div>
+                <div class="card-text">
+                    <p><strong>Impostare un target specifico:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > set target 1
+target => 1</div>
+                    <br>
+                    <p><strong>Oppure per ID:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > set TARGET Windows 7 SP0/SP1
+target => Windows 7 SP0/SP1</div>
+                    <br>
+                    <p><strong>Verificare:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > show options
+
+Exploit target:
+   Id  Name
+   --  ----
+   1   Windows 7 SP0/SP1</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🧪 Identificazione del Target</div>
+            <div class="card-text">
+                <p><strong>Per identificare correttamente il target:</strong></p>
+                <br>
+                <p>1. <strong>Enumeration accurata:</strong> Usa nmap, scanner specifici</p>
+                <div class="code-box">$ nmap -sV -O 10.10.10.40
+
+OS: Windows 7 Professional 7601 Service Pack 1
+445/tcp open microsoft-ds Microsoft Windows 7</div>
+                <br>
+                <p>2. <strong>Banner grabbing:</strong> Analizza le risposte del servizio</p>
+                <br>
+                <p>3. <strong>Trial and error:</strong> Prova target diversi se il primo fallisce</p>
+                <br>
+                <p style="color: #667eea;">💡 I return address variano in base a language pack, versioni software e hooks, quindi il target corretto è cruciale per il successo dell'exploit.</p>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">⚠️ Best Practices</div>
+            <div class="card-text">
+                <p><strong>1.</strong> Inizia sempre con <span class="tech-term">Automatic</span> se disponibile</p>
+                <p><strong>2.</strong> Se fallisce, seleziona manualmente basandoti sull'enumeration</p>
+                <p><strong>3.</strong> Prova target simili se il primo non funziona</p>
+                <p><strong>4.</strong> Consulta la documentazione dell'exploit con <span class="tech-term">info</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 14;</script>
+    <script src="main.js"></script>
+</body>
+</html>

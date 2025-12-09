@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>MSFconsole - L'Interfaccia Principale</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">💻 MSFconsole</h1>
+        <div class="subtitle">L'interfaccia più popolare di Metasploit Framework</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Cos'è MSFconsole?</div>
+            <div class="card-text">
+                <p>MSFconsole è l'interfaccia <strong>"all-in-one"</strong> centralizzata che fornisce accesso efficiente a praticamente tutte le opzioni disponibili nel Metasploit Framework.</p>
+                <br>
+                <p>Sebbene possa sembrare intimidatoria all'inizio, una volta appresa la sintassi dei comandi, imparerai ad apprezzare la potenza di questa interfaccia.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">✨ Caratteristiche Principali</div>
+                <div class="card-text">
+                    <ul style="line-height: 1.8;">
+                        <li><strong>Unico modo supportato</strong> per accedere alla maggior parte delle funzionalità di Metasploit</li>
+                        <li><strong>Interfaccia console-based</strong> al Framework</li>
+                        <li><strong>Più stabile e ricca di funzionalità</strong> tra tutte le interfacce MSF</li>
+                        <li><strong>Full readline support</strong> con tab completion</li>
+                        <li><strong>Esecuzione comandi esterni</strong> da dentro msfconsole</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">🚀 Avviare MSFconsole</div>
+                <div class="card-text">
+                    <p><strong>Comando base:</strong></p>
+                    <div class="code-box">$ msfconsole</div>
+                    <br>
+                    <p><strong>Senza banner (quiet mode):</strong></p>
+                    <div class="code-box">$ msfconsole -q</div>
+                    <br>
+                    <p style="color: #FFD54F;">💡 L'opzione <span class="tech-term">-q</span> è utile per vedere subito il prompt senza aspettare il caricamento dell'ASCII art.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-purple" style="margin-top: 20px;">
+            <div class="card-title">🎨 User Experience</div>
+            <div class="card-text">
+                <p>Il termine chiave è <strong>usabilità</strong> - user experience. La facilità con cui possiamo controllare la console può migliorare la nostra esperienza di apprendimento.</p>
+                <br>
+                <p>MSFconsole combina l'automazione di task comuni con la potenza e il controllo totale di un'interfaccia command-line, permettendoci di gestire vulnerabilità diverse con la stessa facilità con cui gestiremmo le tab di un browser.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 5;</script>
+    <script src="main.js"></script>
+</body>
+</html>

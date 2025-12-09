@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 22</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Packing</h1>
+        <div class="subtitle">Compressione malevola</div>
+
+        
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">Il Packer</div>
+                <div class="card-text">
+                    <p>Un programma che prende l'eseguibile originale, lo comprime/cifra e ci aggiunge un piccolo "loader" (Stub).</p>
+                    <p>Quando esegui il file packed, il loader decomprime il payload in memoria e lo avvia.</p>
+                </div>
+            </div>
+            <div class="card border-blue">
+                <div class="card-title">Perché?</div>
+                <div class="card-text">
+                    <p>1. Ridurre le dimensioni.</p>
+                    <p>2. Evadere le firme antivirus statiche (cambia l'hash e la struttura).</p>
+                    <p>3. Rendere difficile il Reverse Engineering.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card border-yellow">
+            <div class="card-title">Esempio UPX</div>
+            <div class="card-text">
+                <p>Se vedi sezioni chiamate <code>UPX0</code>, <code>UPX1</code>, il file è packed con UPX. Puoi spacchettarlo con <code>upx -d file.exe</code>.</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 22;</script>
+    <script src="main.js"></script>
+</body>
+</html>

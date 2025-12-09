@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Esempi Detection Analytics - Slide 28</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Esempi di Detection Basata su Analytics</h1>
+        <div class="subtitle">Anomaly Detection Statistico</div>
+
+        <div class="card border-blue">
+            <div class="card-title">Comandi Anormalmente Lunghi</div>
+            <div class="card-text">
+                <p><strong>Detection di comandi eccessivamente lunghi:</strong></p>
+                <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" Image=*cmd.exe ParentImage!="*msiexec.exe" ParentImage!="*explorer.exe" | eval len=len(CommandLine) | table User, len, CommandLine | sort - len</div>
+                <p style="margin-top: 15px;">Gli attaccanti frequentemente impiegano comandi eccessivamente lunghi come parte delle loro operazioni. Dopo aver rivisto i risultati, notiamo alcune attività benigne che possono essere filtrate per ridurre il rumore.</p>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-top: 30px;">
+            <div class="card-title">Attività cmd.exe Anormale</div>
+            <div class="card-text">
+                <p><strong>Detection di attività cmd.exe insolita:</strong></p>
+                <div class="code-box">index="main" EventCode=1 (CommandLine="*cmd.exe*") | bucket _time span=1h | stats count as cmdCount by _time User CommandLine | eventstats avg(cmdCount) as avg stdev(cmdCount) as stdev | eval isOutlier=if(cmdCount > avg+1.5*stdev, 1, 0) | search isOutlier=1</div>
+                <p style="margin-top: 15px;">Questa ricerca identifica attività cmd.exe insolita entro un certo intervallo temporale. Usa il comando bucket per raggruppare eventi per ora, calcola conteggio, media e deviazione standard di esecuzioni cmd.exe, e flagga outlier.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 30px;">
+            <div class="card border-purple">
+                <div class="card-title">Processi che Caricano Molte DLL</div>
+                <div class="card-text">
+                    <p><strong>Detection di processi che caricano un alto numero di DLL in un tempo specifico:</strong></p>
+                    <div class="code-box">index="main" EventCode=7 NOT (Image="C:\\Windows\\System32*") NOT (Image="C:\\Program Files (x86)*") NOT (Image="C:\\Program Files*") NOT (Image="C:\\ProgramData*") NOT (Image="C:\\Users\\waldo\\AppData*") | bucket _time span=1h | stats dc(ImageLoaded) as unique_dlls_loaded by _time, Image | where unique_dlls_loaded > 3 | stats count by Image, unique_dlls_loaded | sort - unique_dlls_loaded</div>
+                    <p style="margin-top: 15px;">Non è raro che malware carichi multiple DLL in rapida successione.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Transazioni con Stesso Processo</div>
+                <div class="card-text">
+                    <p><strong>Detection di transazioni dove lo stesso processo è stato creato più di una volta sullo stesso computer:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | transaction ComputerName, Image | where mvcount(ProcessGuid) > 1 | stats count by Image, ParentImage</div>
+                    <p style="margin-top: 15px;">Vogliamo correlare eventi dove lo stesso processo (Image) è eseguito sullo stesso computer (ComputerName), poiché questo potrebbe indicare anomalie.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/150.png" alt="Misspelling" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/151.png" alt="Non-Standard Ports" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/159.png" alt="Network Connections Outliers" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/160.png" alt="Long Commands" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/161.png" alt="Cmd Activity" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 28;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

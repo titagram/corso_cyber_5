@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>ARP Scanning - Slide 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">ARP Scanning & DoS</h1>
+        <div class="subtitle">"C'è un fantasma nella macchina?"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">🕵️‍♀️ Ricognizione Ostile</div>
+                <div class="card-text">
+                    <p>Prima dell'attacco, c'è sempre la ricognizione. L'attaccante sta "bussando" a tutti gli IP della subnet (192.168.10.x) per vedere chi risponde.</p>
+                    <p>Questo genera un pattern a "scala": richieste sequenziali a .1, .2, .3...</p>
+                    <p>Se lo ignoriamo, il passo successivo potrebbe essere un DoS completo della subnet.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🛠️ Analisi Tecnica</div>
+                <div class="card-text">
+                    <p>Cerchiamo le <strong>Risposte (Replies)</strong>. Se l'attaccante scansiona, le vittime ignare risponderanno "Eccomi, sono qui!".</p>
+                    <div class="code-box">Filtro: arp.opcode == 2</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>ARP_Poison.pcapng</code> (lo stesso file).</p>
+                <p>1. Filtra per opcode 2 (Reply).</p>
+                <p>2. Cerca il pacchetto <strong>No. 13</strong>.</p>
+                <p>3. Identifica il MAC address associato all'IP 192.168.10.1 (la prima vittima della scansione).</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">2c:30:33:e2:d5:c3</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 3;</script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Processo di Analisi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Il Processo di Analisi</h1>
+        <div class="subtitle">Tipi di Analisi del Traffico</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Analisi Descrittiva</div>
+                <div class="card-text">
+                    <p>Descrive un dataset basandosi su caratteristiche individuali. Aiuta a rilevare possibili errori nella raccolta dati e/o outlier nel dataset.</p>
+                    <p style="margin-top: 15px;"><strong>Domande chiave:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Qual è il problema?</li>
+                        <li>Qual è l'ambito e l'obiettivo?</li>
+                        <li>Quali sono i target (net/host/protocollo)?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Analisi Diagnostica</div>
+                <div class="card-text">
+                    <p>Chiarisce cause, effetti e interazioni delle condizioni. Fornisce insight ottenuti attraverso correlazioni e interpretazione.</p>
+                    <p style="margin-top: 15px;"><strong>Processo:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Catturare traffico di rete</li>
+                        <li>Identificare componenti richiesti (filtraggio)</li>
+                        <li>Comprendere il traffico catturato</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Analisi Predittiva</div>
+                <div class="card-text">
+                    <p>Valutando dati storici e correnti, crea un modello predittivo per probabilità future.</p>
+                    <p style="margin-top: 15px;"><strong>Attività:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Note-taking e mind mapping</li>
+                        <li>Annotare tutto ciò che facciamo, vediamo o troviamo</li>
+                        <li>Riassumere i risultati trovati</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Analisi Prescrittiva</div>
+                <div class="card-text">
+                    <p>Mira a restringere quali azioni intraprendere per eliminare o prevenire un problema futuro.</p>
+                    <p style="margin-top: 15px;">Utilizzando i risultati del workflow, possiamo prendere decisioni informate su quali azioni sono richieste per risolvere il problema e prevenire che accada di nuovo.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">Componenti Chiave di un'Analisi Efficace</div>
+            <div class="card-text">
+                <ol style="padding-left: 20px; line-height: 2;">
+                    <li><strong>Conosci il tuo ambiente:</strong> Inventari degli asset e mappe di rete sono vitali</li>
+                    <li><strong>Il posizionamento è fondamentale:</strong> Più vicino alla fonte del problema è l'ideale</li>
+                    <li><strong>Persistenza:</strong> Il problema potrebbe non essere facile da individuare. Non perdere la determinazione</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 15;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

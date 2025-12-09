@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Suricata - File Extraction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Suricata - File Extraction</h1>
+        <div class="subtitle">Estrazione File dal Traffico</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">Abilitare File Extraction</div>
+            <div class="card-text">
+                <p>Suricata ha una funzionalità sottoutilizzata ma altamente potente: <span class="tech-term">file extraction</span>. Questa funzionalità ci permette di catturare e memorizzare file trasferiti su diversi protocolli.</p>
+                <p style="margin-top: 15px;">Per abilitare l'estrazione file, modifichiamo la sezione <code>file-store</code> in <span class="tech-term">suricata.yaml</span>:</p>
+                <div class="code-box" style="margin-top: 15px;">
+file-store:
+  version: 2
+  enabled: yes
+  force-filestore: yes
+  dir: /path/to/filestore
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Regola per File Extraction</div>
+                <div class="card-text">
+                    <p>L'estrazione file non è un processo automatico. Dobbiamo creare una regola specifica che istruisca Suricata quando e che tipo di file estrarre.</p>
+                    <p style="margin-top: 15px;">Esempio di regola semplice:</p>
+                    <div class="code-box" style="margin-top: 15px;">
+alert http any any -> any any (msg:"FILE store all"; filestore; sid:2; rev:1;)
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Organizzazione File Store</div>
+                <div class="card-text">
+                    <p>Il modulo file-store utilizza la sua directory di log (default: filestore nella directory di logging di default) e registra file usando lo <span class="tech-term">SHA256</span> del contenuto come nome del file.</p>
+                    <p style="margin-top: 15px;">Ogni file è poi posizionato in una directory nominata da 00 a ff dove la directory condivide i primi 2 caratteri del nome del file.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong> Se lo SHA256 inizia con f9bc6d..., il file sarà posizionato in filestore/f9/</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 8;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

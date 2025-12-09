@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Deployment di IDS/IPS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Deployment di IDS/IPS</h1>
+        <div class="subtitle">Posizionamento e Strategia</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Posizionamento IDS</div>
+                <div class="card-text">
+                    <p>Gli <span class="tech-term">IDS</span> monitorano passivamente il traffico di rete, rilevando minacce potenziali e generando alert.</p>
+                    <p style="margin-top: 15px;">Posizionandoli dietro il firewall, possiamo assicurarci che analizzino traffico che ha già superato la prima linea di difesa, permettendoci di concentrarci su minacce più sottili o complesse che hanno bypassato il firewall.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Posizionamento IPS</div>
+                <div class="card-text">
+                    <p>Gli <span class="tech-term">IPS</span> intervengono attivamente per fermare minacce rilevate.</p>
+                    <p style="margin-top: 15px;">Devono essere posizionati in un punto della rete dove possono non solo vedere traffico potenzialmente malizioso ma anche avere l'autorità di fermarlo.</p>
+                    <p style="margin-top: 15px;">Questo è solitamente ottenuto posizionandoli <strong>inline</strong> sulla rete, spesso direttamente dietro il firewall.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Host-based vs Network-based</div>
+            <div class="card-text">
+                <p>IDS/IPS possono essere implementati anche a livello host, noti come:</p>
+                <ul style="margin-top: 15px; padding-left: 20px; line-height: 2;">
+                    <li><strong>HIDS:</strong> Host-based Intrusion Detection Systems</li>
+                    <li><strong>HIPS:</strong> Host-based Intrusion Prevention Systems</li>
+                </ul>
+                <p style="margin-top: 15px;">Questi monitorano il traffico in entrata e in uscita dell'host individuale per qualsiasi attività sospetta.</p>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">SIEM e Aggiornamenti</div>
+            <div class="card-text">
+                <p><strong>SIEM:</strong> I sistemi Security Information and Event Management raccolgono e aggregano log da IDS e IPS insieme ad altri dispositivi nella rete. Permettono di correlare eventi da diverse fonti e utilizzare analisi avanzate per rilevare attacchi complessi e coordinati.</p>
+                <p style="margin-top: 15px;"><strong>Aggiornamenti:</strong> Per garantire che questi sistemi performino al meglio, li aggiorniamo costantemente con le ultime signature di minacce e ottimizziamo i loro algoritmi di rilevamento anomalie. Questo richiede uno sforzo continuo e diligente dal team di sicurezza.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 2;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

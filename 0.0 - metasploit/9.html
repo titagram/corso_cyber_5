@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tipi di Moduli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🗂️ Tipi di Moduli Metasploit</h1>
+        <div class="subtitle">Classificazione e funzionalità dei moduli</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">💥 Exploits</div>
+                <div class="card-text">
+                    <p><strong>Moduli che sfruttano una vulnerabilità</strong> per permettere la consegna del payload.</p>
+                    <br>
+                    <p>Sono il cuore di Metasploit e rappresentano l'azione di attacco vera e propria.</p>
+                    <br>
+                    <p style="color: #F44336;">✅ Interagibile con comando <span class="tech-term">use</span></p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">🔍 Auxiliary</div>
+                <div class="card-text">
+                    <p><strong>Funzionalità di scanning, fuzzing, sniffing e amministrative.</strong></p>
+                    <br>
+                    <p>Offrono assistenza extra e funzionalità come port scanning, vulnerability scanning, credential testing.</p>
+                    <br>
+                    <p style="color: #4CAF50;">✅ Interagibile con comando <span class="tech-term">use</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-blue">
+                <div class="card-title">📦 Payloads</div>
+                <div class="card-text">
+                    <p><strong>Codice che viene eseguito remotamente</strong> e chiama indietro la macchina dell'attacker per stabilire una connessione (o shell).</p>
+                    <br>
+                    <p>Esempi: reverse_tcp, meterpreter, bind_tcp</p>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">📝 Post</div>
+                <div class="card-text">
+                    <p><strong>Ampia gamma di moduli</strong> per raccogliere informazioni, fare pivoting più in profondità nella rete, etc.</p>
+                    <br>
+                    <p>Usati dopo aver ottenuto accesso al sistema.</p>
+                    <br>
+                    <p style="color: #667eea;">✅ Interagibile con comando <span class="tech-term">use</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-3-col" style="margin-top: 25px;">
+            <div class="card border-yellow">
+                <div class="card-title">🔐 Encoders</div>
+                <div class="card-text">
+                    <p>Assicurano che i payload arrivino intatti alla loro destinazione.</p>
+                    <br>
+                    <p>Usati anche per evitare bad characters e signature detection.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">⚙️ NOPs</div>
+                <div class="card-text">
+                    <p><strong>No Operation code</strong></p>
+                    <br>
+                    <p>Mantengono dimensioni del payload consistenti attraverso tentativi di exploit multipli.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">🎭 Evasion</div>
+                <div class="card-text">
+                    <p>Moduli specializzati per <strong>evasione di sistemi di sicurezza</strong> come IDS/IPS e antivirus.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue" style="margin-top: 25px;">
+            <div class="card-title">🔌 Plugins</div>
+            <div class="card-text">
+                <p>Script aggiuntivi che possono essere integrati in un assessment con msfconsole e coesistere con le funzionalità esistenti.</p>
+                <br>
+                <p>Esempi: Nessus, Nexpose, OpenVAS integrations</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 9;</script>
+    <script src="main.js"></script>
+</body>
+</html>

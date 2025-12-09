@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Walkthrough "Blog" CTF - Network Scanning</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Ricognizione Attiva: Mappare la Superficie di Attacco</h1>
+        
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Azione Pratica</div>
+                <div class="card-text">
+                    <p><strong>Comando:</strong></p>
+                    <div class="code-box">nmap -sV -sC -A 10.10.x.x</div>
+                    <br>
+                    <p><strong>Output chiave:</strong></p>
+                    <div class="code-box">Porta 80 (HTTP/WordPress)<br>Porta 22 (SSH)<br>Porta 139/445 (SMB)</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Analisi Tecnica</div>
+                <div class="card-text">
+                    <p><strong>Flag `-sV` (Service Version):</strong> Interroga le porte aperte analizzando i banner di risposta per determinare il software esatto (es. Apache 2.4.29).</p>
+                    <p><strong>Flag `-sC` (Default Scripts):</strong> Lancia script Lua di base per trovare vulnerabilità comuni.</p>
+                    <p><strong>Analisi:</strong> La presenza di <span class="tech-term">SMB</span> (condivisione file Windows/Samba) su un server Web Linux è un'anomalia. Spesso indica una configurazione errata o un vecchio backup dimenticato.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 2;</script>
+    <script src="main.js"></script>
+</body>
+</html>

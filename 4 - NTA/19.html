@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tcpdump - Flag TCP e Output</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Tcpdump - Flag TCP e Output</h1>
+        <div class="subtitle">Analisi Avanzata dei Pacchetti</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Cercare Flag TCP</div>
+                <div class="card-text">
+                    <p>Per vedere solo pacchetti con il flag <span class="tech-term">SYN</span> impostato:</p>
+                    <div class="code-box" style="margin-top: 15px;">
+tcpdump -i eth0 'tcp[13] & 2 != 0'
+                    </div>
+                    <p style="margin-top: 15px;">Questo conta fino al 13° byte nella struttura e guarda il 2° bit. Se è impostato a 1 o ON, il flag SYN è impostato.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Opzioni Output</div>
+                <div class="card-text">
+                    <p><span class="tech-term">-S</span> - Mostra numeri di sequenza assoluti invece di relativi</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">-v, -vv, -vvv</span> - Aumenta la verbosità dell'output</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">-A</span> - Mostra solo testo ASCII dopo la riga del pacchetto</p>
+                    <p style="margin-top: 10px;"><span class="tech-term">-l</span> - Output line-buffered (utile per piping a grep)</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <img src="img/breakdown.png" alt="Tcpdump Output Breakdown" style="max-width: 900px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Interpretazione Output Tcpdump</div>
+            <div class="card-text">
+                <p>L'output di Tcpdump può essere suddiviso in diversi campi:</p>
+                <ul style="margin-top: 15px; padding-left: 20px; line-height: 2;">
+                    <li><strong>Timestamp:</strong> Data e ora del pacchetto</li>
+                    <li><strong>Protocol:</strong> Protocollo del livello superiore (IP, TCP, UDP, ecc.)</li>
+                    <li><strong>Source & Destination IP.Port:</strong> IP e porta sorgente/destinazione</li>
+                    <li><strong>Flags:</strong> Flag TCP utilizzati (SYN, ACK, FIN, ecc.)</li>
+                    <li><strong>Sequence e Acknowledgement Numbers:</strong> Numeri usati per tracciare i segmenti TCP</li>
+                    <li><strong>Protocol Options:</strong> Valori TCP negoziati (window size, selective acknowledgments, ecc.)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">Pre-Capture vs Post-Capture Filtering</div>
+            <div class="card-text">
+                <p><strong>Pre-Capture:</strong> Applicare filtri direttamente alla cattura farà cadere qualsiasi traffico non corrispondente. Riduce la quantità di dati nelle catture ma può eliminare traffico potenzialmente necessario in seguito.</p>
+                <p style="margin-top: 15px;"><strong>Post-Capture:</strong> Applicare filtri quando si legge un file di cattura parserà il file e rimuoverà qualsiasi cosa non corrispondente dall'output del terminale. Non modifica permanentemente il file di cattura.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 19;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

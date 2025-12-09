@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tips per l'Analisi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Tips per l'Analisi</h1>
+        <div class="subtitle">Domande Chiave Durante l'Analisi</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">Checklist di Analisi</div>
+            <div class="card-text">
+                <p>Di seguito una lista di domande che possiamo porci durante il processo di analisi per rimanere in pista:</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Domande Iniziali</div>
+                <div class="card-text">
+                    <ul style="padding-left: 20px; line-height: 2;">
+                        <li>Che tipo di traffico vedi? (protocollo, porta, ecc.)</li>
+                        <li>C'è più di una conversazione? (quante?)</li>
+                        <li>Quanti host unici?</li>
+                        <li>Qual è il timestamp della prima conversazione nel PCAP (traffico TCP)?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Domande di Filtraggio</div>
+                <div class="card-text">
+                    <ul style="padding-left: 20px; line-height: 2;">
+                        <li>Quale traffico posso filtrare per pulire la mia vista?</li>
+                        <li>Chi sono i server nel PCAP? (rispondono su porte well-known, 53, 80, ecc.)</li>
+                        <li>Quali record sono stati richiesti o metodi utilizzati? (GET, POST, DNS A records, ecc.)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">Strumenti Aggiuntivi</div>
+            <div class="card-text">
+                <p>Il processo di analisi non si basa esclusivamente sull'uso di strumenti come tcpdump e Wireshark. Ci sono molti strumenti utili che possono aiutare ad arricchire la nostra comprensione dell'ambiente e fornire una migliore protezione:</p>
+                <ul style="margin-top: 15px; padding-left: 20px; line-height: 2;">
+                    <li><strong>Snort:</strong> Sistema di rilevamento intrusioni</li>
+                    <li><strong>Security Onion:</strong> Distribuzione Linux per sicurezza di rete</li>
+                    <li><strong>Firewall:</strong> Per monitoraggio e filtraggio del traffico</li>
+                    <li><strong>SIEM:</strong> Per analisi centralizzata e alerting</li>
+                </ul>
+                <p style="margin-top: 15px;">Non aver paura di utilizzare questi strumenti nelle investigazioni.</p>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">Conclusione</div>
+            <div class="card-text">
+                <p>Il processo di analisi è un compito molto dinamico e i nostri giorni non saranno mai gli stessi. Continua a imparare, comprendi cosa sta succedendo intorno a noi, e man mano che le tue competenze crescono, così crescerà anche la capacità di rilevare minacce.</p>
+                <p style="margin-top: 15px;"><strong>Ricorda:</strong> La visibilità è probabilmente la cosa più benefica che l'analisi del traffico fornisce. Con questa visibilità, possiamo catturare traffico su diversi periodi per stabilire una baseline per il nostro ambiente.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 21;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

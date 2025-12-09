@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Walkthrough "Blog" CTF - Stabilizzazione della Shell</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Post-Exploitation: Upgrade della Shell</h1>
+        
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Azione Pratica</div>
+                <div class="card-text">
+                    <p><strong>Comando:</strong></p>
+                    <div class="code-box">python -c 'import pty; pty.spawn("/bin/bash")'</div>
+                    <br>
+                    <p><strong>Risultato:</strong></p>
+                    <div class="code-box">Prompt colorato, supporto a `su`, `nano`, `ctrl+c`.</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Analisi Tecnica</div>
+                <div class="card-text">
+                    <p><strong>Dumb Shell vs PTY:</strong> La reverse shell base collega solo *stdin* e *stdout*. Non è un terminale vero (TTY). Comandi che richiedono interazione (come `sudo` o editor di testo) si bloccano perché non sanno gestire l'input utente.</p>
+                    <p><strong>Python Magic:</strong> Usiamo Python per invocare una <span class="tech-term">Pseudo-Terminal (PTY)</span>, che simula un dispositivo terminale completo, permettendo alla shell remota di comportarsi come se fossimo seduti davanti al server.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 7;</script>
+    <script src="main.js"></script>
+</body>
+</html>

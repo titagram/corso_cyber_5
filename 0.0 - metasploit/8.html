@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Introduzione ai Moduli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🧩 Introduzione ai Moduli</h1>
+        <div class="subtitle">I building block di Metasploit Framework</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">📦 Cosa sono i Moduli?</div>
+            <div class="card-text">
+                <p>I moduli Metasploit sono <strong>script preparati con uno scopo specifico</strong> e funzioni corrispondenti che sono già state sviluppate e testate nel mondo reale.</p>
+                <br>
+                <p>Sono <strong>Proof-of-Concept (POC)</strong> che possono essere utilizzati per sfruttare vulnerabilità esistenti in modo largamente automatizzato.</p>
+                <br>
+                <p style="color: #F44336; font-weight: 600;">⚠️ Importante: Il fallimento di un exploit NON dimostra che la vulnerabilità non esiste, ma solo che quell'exploit specifico non ha funzionato in quel contesto.</p>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-bottom: 25px;">
+            <div class="card-title">🔧 Personalizzazione è Fondamentale</div>
+            <div class="card-text">
+                <p>Molti exploit richiedono <strong>personalizzazione</strong> in base all'host target per far funzionare l'exploit correttamente.</p>
+                <br>
+                <p>Gli strumenti automatizzati come Metasploit Framework dovrebbero essere considerati uno <strong>strumento di supporto</strong> e non un sostituto delle competenze manuali.</p>
+                <br>
+                <p style="color: #4CAF50;">💡 La conoscenza manuale rimane fondamentale per il successo!</p>
+            </div>
+        </div>
+
+        <div class="card border-purple">
+            <div class="card-title">📝 Sintassi dei Moduli</div>
+            <div class="card-text">
+                <p>Ogni modulo è strutturato in cartelle con la seguente sintassi:</p>
+                <div class="code-box">&lt;No.&gt; &lt;type&gt;/&lt;os&gt;/&lt;service&gt;/&lt;name&gt;</div>
+                <br>
+                <p><strong>Esempio:</strong></p>
+                <div class="code-box">794   exploit/windows/ftp/scriptftp_list</div>
+                <br>
+                <p><strong>Componenti:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li><span class="tech-term">794</span> - Index Number per selezione rapida</li>
+                    <li><span class="tech-term">exploit</span> - Tipo di modulo</li>
+                    <li><span class="tech-term">windows</span> - Sistema operativo target</li>
+                    <li><span class="tech-term">ftp</span> - Servizio vulnerabile</li>
+                    <li><span class="tech-term">scriptftp_list</span> - Nome specifico dell'exploit</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 8;</script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating Meaningful Alerts - Slide 23</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Creare Alert Significativi</h1>
+        <div class="subtitle">Detection di Shellcode da Memoria UNKNOWN</div>
+
+        <div class="card border-blue">
+            <div class="card-title">Approccio</div>
+            <div class="card-text">
+                <p>Creiamo un alert che può rilevare threat actor basandoci su chiamate API da regioni di memoria UNKNOWN.</p>
+                <p style="margin-top: 15px;"><strong>Concetto:</strong> Qualsiasi forma di shellcode sarà localizzata in una regione di memoria "unbacked". Questo implica che qualsiasi chiamata API da questo shellcode non origina da alcun file identificabile su disco, ma da regioni arbitrarie, o UNKNOWN, in memoria che non mappano affatto su disco.</p>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-top: 30px;">
+            <div class="card-title">Query Base</div>
+            <div class="card-text">
+                <p><strong>Identificare eventi con CallTrace UNKNOWN:</strong></p>
+                <div class="code-box">index="main" CallTrace="*UNKNOWN*" | stats count by EventCode</div>
+                <p style="margin-top: 15px;">Solo event code 10 mostra qualcosa relativo al nostro CallTrace, quindi il nostro alert sarà legato a process access!</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 30px;">
+            <div class="card border-purple">
+                <div class="card-title">Filtri Progressivi</div>
+                <div class="card-text">
+                    <p><strong>1. Escludere auto-accesso:</strong></p>
+                    <div class="code-box">index="main" CallTrace="*UNKNOWN*" | where SourceImage!=TargetImage | stats count by SourceImage</div>
+                    <p style="margin-top: 15px;"><strong>2. Escludere .NET (JIT):</strong></p>
+                    <div class="code-box">index="main" CallTrace="*UNKNOWN*" SourceImage!="*Microsoft.NET*" CallTrace!=*ni.dll* CallTrace!=*clr.dll* | where SourceImage!=TargetImage | stats count by SourceImage</div>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Filtri Aggiuntivi</div>
+                <div class="card-text">
+                    <p><strong>3. Escludere WOW64:</strong></p>
+                    <div class="code-box">... CallTrace!=*wow64* ...</div>
+                    <p style="margin-top: 15px;"><strong>4. Escludere Explorer.exe:</strong></p>
+                    <div class="code-box">... SourceImage!="C:\\Windows\\Explorer.EXE" ...</div>
+                    <p style="margin-top: 15px;"><strong>Query finale:</strong></p>
+                    <div class="code-box">index="main" CallTrace="*UNKNOWN*" SourceImage!="*Microsoft.NET*" CallTrace!=*ni.dll* CallTrace!=*clr.dll* CallTrace!=*wow64* SourceImage!="C:\\Windows\\Explorer.EXE" | where SourceImage!=TargetImage | stats count by SourceImage, TargetImage, CallTrace</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/23.png" alt="LSASS Access" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/24.png" alt="Notepad LSASS" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/25.png" alt="Call Stack" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 23;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Esercizi e Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Esercizi e Lab</h1>
+        <div class="subtitle">Interrogare il Traffico di Rete</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">Obiettivo del Lab</div>
+            <div class="card-text">
+                <p>Fornire esposizione all'interrogazione del traffico di rete e pratica preziosa nell'implementazione di filtri di pacchetti. Utilizzeremo filtri come host, port, protocol e altro per cambiare la nostra vista mentre scaviamo attraverso un file .PCAP.</p>
+                <p style="margin-top: 15px;"><strong>Scenario:</strong> Il management ci ha incaricato di eseguire un'analisi rapida del traffico catturato dal team. L'obiettivo è determinare quali server stanno rispondendo a richieste DNS e HTTP/S nella nostra rete locale.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Task #1: Lettura Base</div>
+                <div class="card-text">
+                    <p>Leggere una cattura da un file senza filtri implementati. Esaminare il PCAP con nessun filtro applicato per avere una visione generale del traffico.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Task #2: Identificare Tipo di Traffico</div>
+                <div class="card-text">
+                    <p>Prendere nota dei tipi di traffico visibili (porte utilizzate, protocolli, altre informazioni rilevanti). Quali filtri possiamo usare per facilitare questo compito?</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Task #3: Identificare Conversazioni</div>
+                <div class="card-text">
+                    <p>Determinare se notiamo pattern nel traffico. Ci sono connessioni comuni tra un server e un host? Chi sono i server e i client in queste conversazioni?</p>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">Task #4: Analisi Approfondita</div>
+                <div class="card-text">
+                    <p>Utilizzare qualsiasi sintassi necessaria per rispondere a domande specifiche: timestamp della prima conversazione, indirizzi IP di domini, protocolli utilizzati.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue" style="margin-top: 25px;">
+            <div class="card-title">Task #5-7: Filtraggio e Analisi</div>
+            <div class="card-text">
+                <ul style="padding-left: 20px; line-height: 2;">
+                    <li><strong>Task #5:</strong> Filtrare tutto il traffico che non è DNS. Chi è il server DNS? Quali nomi di dominio sono stati richiesti?</li>
+                    <li><strong>Task #6:</strong> Filtrare per traffico TCP (HTTP/HTTPS). Quali pagine web sono state richieste? Quali sono i metodi HTTP più comuni?</li>
+                    <li><strong>Task #7:</strong> Esaminare il webserver nella prima conversazione. Possiamo determinare quale applicazione sta eseguendo il webserver?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <img src="img/question-1.PNG" alt="Exercise Question" style="max-width: 800px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        </div>
+    </div>
+
+    <script>const slideNumero = 20;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

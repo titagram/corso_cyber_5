@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurazione Suricata</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Configurazione Suricata</h1>
+        <div class="subtitle">File di Regole e Variabili</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">File di Regole</div>
+            <div class="card-text">
+                <p>Suricata carica regole da file nella directory <span class="tech-term">/etc/suricata/rules/</span>. Possiamo visualizzare tutti i file di regole con:</p>
+                <div class="code-box" style="margin-top: 15px;">
+ls -lah /etc/suricata/rules/
+                </div>
+                <p style="margin-top: 15px;">Le regole possono essere commentate (non caricate) quando una nuova versione entra in gioco o se la minaccia associata diventa obsoleta o irrilevante.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Variabili nelle Regole</div>
+                <div class="card-text">
+                    <p>Ogni regola di solito coinvolge variabili specifiche come:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><span class="tech-term">$HOME_NET</span> - Rete interna</li>
+                        <li><span class="tech-term">$EXTERNAL_NET</span> - Rete esterna</li>
+                    </ul>
+                    <p style="margin-top: 15px;">La regola esamina traffico dagli indirizzi IP specificati in $HOME_NET verso gli indirizzi IP in $EXTERNAL_NET.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Configurazione suricata.yaml</div>
+                <div class="card-text">
+                    <p>Queste variabili possono essere definite nel file di configurazione <span class="tech-term">suricata.yaml</span>:</p>
+                    <div class="code-box" style="margin-top: 15px;">
+vars:
+  address-groups:
+    HOME_NET: "[10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+                    </div>
+                    <p style="margin-top: 15px;">Questo ci permette di personalizzare queste variabili secondo il nostro ambiente di rete specifico e persino definire le nostre variabili.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">Caricare Regole Personalizzate</div>
+            <div class="card-text">
+                <p>Per configurare Suricata per caricare signature da un file di regole personalizzato (come local.rules), dobbiamo aggiungere il percorso al file <span class="tech-term">suricata.yaml</span> nella sezione <code>rule-files:</code>.</p>
+                <p style="margin-top: 15px;">Questo permette di testare e sviluppare regole personalizzate senza modificare i file di regole di sistema.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 6;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

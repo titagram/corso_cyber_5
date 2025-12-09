@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SPL - Comandi Base - Slide 7</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SPL: Comandi Base</h1>
+        <div class="subtitle">fields, table, rename, dedup, sort</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">fields</div>
+                <div class="card-text">
+                    <p>Specifica quali campi includere o escludere nei risultati della ricerca.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | fields - User</div>
+                    <p style="margin-top: 15px;">Dopo aver recuperato tutti gli eventi di creazione processo dall'indice main, il comando <code>fields</code> esclude il campo <code>User</code> dai risultati. Utilizzando <code>sourcetype</code> si restringe l'ambito esclusivamente ai log Sysmon.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">table</div>
+                <div class="card-text">
+                    <p>Presenta i risultati della ricerca in formato tabellare.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | table _time, host, Image</div>
+                    <p style="margin-top: 15px;">Questa query restituisce eventi di creazione processo, poi organizza i campi selezionati (<code>_time</code>, <code>host</code>, e <code>Image</code>) in formato tabellare. <code>_time</code> è il timestamp dell'evento, <code>host</code> è il nome dell'host, e <code>Image</code> è il nome del file eseguibile.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-purple">
+                <div class="card-title">rename</div>
+                <div class="card-text">
+                    <p>Rinomina un campo nei risultati della ricerca.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | rename Image as Process</div>
+                    <p style="margin-top: 15px;">Questo comando rinomina il campo <code>Image</code> in <code>Process</code> nei risultati. Il campo <code>Image</code> nei log Sysmon rappresenta il nome del file eseguibile del processo.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">dedup</div>
+                <div class="card-text">
+                    <p>Rimuove eventi duplicati.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | dedup Image</div>
+                    <p style="margin-top: 15px;">Il comando <code>dedup</code> rimuove voci duplicate basate sul campo <code>Image</code> dagli eventi di creazione processo. Se lo stesso processo viene creato più volte, apparirà solo una volta nei risultati.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 30px;">
+            <div class="card-title">sort</div>
+            <div class="card-text">
+                <p>Ordina i risultati della ricerca.</p>
+                <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | sort - _time</div>
+                <p style="margin-top: 15px;">Questo comando ordina tutti gli eventi di creazione processo nell'indice main in ordine decrescente dei loro timestamp (<code>_time</code>), cioè gli eventi più recenti vengono mostrati per primi. Il segno <code>-</code> indica ordine decrescente.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 7;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

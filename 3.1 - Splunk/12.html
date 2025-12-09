@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SPL - Subsearches - Slide 12</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SPL: Subsearches</h1>
+        <div class="subtitle">Ricerche Annidate</div>
+
+        <div class="card border-blue">
+            <div class="card-title">Definizione</div>
+            <div class="card-text">
+                <p>Una <strong>subsearch</strong> in Splunk è una ricerca annidata all'interno di un'altra ricerca. Viene usata per calcolare un insieme di risultati che vengono poi utilizzati nella ricerca esterna.</p>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-top: 30px;">
+            <div class="card-title">Esempio Pratico</div>
+            <div class="card-text">
+                <p><strong>Query:</strong></p>
+                <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 NOT [ search index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | top limit=100 Image | fields Image ] | table _time, Image, CommandLine, User, ComputerName</div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 30px;">
+            <div class="card border-purple">
+                <div class="card-title">Componenti della Query</div>
+                <div class="card-text">
+                    <p><strong>Ricerca principale:</strong></p>
+                    <p><code>index="main" sourcetype="WinEventLog:Sysmon" EventCode=1</code></p>
+                    <p style="margin-top: 15px;">Recupera eventi di creazione processo (EventCode=1).</p>
+                    <p style="margin-top: 15px;"><strong>Subsearch (tra parentesi quadre):</strong></p>
+                    <p><code>[ search ... | top limit=100 Image | fields Image ]</code></p>
+                    <p style="margin-top: 15px;">Recupera i 100 nomi di processo (Image) più comuni.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Risultato</div>
+                <div class="card-text">
+                    <p>Il <code>NOT</code> prima della subsearch esclude dalla ricerca principale tutti i risultati restituiti dalla subsearch.</p>
+                    <p style="margin-top: 15px;"><strong>Output:</strong> La tabella finale mostra timestamp, nome processo, command line, utente e nome computer per processi <strong>insoliti o rari</strong> (non tra i 100 più comuni).</p>
+                    <p style="margin-top: 15px;"><strong>Utilizzo:</strong> Questa query può aiutare a evidenziare processi insoliti o rari, che potrebbero valere la pena investigare per potenziale attività malevola.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 30px;">
+            <div class="card-title">Nota Importante</div>
+            <div class="card-text">
+                <p>Questo tipo di ricerca può generare molto rumore in ambienti dove nuovi e unici processi vengono creati frequentemente, quindi è importante un'attenta sintonizzazione e contesto.</p>
+                <p style="margin-top: 15px;"><strong>Risorse SPL:</strong></p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>https://docs.splunk.com/Documentation/SCS/current/SearchReference/Introduction</li>
+                    <li>https://docs.splunk.com/Documentation/SplunkCloud/latest/SearchReference/</li>
+                    <li>https://docs.splunk.com/Documentation/SplunkCloud/latest/Search/</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 12;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

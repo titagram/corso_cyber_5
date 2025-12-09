@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Esempio Regola: Covenant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Esempio Regola: Covenant</h1>
+        <div class="subtitle">Rilevamento Basato su Contenuto</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Regola Basata su Contenuto</div>
+                <div class="card-text">
+                    <div class="code-box" style="margin-top: 15px;">
+alert tcp any any -> $HOME_NET any (msg:"detected by body"; content:"&lt;title&gt;Hello World!&lt;/title&gt;"; detection_filter: track by_src, count 4, seconds 10; priority:1; sid:3000011;)
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Covenant</strong> è un altro framework C2 open-source comunemente usato dagli attaccanti.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Componenti</div>
+                <div class="card-text">
+                    <p><strong>content:</strong> Cerca la stringa <code>&lt;title&gt;Hello World!&lt;/title&gt;</code> nel payload TCP</p>
+                    <p style="margin-top: 15px;"><strong>detection_filter:</strong> Filtro post-rilevamento che specifica che la regola dovrebbe tracciare l'indirizzo IP sorgente (by_src) e attiverà un alert solo se lo stesso rilevamento accade almeno 4 volte (count 4) entro una finestra di 10 secondi (seconds 10)</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Regola Basata su Analisi</div>
+                <div class="card-text">
+                    <div class="code-box" style="margin-top: 15px;">
+alert tcp $HOME_NET any -> any any (msg:"detected by size and counter"; dsize:312; detection_filter: track by_src, count 3, seconds 10; priority:1; sid:3000001;)
+                    </div>
+                    <p style="margin-top: 15px;"><strong>dsize:312:</strong> Cerca traffico TCP con una dimensione payload dati di esattamente 312 byte</p>
+                    <p style="margin-top: 15px;"><strong>detection_filter:</strong> Traccia l'IP sorgente e attiva solo se rileva lo stesso hit almeno 3 volte entro 10 secondi</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Nota Importante</div>
+                <div class="card-text">
+                    <p>Queste regole possono produrre risultati falsi positivi. Per prestazioni ottimali, è consigliabile integrarle con altre regole di rilevamento.</p>
+                    <p style="margin-top: 15px;">L'approccio basato su analisi (dimensione e contatore) è più efficiente rispetto alla ricerca di contenuto specifico in tutto il payload.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 14;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

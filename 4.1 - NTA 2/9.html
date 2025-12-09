@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>TCP Handshake - Slide 9</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">TCP Handshake Abnormalities</h1>
+        <div class="subtitle">"Bussano ma non entrano..."</div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">🚪 Port Scanning</div>
+                <div class="card-text">
+                    <p>Il server registra migliaia di tentativi di connessione incompleti.</p>
+                    <p>È una <strong>SYN Scan</strong>. L'attaccante invia <code>SYN</code>. Se riceve <code>SYN-ACK</code>, la porta è aperta. Invece di completare con <code>ACK</code>, invia <code>RST</code> e sparisce.</p>
+                    <p>È come suonare il campanello per vedere se c'è qualcuno in casa, e poi scappare.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🚩 I Flag TCP</div>
+                <div class="card-text">
+                    <p>Analizzare i flag è cruciale.</p>
+                    <p><strong>SYN:</strong> Inizio connessione.<br>
+                    <strong>ACK:</strong> Conferma ricevuta.<br>
+                    <strong>RST:</strong> Abbattimento connessione.</p>
+                    <p>Un eccesso di pacchetti ACK o SYN senza dati reali indica scansioni in atto (Nmap).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>nmap_syn_scan.pcapng</code>.</p>
+                <p>1. Vogliamo misurare l'entità dello scan cercando i pacchetti di risposta/conferma.</p>
+                <p>2. Il filtro è per il flag ACK settato: <code>tcp.flags.ack == 1</code></p>
+                <p>3. Conta i pacchetti visualizzati.</p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">429</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 9;</script>
+    <script src="main.js"></script>
+</body>
+</html>

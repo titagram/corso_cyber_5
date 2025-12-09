@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Esempi Detection TTPs - Slide 26</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Esempi di Detection Basata su TTP</h1>
+        <div class="subtitle">Pattern di Attacco Conosciuti</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">PsExec Usage</div>
+                <div class="card-text">
+                    <p><strong>Case 1 - Event ID 13:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=13 Image="C:\\Windows\\system32\\services.exe" TargetObject="HKLM\\System\\CurrentControlSet\\Services\\*\\ImagePath" | rex field=Details "(?&lt;reg_file_name&gt;[^\\\]+)$" | eval reg_file_name = lower(reg_file_name), file_name = if(isnull(file_name),reg_file_name,lower(file_name)) | stats values(Image) AS Image, values(Details) AS RegistryDetails, values(_time) AS EventTimes, count by file_name, ComputerName</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">PsExec - Altri Metodi</div>
+                <div class="card-text">
+                    <p><strong>Case 2 - Event ID 11:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=11 Image=System | stats count by TargetFilename</div>
+                    <p style="margin-top: 15px;"><strong>Case 3 - Event ID 18:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=18 Image=System | stats count by PipeName</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 30px;">
+            <div class="card border-purple">
+                <div class="card-title">Archive Files per Exfiltration</div>
+                <div class="card-text">
+                    <p><strong>Detection di utilizzo di file zip, rar, 7z:</strong></p>
+                    <div class="code-box">index="main" EventCode=11 (TargetFilename="*.zip" OR TargetFilename="*.rar" OR TargetFilename="*.7z") | stats count by ComputerName, User, TargetFilename | sort - count</div>
+                    <p style="margin-top: 15px;">Gli attaccanti possono impiegare file archivio per trasferire tool a un host compromesso o exfiltrar dati.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">PowerShell/MS Edge Downloads</div>
+                <div class="card-text">
+                    <p><strong>PowerShell:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=11 Image="*powershell.exe*" | stats count by Image, TargetFilename | sort + count</div>
+                    <p style="margin-top: 15px;"><strong>MS Edge:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=11 Image="*msedge.exe" TargetFilename=*"Zone.Identifier" | stats count by TargetFilename | sort + count</div>
+                    <p style="margin-top: 15px;">Il <code>*Zone.Identifier</code> indica un file scaricato da internet.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/156.png" alt="Reconnaissance" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/141.png" alt="GitHub Payloads" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/142.png" alt="PsExec Event 13" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/143.png" alt="PsExec Event 11" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/144.png" alt="PsExec Event 18" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 26;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

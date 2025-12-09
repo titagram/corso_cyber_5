@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Detection Based on Analytics - Slide 25</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Detection Basata su Analytics</h1>
+        <div class="subtitle">Analisi Statistica e Anomaly Detection</div>
+
+        <div class="card border-blue">
+            <div class="card-title">Approccio</div>
+            <div class="card-text">
+                <p>Il secondo approccio si basa pesantemente su analisi statistica e anomaly detection per identificare comportamenti anormali. Profilando il comportamento normale e identificando deviazioni da questa baseline, possiamo scoprire attività sospette che possono significare un'intrusione.</p>
+                <p style="margin-top: 15px;"><strong>Strategia:</strong> Non ci affidiamo solo a conoscenze pre-esistenti di minacce specifiche. Invece, facciamo uso estensivo di tecniche matematiche e statistiche per evidenziare anomalie.</p>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-top: 30px;">
+            <div class="card-title">Esempio: streamstats</div>
+            <div class="card-text">
+                <p>Un buon esempio di questo approccio in Splunk è l'uso del comando <code>streamstats</code>, che permette di eseguire analytics in tempo reale sui dati.</p>
+                <p style="margin-top: 15px;"><strong>Query esempio:</strong></p>
+                <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=3 | bin _time span=1h | stats count as NetworkConnections by _time, Image | streamstats time_window=24h avg(NetworkConnections) as avg stdev(NetworkConnections) as stdev by Image | eval isOutlier=if(NetworkConnections > (avg + (0.5*stdev)), 1, 0) | search isOutlier=1</div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 30px;">
+            <div class="card border-purple">
+                <div class="card-title">Spiegazione Query</div>
+                <div class="card-text">
+                    <p><strong>1. bin:</strong> Raggruppa eventi in intervalli orari.</p>
+                    <p><strong>2. stats:</strong> Calcola il numero di connessioni di rete per processo per bucket temporale.</p>
+                    <p><strong>3. streamstats:</strong> Calcola una media mobile e deviazione standard del numero di connessioni di rete su un periodo di 24 ore per ogni processo.</p>
+                    <p><strong>4. eval:</strong> Crea un campo <code>isOutlier</code> che etichetta eventi dove il numero di connessioni è più di 0.5 deviazioni standard dalla media.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Utilizzo</div>
+                <div class="card-text">
+                    <p>Monitorando anomalie nelle connessioni di rete iniziate da processi, possiamo rilevare potenzialmente attività malevoli come:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Comunicazione command-and-control</li>
+                        <li>Tentativi di exfiltration dati</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Nota:</strong> Come con qualsiasi metodo di anomaly detection, è importante ricordare che può produrre falsi positivi e dovrebbe essere calibrato secondo le specifiche del tuo ambiente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/31.png" alt="Final Alert Results" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/browser.png" alt="Browser Filter" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 25;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

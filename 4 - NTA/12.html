@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>HTTP e HTTPS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">HTTP e HTTPS</h1>
+        <div class="subtitle">Protocolli del Livello Applicativo</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">HTTP - Hypertext Transfer Protocol</div>
+                <div class="card-text">
+                    <p>Protocollo stateless del livello Applicativo in uso dal 1990.</p>
+                    <p style="margin-top: 15px;"><strong>Funzionalità:</strong> Abilita il trasferimento di dati in chiaro tra client e server su TCP</p>
+                    <p style="margin-top: 15px;"><strong>Porte:</strong> 80 o 8000 su TCP (normalmente)</p>
+                    <p style="margin-top: 15px;">Il client invia una richiesta HTTP al server chiedendo una risorsa. Il server risponde con il media richiesto (HTML, immagini, video).</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">HTTPS - HTTP Secure</div>
+                <div class="card-text">
+                    <p>Modifica del protocollo HTTP progettata per utilizzare <span class="tech-term">TLS</span> (Transport Layer Security) o <span class="tech-term">SSL</span> per la sicurezza dei dati.</p>
+                    <p style="margin-top: 15px;"><strong>Porte:</strong> 443 e 8443 invece della porta standard 80</p>
+                    <p style="margin-top: 15px;"><strong>Vantaggi:</strong> Cifra l'intera conversazione, non solo i dati inviati o richiesti. Protegge da attacchi Man-in-the-Middle.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Metodi HTTP</div>
+            <div class="card-text">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <th style="padding: 10px; text-align: left;">Metodo</th>
+                        <th style="padding: 10px; text-align: left;">Descrizione</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">GET</span></td>
+                        <td style="padding: 10px;">Richiede informazioni e contenuto dal server (più comune)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">POST</span></td>
+                        <td style="padding: 10px;">Invia informazioni al server basate sui campi nella richiesta</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">PUT</span></td>
+                        <td style="padding: 10px;">Crea o aggiorna un oggetto all'URI fornito</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">DELETE</span></td>
+                        <td style="padding: 10px;">Rimuove l'oggetto all'URI dato</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><span class="tech-term">HEAD</span></td>
+                        <td style="padding: 10px;">Richiede informazioni sul server senza il body del messaggio</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <img src="img/https.png" alt="TLS Handshake via HTTPS" style="max-width: 900px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        </div>
+    </div>
+
+    <script>const slideNumero = 12;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

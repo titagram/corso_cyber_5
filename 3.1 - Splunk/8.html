@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SPL - Comandi Statistici - Slide 8</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SPL: Comandi Statistici</h1>
+        <div class="subtitle">stats e chart</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">stats</div>
+                <div class="card-text">
+                    <p>Esegue operazioni statistiche sui dati.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=3 | stats count by _time, Image</div>
+                    <p style="margin-top: 15px;">Questa query restituisce una tabella dove ogni riga rappresenta una combinazione unica di timestamp (<code>_time</code>) e processo (<code>Image</code>). La colonna <code>count</code> indica il numero di eventi di connessione di rete che si sono verificati per quel processo specifico a quel tempo specifico.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">chart</div>
+                <div class="card-text">
+                    <p>Crea una visualizzazione dei dati basata su operazioni statistiche.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=3 | chart count by _time, Image</div>
+                    <p style="margin-top: 15px;">Questa query restituisce una tabella dove ogni riga rappresenta un timestamp unico (<code>_time</code>) e ogni colonna rappresenta un processo unico (<code>Image</code>). I valori delle celle indicano il numero di eventi di connessione di rete per ogni processo a ogni tempo specifico.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 30px;">
+            <div class="card-title">Differenza tra stats e chart</div>
+            <div class="card-text">
+                <p><strong>stats:</strong> I dati per ogni processo sono intervallati nella tabella. Per visualizzare i conteggi nel tempo per ogni processo, bisogna filtrare manualmente per processo.</p>
+                <p style="margin-top: 15px;"><strong>chart:</strong> Ogni processo ha la sua colonna. Puoi facilmente visualizzare i dati nel tempo per ogni processo perché ogni processo ha la sua colonna. Puoi vedere a colpo d'occhio il conteggio degli eventi di connessione di rete nel tempo per ogni processo.</p>
+                <p style="margin-top: 15px;"><strong>Vantaggio di chart:</strong> Facilita la visualizzazione dei dati nel tempo per ogni processo.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 8;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

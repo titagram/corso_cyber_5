@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Strumenti di Analisi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Strumenti di Analisi</h1>
+        <div class="subtitle">Ambiente e Attrezzature per NTA</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">tcpdump</div>
+                <div class="card-text">
+                    <p>Utility da riga di comando che, con l'aiuto di <span class="tech-term">LibPcap</span>, cattura e interpreta il traffico di rete da un'interfaccia di rete o da un file di cattura.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">TShark</div>
+                <div class="card-text">
+                    <p>Analizzatore di pacchetti di rete simile a tcpdump. Cattura pacchetti da una rete live o legge e decodifica da un file. Variante da riga di comando di Wireshark.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Wireshark</div>
+                <div class="card-text">
+                    <p>Analizzatore grafico del traffico di rete. Cattura e decodifica frame "off the wire" e permette un'analisi approfondita dell'ambiente. Esegue molti dissector diversi sul traffico.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">NGrep</div>
+                <div class="card-text">
+                    <p>Strumento di pattern-matching simile a grep per Linux, ma funziona con pacchetti di traffico di rete. Utilizza espressioni regex e sintassi BPF. Eccellente per debug di protocolli HTTP e FTP.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-purple">
+                <div class="card-title">Network Taps</div>
+                <div class="card-text">
+                    <p>Dispositivi (Gigamon, Niagara-taps) capaci di copiare il traffico di rete e inviarlo altrove per l'analisi. Possono essere in-line o out-of-band, attivi o passivi.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">Span Ports</div>
+                <div class="card-text">
+                    <p>Modo per copiare frame da dispositivi di rete di layer 2 o 3 durante l'elaborazione egress o ingress e inviarli a un punto di raccolta. Spesso una porta viene mirrorata per inviare copie a un log server.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-top: 25px;">
+            <div class="card-title">Elastic Stack & SIEM</div>
+            <div class="card-text">
+                <p><strong>Elastic Stack:</strong> Insieme di strumenti che possono prendere dati da molte fonti, ingerirli, visualizzarli e abilitare ricerca e analisi.</p>
+                <p style="margin-top: 10px;"><strong>SIEM:</strong> (come Splunk) punto centrale in cui i dati vengono analizzati e visualizzati. Alerting, analisi forense e controlli quotidiani sono tutti casi d'uso per un SIEM.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 3;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

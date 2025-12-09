@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>DNS Tunneling - Slide 16</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Peculiar DNS Traffic</h1>
+        <div class="subtitle">"Il telefono chiama casa"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">🚇 DNS Tunneling</div>
+                <div class="card-text">
+                    <p>Il DNS è la rubrica di internet. Ma può essere usato per trasportare dati.</p>
+                    <p>Un malware infetta un PC e vuole inviare dati fuori. Usa query DNS a domini controllati dall'attaccante, inserendo i dati nei sottodomini o nei record TXT.</p>
+                    <p>Es: <code>password123.evil.com</code>.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🕵️‍♂️ Decrypting the Message</div>
+                <div class="card-text">
+                    <p>Spesso i dati sono codificati (e ricodificati) in Base64 per sembrare stringhe alfanumeriche casuali.</p>
+                    <p>Dobbiamo estrarre il testo e decodificarlo a "cipolla" (più volte).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>DNS-tunneling</code> (file pcap).</p>
+                <p>1. Filtra per <code>dns</code>. Apri il pacchetto <strong>No. 11</strong>.</p>
+                <p>2. Trova il valore del record TXT nella sezione Answers.</p>
+                <p>3. Decodifica tripla dal terminale:</p>
+                <div class="code-box">echo 'VALORE' | base64 -d | base64 -d | base64 -d</div>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">HTB{Would_you_forward_me_this_pretty_please}</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 16;</script>
+    <script src="main.js"></script>
+</body>
+</html>

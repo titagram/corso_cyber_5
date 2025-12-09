@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SPL - lookup e inputlookup - Slide 10</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SPL: Lookup e Inputlookup</h1>
+        <div class="subtitle">Arricchimento Dati con Fonti Esterne</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">lookup</div>
+                <div class="card-text">
+                    <p>Arricchisce i dati con fonti esterne (es. tabelle CSV).</p>
+                    <p style="margin-top: 15px;"><strong>Esempio di CSV:</strong></p>
+                    <div class="code-box">filename, is_malware
+notepad.exe, false
+cmd.exe, false
+powershell.exe, false
+sharphound.exe, true
+randomfile.exe, true</div>
+                    <p style="margin-top: 15px;">Questo file CSV deve essere aggiunto come nuova tabella Lookup in Splunk.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Query con lookup</div>
+                <div class="card-text">
+                    <p><strong>Query completa:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | rex field=Image "(?P&lt;filename&gt;[^\\\]+)$" | eval filename=lower(filename) | lookup malware_lookup.csv filename OUTPUTNEW is_malware | table filename, is_malware</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 30px;">
+            <div class="card-title">Spiegazione della Query</div>
+            <div class="card-text">
+                <p><strong>1. Ricerca:</strong> Cerca eventi di creazione processo (EventCode=1) nei log Sysmon.</p>
+                <p><strong>2. rex:</strong> Estrae il nome del file dal campo <code>Image</code> (tutto dopo l'ultimo backslash).</p>
+                <p><strong>3. eval:</strong> Converte il nome del file in minuscolo per ricerca case-insensitive.</p>
+                <p><strong>4. lookup:</strong> Confronta il nome del file con la tabella lookup. Se trova una corrispondenza, aggiunge il campo <code>is_malware</code> all'evento.</p>
+                <p><strong>5. table:</strong> Mostra solo i campi <code>filename</code> e <code>is_malware</code>. Se <code>is_malware</code> non è presente in una riga, significa che non è stata trovata corrispondenza nella tabella lookup.</p>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 30px;">
+            <div class="card-title">inputlookup</div>
+            <div class="card-text">
+                <p>Recupera dati da un file lookup senza unirli ai risultati della ricerca.</p>
+                <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                <div class="code-box">| inputlookup malware_lookup.csv</div>
+                <p style="margin-top: 15px;">Questo comando recupera tutti i record dal file <code>malware_lookup.csv</code>. Il risultato non viene unito con alcun risultato di ricerca, ma può essere usato per verificare il contenuto del file lookup o per operazioni successive come filtraggio o join con altri dataset.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 10;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

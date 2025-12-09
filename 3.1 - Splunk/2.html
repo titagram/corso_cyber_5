@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Architettura Splunk - Slide 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Architettura Splunk Enterprise</h1>
+        <div class="subtitle">Componenti Principali</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Forwarders</div>
+                <div class="card-text">
+                    <p><strong>Universal Forwarder (UF):</strong> Agente leggero che raccoglie dati e li inoltra agli indexer senza pre-elaborazione. Facilmente installabile su sorgenti remote senza impattare significativamente sulle prestazioni.</p>
+                    <p><strong>Heavy Forwarder (HF):</strong> Agente per raccolta dati intensiva, specialmente da firewall o punti di routing/filtering. Elabora i dati prima dell'inoltro, permettendo routing basato su criteri specifici. Può indicizzare localmente mentre inoltra ad altri indexer.</p>
+                    <p><strong>HTTP Event Collectors (HEC):</strong> Raccolta diretta da applicazioni tramite token-based JSON o API raw. I dati vengono inviati direttamente al livello Indexer.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Indexers</div>
+                <div class="card-text">
+                    <p>Ricevono dati dai forwarder, li organizzano e li memorizzano in indici.</p>
+                    <p><strong>Funzionalità:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Generano directory categorizzate per età</li>
+                        <li>Memorizzano dati raw compressi</li>
+                        <li>Creano indici che puntano ai dati raw</li>
+                        <li>Processano query di ricerca dagli utenti</li>
+                        <li>Restituiscono risultati</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-purple">
+                <div class="card-title">Search Heads</div>
+                <div class="card-text">
+                    <p>Coordinano i job di ricerca, li inviano agli indexer e uniscono i risultati.</p>
+                    <p>Forniscono l'interfaccia per l'interazione degli utenti con Splunk.</p>
+                    <p>Supportano la creazione di Knowledge Objects per estrarre campi supplementari e manipolare dati senza modificare i dati indicizzati originali.</p>
+                    <p>Offrono strumenti per arricchire l'esperienza di ricerca: report, dashboard e visualizzazioni.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Componenti di Gestione</div>
+                <div class="card-text">
+                    <p><strong>Deployment Server:</strong> Gestisce la configurazione per i forwarder, distribuendo app e aggiornamenti.</p>
+                    <p><strong>Cluster Master:</strong> Coordina le attività degli indexer in un ambiente clusterizzato, assicurando replica dei dati e search affinity.</p>
+                    <p><strong>License Master:</strong> Gestisce i dettagli di licenza della piattaforma Splunk.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 2;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

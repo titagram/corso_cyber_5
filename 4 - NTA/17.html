@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tcpdump - Fondamenti</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Tcpdump - Fondamenti</h1>
+        <div class="subtitle">Packet Sniffer da Riga di Comando</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Cos'è Tcpdump?</div>
+                <div class="card-text">
+                    <p>Packet sniffer da riga di comando che può catturare e interpretare direttamente frame di dati da un file o interfaccia di rete.</p>
+                    <p style="margin-top: 15px;"><strong>Utilizzo:</strong> Costruito per sistemi operativi Unix-like, ha un gemello Windows chiamato WinDump (non più supportato).</p>
+                    <p style="margin-top: 15px;"><strong>Requisiti:</strong> Privilegi root o amministratore per accedere direttamente all'hardware.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Come Funziona</div>
+                <div class="card-text">
+                    <p>Per catturare traffico "off the wire", utilizza le librerie <span class="tech-term">pcap</span> e <span class="tech-term">libpcap</span>, accoppiate con un'interfaccia in modalità promiscua.</p>
+                    <p style="margin-top: 15px;">Questo permette al programma di vedere e catturare pacchetti provenienti da o destinati a qualsiasi dispositivo nella LAN locale, non solo i pacchetti destinati a noi.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Opzioni Base di Cattura</div>
+            <div class="card-text">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <th style="padding: 10px; text-align: left;">Switch</th>
+                        <th style="padding: 10px; text-align: left;">Risultato</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">-D</span></td>
+                        <td style="padding: 10px;">Mostra interfacce disponibili</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">-i</span></td>
+                        <td style="padding: 10px;">Seleziona interfaccia (es. -i eth0)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">-n</span></td>
+                        <td style="padding: 10px;">Non convertire indirizzi in nomi</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">-X</span></td>
+                        <td style="padding: 10px;">Mostra contenuto in hex e ASCII</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">-w file.pcap</span></td>
+                        <td style="padding: 10px;">Scrivi in un file</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><span class="tech-term">-r file.pcap</span></td>
+                        <td style="padding: 10px;">Leggi da un file</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 17;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

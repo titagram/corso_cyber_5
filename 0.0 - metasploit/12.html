@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurazione Target e Payload</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">⚙️ Configurazione Target e Payload</h1>
+        <div class="subtitle">Impostare i parametri necessari per l'exploit</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">🎯 Configurazione Target (RHOST/RHOSTS)</div>
+                <div class="card-text">
+                    <p><strong>RHOSTS:</strong> IP address del target remoto</p>
+                    <br>
+                    <p><strong>Impostazione temporanea:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > set RHOSTS 10.10.10.40
+RHOSTS => 10.10.10.40</div>
+                    <br>
+                    <p><strong>Impostazione permanente (setg):</strong></p>
+                    <div class="code-box">msf6 exploit(...) > setg RHOSTS 10.10.10.40
+RHOSTS => 10.10.10.40</div>
+                    <br>
+                    <p style="color: #F44336;">Il comando <span class="tech-term">setg</span> rende l'impostazione permanente fino al riavvio di msfconsole.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">📡 Configurazione Attacker (LHOST/LPORT)</div>
+                <div class="card-text">
+                    <p><strong>LHOST:</strong> IP address della macchina attacker (tua)</p>
+                    <p><strong>LPORT:</strong> Porta in ascolto (default 4444)</p>
+                    <br>
+                    <p><strong>Trovare il proprio IP:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > ifconfig
+
+tun0: inet 10.10.14.15 netmask 255.255.254.0</div>
+                    <br>
+                    <p><strong>Impostare LHOST:</strong></p>
+                    <div class="code-box">msf6 exploit(...) > setg LHOST 10.10.14.15
+LHOST => 10.10.14.15</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue" style="margin-top: 25px;">
+            <div class="card-title">📝 Parametri Comuni</div>
+            <div class="card-text">
+                <div class="grid-2-col">
+                    <div>
+                        <p><strong>Target (Exploit):</strong></p>
+                        <ul style="margin-top: 10px; line-height: 1.8;">
+                            <li><span class="tech-term">RHOSTS</span> - IP target (singolo o range)</li>
+                            <li><span class="tech-term">RPORT</span> - Porta del servizio vulnerabile</li>
+                            <li><span class="tech-term">SMBUser</span> - Username (se necessario)</li>
+                            <li><span class="tech-term">SMBPass</span> - Password (se necessario)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Attacker (Payload):</strong></p>
+                        <ul style="margin-top: 10px; line-height: 1.8;">
+                            <li><span class="tech-term">LHOST</span> - IP dell'attacker</li>
+                            <li><span class="tech-term">LPORT</span> - Porta in ascolto</li>
+                            <li><span class="tech-term">EXITFUNC</span> - Tecnica di uscita</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">🚀 Comandi Utili</div>
+            <div class="card-text">
+                <p><strong>Verificare impostazioni:</strong> <span class="tech-term">show options</span></p>
+                <p><strong>Rimuovere un'impostazione:</strong> <span class="tech-term">unset RHOSTS</span></p>
+                <p><strong>Rimuovere tutto:</strong> <span class="tech-term">unset all</span></p>
+                <p><strong>Vedere impostazioni globali:</strong> <span class="tech-term">show global</span></p>
+                <br>
+                <p style="color: #FFD54F;">💡 Usa sempre <span class="tech-term">show options</span> prima di lanciare l'exploit!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 12;</script>
+    <script src="main.js"></script>
+</body>
+</html>

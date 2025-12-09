@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Fragmentation - Slide 6</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Fragmentation Attacks</h1>
+        <div class="subtitle">"Il Firewall è cieco?"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-red">
+                <div class="card-title">🧩 Puzzle Letale</div>
+                <div class="card-text">
+                    <p>Il Firewall dice "Tutto verde", ma il server è sotto attacco. Come è possibile?</p>
+                    <p>L'attaccante sta usando la <strong>frammentazione</strong>. Spezzetta un pacchetto malevolo in frammenti minuscoli. Singolarmente sembrano innocui, ma quando il server li riassembla... BOOM.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🛡️ Meccanica di Evasione</div>
+                <div class="card-text">
+                    <p>Se l'IDS/IPS non riassembla i pacchetti prima di ispezionarli, non vedrà la firma dell'attacco.</p>
+                    <p>Un sintomo comune di scansioni aggressive o tentativi di evasione falliti sono molti pacchetti di <strong>Reset (RST)</strong>. Il server target, confuso o sovraccarico, chiude le connessioni.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>nmap_frag_fw_bypass.pcapng</code>.</p>
+                <p>1. Questo file contiene un tentativo di bypass del firewall tramite frammentazione.</p>
+                <p>2. Vogliamo contare quanti pacchetti hanno il flag <strong>RST</strong> (Reset) impostato, segno che le porte target stanno rifiutando o chiudendo connessioni anomale.</p>
+                <p>3. Filtro: <code>tcp.flags.reset == 1</code></p>
+                <p><strong>Risposta Attesa (Packets):</strong> <span class="spoiler">66535</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 6;</script>
+    <script src="main.js"></script>
+</body>
+</html>

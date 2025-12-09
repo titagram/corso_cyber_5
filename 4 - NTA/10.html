@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>TCP vs UDP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Meccanismi di Trasporto</h1>
+        <div class="subtitle">TCP vs UDP</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">Il Transport Layer</div>
+            <div class="card-text">
+                <p>Il Transport Layer è un hub di controllo. I dati delle applicazioni dai livelli superiori devono attraversare lo stack fino al Transport Layer. Questo livello dirige come il traffico sarà incapsulato e inviato ai protocolli di livello inferiore (IP e MAC).</p>
+                <p style="margin-top: 15px;">Una volta che i dati raggiungono il destinatario, il Transport Layer, lavorando con i protocolli Network/Internet, è responsabile di riassemblare i dati incapsulati nell'ordine corretto.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">TCP - Transmission Control Protocol</div>
+                <div class="card-text">
+                    <p><strong>Trasmissione:</strong> Orientato alla connessione</p>
+                    <p><strong>Stabilimento connessione:</strong> Three-way handshake</p>
+                    <p><strong>Consegna dati:</strong> Conversazioni basate su stream</p>
+                    <p><strong>Ricezione dati:</strong> Utilizza numeri di sequenza e acknowledgment</p>
+                    <p><strong>Velocità:</strong> Più overhead, più lento ma affidabile</p>
+                    <p style="margin-top: 15px;"><em>Utilizzato quando la completezza è più importante della velocità (es. SSH, trasferimenti file)</em></p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">UDP - User Datagram Protocol</div>
+                <div class="card-text">
+                    <p><strong>Trasmissione:</strong> Senza connessione, "fire and forget"</p>
+                    <p><strong>Stabilimento connessione:</strong> Non garantisce che la destinazione stia ascoltando</p>
+                    <p><strong>Consegna dati:</strong> Pacchetto per pacchetto</p>
+                    <p><strong>Ricezione dati:</strong> Non verifica la ricezione</p>
+                    <p><strong>Velocità:</strong> Veloce ma inaffidabile</p>
+                    <p style="margin-top: 15px;"><em>Utilizzato quando la velocità è più importante della completezza (es. streaming video, DNS)</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Confronto Pratico</div>
+            <div class="card-text">
+                <p><strong>TCP:</strong> Quando usiamo SSH per connetterci a un host remoto, una connessione viene aperta che rimane attiva mentre emettiamo comandi. TCP garantisce che la nostra conversazione non venga interrotta e che ogni pacchetto sia ricevuto correttamente.</p>
+                <p style="margin-top: 15px;"><strong>UDP:</strong> Quando facciamo streaming di un video, l'utente non noterà un pixel o due persi. Ci interessa più guardare il video senza interruzioni continue. Lo stesso vale per DNS: se una richiesta viene persa, viene semplicemente reinviata.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 10;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

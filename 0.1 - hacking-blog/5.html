@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Walkthrough "Blog" CTF - L'Exploit (RCE)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Exploiting: Da Editor Immagini a RCE</h1>
+        
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Azione Pratica</div>
+                <div class="card-text">
+                    <p><strong>Target:</strong></p>
+                    <div class="code-box">WordPress 5.0</div>
+                    <br>
+                    <p><strong>Vulnerabilità:</strong></p>
+                    <div class="code-box">Crop-Image Shell Upload</div>
+                    <br>
+                    <p><strong>Risultato:</strong></p>
+                    <div class="code-box">Accesso al server</div>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Analisi Tecnica</div>
+                <div class="card-text">
+                    <p><strong>La Logica del Bug:</strong> La funzione di ritaglio immagini (`wp_crop_image`) in questa versione non validava correttamente l'estensione del file di output.</p>
+                    <p><strong>L'Attacco:</strong></p>
+                    <ol>
+                        <li>Carichiamo un'immagine legittima contenente codice PHP iniettato (exif data o append).</li>
+                        <li>Chiediamo al server di "ritagliarla".</li>
+                        <li>Manipoliamo la richiesta per salvare il ritaglio come `.php` invece di `.jpg`.</li>
+                        <li>Il server esegue il codice PHP quando visitiamo l'URL dell'immagine.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 5;</script>
+    <script src="main.js"></script>
+</body>
+</html>

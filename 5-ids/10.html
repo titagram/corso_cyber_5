@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Anatomia delle Regole Suricata</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Anatomia delle Regole Suricata</h1>
+        <div class="subtitle">Struttura e Componenti</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">Struttura Base di una Regola</div>
+            <div class="card-text">
+                <div class="code-box" style="margin-top: 15px;">
+action protocol from_ip port -> to_ip port (msg:"messaggio"; content:"pattern"; sid:10000001; rev:1;)
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">Header della Regola</div>
+                <div class="card-text">
+                    <p><strong>action:</strong> Istruisce Suricata su quali passi intraprendere se i contenuti corrispondono:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><span class="tech-term">alert</span> - Genera un alert</li>
+                        <li><span class="tech-term">log</span> - Registra traffico senza alert</li>
+                        <li><span class="tech-term">pass</span> - Ignora il pacchetto</li>
+                        <li><span class="tech-term">drop</span> - Elimina il pacchetto (modalità IPS)</li>
+                        <li><span class="tech-term">reject</span> - Invia pacchetti TCP RST</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Protocollo e Direzione</div>
+                <div class="card-text">
+                    <p><strong>protocol:</strong> Può variare: tcp, udp, icmp, ip, http, tls, smb, dns, ecc.</p>
+                    <p style="margin-top: 15px;"><strong>Direzione traffico:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Outbound: <code>$HOME_NET any -> $EXTERNAL_NET 9090</code></li>
+                        <li>Inbound: <code>$EXTERNAL_NET any -> $HOME_NET 8443</code></li>
+                        <li>Bidirezionale: <code>$EXTERNAL_NET any <> $HOME_NET any</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Opzioni di Regola</div>
+                <div class="card-text">
+                    <p><strong>msg:</strong> Messaggio arbitrario mostrato quando la regola è attivata</p>
+                    <p style="margin-top: 10px;"><strong>content:</strong> Segmenti di traffico essenziali per il rilevamento</p>
+                    <p style="margin-top: 10px;"><strong>flow:</strong> Identifica originatore e risponditore (es. <code>flow:established,to_server</code>)</p>
+                    <p style="margin-top: 10px;"><strong>nocase:</strong> Assicura che le regole non siano bypassate attraverso cambi di case</p>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">Metadati della Regola</div>
+                <div class="card-text">
+                    <p><strong>sid (signature ID):</strong> Identificatore numerico unico essenziale per gestire e distinguere tra regole</p>
+                    <p style="margin-top: 10px;"><strong>rev (revision):</strong> Offre insight sulla versione della regola, indicando modifiche e miglioramenti nel tempo</p>
+                    <p style="margin-top: 10px;"><strong>reference:</strong> Fornisce un riferimento alla fonte originale di informazione che ha ispirato la creazione della regola</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 10;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SPL - eval e rex - Slide 9</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">SPL: Comandi Avanzati</h1>
+        <div class="subtitle">eval e rex</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">eval</div>
+                <div class="card-text">
+                    <p>Crea o ridefinisce campi.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" sourcetype="WinEventLog:Sysmon" EventCode=1 | eval Process_Path=lower(Image)</div>
+                    <p style="margin-top: 15px;">Questo comando crea un nuovo campo <code>Process_Path</code> che contiene la versione in minuscolo del campo <code>Image</code>. Non modifica il campo <code>Image</code> effettivo, ma crea un nuovo campo che può essere usato in operazioni successive o per scopi di visualizzazione.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">rex</div>
+                <div class="card-text">
+                    <p>Estrae nuovi campi da quelli esistenti usando espressioni regolari.</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong></p>
+                    <div class="code-box">index="main" EventCode=4662 | rex max_match=0 "[^%](?&lt;guid&gt;{.*})" | table guid</div>
+                    <p style="margin-top: 15px;">Il comando <code>rex</code> estrae valori corrispondenti al pattern dagli eventi. Il pattern regex <code>{.*}</code> cerca sottostringhe che iniziano con <code>{</code> e finiscono con <code>}</code>. La parte <code>[^%]</code> assicura che la corrispondenza non inizi con un carattere <code>%</code>.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 30px;">
+            <div class="card-title">Opzione max_match</div>
+            <div class="card-text">
+                <p>L'opzione <code>max_match=0</code> assicura che tutte le occorrenze del pattern vengano estratte da ogni evento. Per default, il comando <code>rex</code> estrae solo la prima occorrenza.</p>
+                <p style="margin-top: 15px;">Questo è utile perché i GUID non vengono automaticamente estratti dai log degli eventi 4662.</p>
+                <p style="margin-top: 15px;"><strong>Utilizzo:</strong> Il valore catturato all'interno delle parentesi graffe viene assegnato al gruppo di cattura denominato <code>guid</code>, che viene poi visualizzato nella tabella.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 9;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

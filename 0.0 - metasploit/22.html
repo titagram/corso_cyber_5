@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Nmap e Database Integration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🔍 Nmap e Database Integration</h1>
+        <div class="subtitle">Scanning e importazione automatica dei risultati</div>
+
+        <div class="card border-green" style="margin-bottom: 25px;">
+            <div class="card-title">🚀 db_nmap - Scanning Integrato</div>
+            <div class="card-text">
+                <p>Il comando <span class="tech-term">db_nmap</span> esegue Nmap direttamente da msfconsole e <strong>salva automaticamente</strong> i risultati nel database.</p>
+                <br>
+                <p><strong>Esempio completo:</strong></p>
+                <div class="code-box">msf6 > db_nmap -sV -sC -p- 10.10.10.8
+
+[*] Nmap: Starting Nmap 7.91
+[*] Nmap: Nmap scan report for 10.10.10.8
+[*] Nmap: Host is up (0.016s latency).
+[*] Nmap: Not shown: 65534 filtered ports
+[*] Nmap: PORT   STATE SERVICE VERSION
+[*] Nmap: 80/tcp open  http    HttpFileServer httpd 2.3
+[*] Nmap: Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+[*] Nmap: Nmap done: 1 IP address (1 host up) scanned in 45.23 seconds</div>
+                <br>
+                <p style="color: #4CAF50;">✅ I risultati sono immediatamente disponibili con <span class="tech-term">hosts</span> e <span class="tech-term">services</span>!</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">📊 Visualizzare Hosts</div>
+                <div class="card-text">
+                    <div class="code-box">msf6 > hosts
+
+Hosts
+=====
+address      mac  name  os_name  os_flavor  os_sp
+-------      ---  ----  -------  ---------  -----
+10.10.10.8              Unknown
+10.10.10.40             Windows  7          SP1</div>
+                    <br>
+                    <p><strong>Opzioni utili:</strong></p>
+                    <div class="code-box">msf6 > hosts -h
+  -a,--add          # Aggiungi host
+  -d,--delete       # Elimina host
+  -c col1,col2      # Mostra solo colonne
+  -u,--up           # Solo hosts up
+  -S,--search       # Filtro ricerca
+  -R,--rhosts       # Imposta RHOSTS</div>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">🔌 Visualizzare Services</div>
+                <div class="card-text">
+                    <div class="code-box">msf6 > services
+
+Services
+========
+host         port   proto  name          state
+----         ----   -----  ----          -----
+10.10.10.8   80     tcp    http          open
+10.10.10.40  445    tcp    microsoft-ds  open
+10.10.10.40  135    tcp    msrpc         open</div>
+                    <br>
+                    <p><strong>Filtrare per porta:</strong></p>
+                    <div class="code-box">msf6 > services -p 445</div>
+                    <br>
+                    <p><strong>Filtrare per servizio:</strong></p>
+                    <div class="code-box">msf6 > services -s http,https</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">📥 Importare Scan Esterni</div>
+            <div class="card-text">
+                <p>Puoi importare scan effettuati esternamente in formato XML:</p>
+                <br>
+                <p><strong>1. Eseguire scan Nmap con output XML:</strong></p>
+                <div class="code-box">$ nmap -sV -sC -oX scan_results.xml 10.10.10.0/24</div>
+                <br>
+                <p><strong>2. Importare in msfconsole:</strong></p>
+                <div class="code-box">msf6 > db_import scan_results.xml
+[*] Importing 'Nmap XML' data
+[*] Import: Parsing with 'Nokogiri v1.11.1'
+[*] Importing host 10.10.10.8
+[*] Importing host 10.10.10.40
+[*] Successfully imported /root/scan_results.xml</div>
+                <br>
+                <p><strong>Scanner supportati:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>Nmap XML</li>
+                    <li>Nessus (.nessus)</li>
+                    <li>Nexpose XML</li>
+                    <li>OpenVAS XML</li>
+                    <li>Qualys XML</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">🎯 Usare i Dati per RHOSTS</div>
+            <div class="card-text">
+                <p>Puoi impostare automaticamente RHOSTS dai risultati del database:</p>
+                <div class="code-box">msf6 > services -p 445 -R
+RHOSTS => 10.10.10.40 10.10.10.50
+
+msf6 exploit(windows/smb/ms17_010_eternalblue) > show options
+
+   Name      Current Setting       Required
+   ----      ---------------       --------
+   RHOSTS    10.10.10.40 10.10.10.50  yes</div>
+                <br>
+                <p style="color: #F44336; font-weight: 600;">🔥 Questo permette di lanciare exploit contro multipli target automaticamente!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 22;</script>
+    <script src="main.js"></script>
+</body>
+</html>

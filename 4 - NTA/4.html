@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>BPF Syntax e Workflow NTA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">BPF Syntax</h1>
+        <div class="subtitle">Berkeley Packet Filter</div>
+
+        <div class="card border-blue">
+            <div class="card-title">Cos'è BPF?</div>
+            <div class="card-text">
+                <p>Il <span class="tech-term">Berkeley Packet Filter (BPF)</span> è una tecnologia che abilita un'interfaccia raw per leggere e scrivere dal Data-Link layer.</p>
+                <p style="margin-top: 15px;">Molti strumenti condividono questa sintassi. BPF fornisce capacità di filtraggio e decodifica essenziali per l'analisi del traffico.</p>
+                <p style="margin-top: 15px;"><strong>Utilizzo:</strong> La sintassi BPF è il metodo principale che utilizzeremo per filtrare e analizzare il traffico di rete.</p>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-top: 25px;">
+            <div class="card-title">Esecuzione dell'Analisi</div>
+            <div class="card-text">
+                <p>L'analisi può essere semplice come guardare il traffico live scorrere nella console, o complessa come catturare dati con un tap, inviarli a un SIEM e analizzare i dati PCAP per signature e alert.</p>
+                <p style="margin-top: 15px;"><strong>Requisito minimo:</strong> Per ascoltare passivamente, dobbiamo essere connessi al segmento di rete su cui vogliamo ascoltare. In un ambiente switched, VLAN e porte switch non inoltrano traffico fuori dal loro dominio di broadcast.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 4;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

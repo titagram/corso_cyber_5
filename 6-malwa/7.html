@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 7</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Metodologie di Analisi</h1>
+        <div class="subtitle">Approcci complementari</div>
+
+        
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">📄 Analisi Statica</div>
+                <div class="card-text">
+                    <p>Analisi del file <strong>senza eseguirlo</strong>.</p>
+                    <p>Sicura, veloce, ma può essere ingannata da packing e offuscamento.</p>
+                    <p><em>Tools: PEStudio, strings, CFF Explorer.</em></p>
+                </div>
+            </div>
+            <div class="card border-red">
+                <div class="card-title">🏃 Analisi Dinamica</div>
+                <div class="card-text">
+                    <p>Esecuzione del malware in ambiente controllato (Sandbox).</p>
+                    <p>Osserviamo il comportamento reale, ma il malware potrebbe "accorgersi" della VM e nascondersi.</p>
+                    <p><em>Tools: ProcMon, Wireshark, RegShot.</em></p>
+                </div>
+            </div>
+        </div>
+        <div class="card border-green">
+            <div class="card-title">Code Analysis (Advanced)</div>
+            <div class="card-text">
+                <p>Disassemblare (Assembly) o Decompilare il codice per capire la logica interna. Richiede skills avanzate di Reverse Engineering. <em>Tools: IDA Pro, Ghidra, x64dbg.</em></p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 7;</script>
+    <script src="main.js"></script>
+</body>
+</html>

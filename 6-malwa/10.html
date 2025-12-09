@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 10</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Windows API</h1>
+        <div class="subtitle">Il linguaggio del malware</div>
+
+        
+        <div class="card border-blue">
+            <div class="card-title">Cosa sono le API?</div>
+            <div class="card-text">
+                <p>Le <strong>Windows API</strong> (o WinAPI) sono le funzioni che Microsoft mette a disposizione dei programmatori per interagire con l'OS.</p>
+                <p>Il malware <strong>DEVE</strong> usarle. Non può magicamente rubare un file o aprire una connessione di rete senza invocare una API.</p>
+            </div>
+        </div>
+        <div class="grid-2-col" style="margin-top:20px;">
+            <div class="card border-yellow">
+                <div class="card-title">Esempi Comuni</div>
+                <div class="card-text">
+                    <ul>
+                        <li><code>CreateFile</code> / <code>ReadFile</code> (Rubare dati)</li>
+                        <li><code>InternetOpenUrl</code> (Contattare C2)</li>
+                        <li><code>RegSetValueEx</code> (Persistenza nel registro)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card border-green">
+                <div class="card-title">Import Table</div>
+                <div class="card-text">
+                    <p>Analizzando quali API un programma "importa" (chiede di usare), possiamo capire cosa è capace di fare prima ancora di eseguirlo.</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 10;</script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Suricata - Comandi Pratici</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Suricata - Comandi Pratici</h1>
+        <div class="subtitle">Input Offline e Live</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Input Offline (PCAP)</div>
+                <div class="card-text">
+                    <p>Per processare file PCAP:</p>
+                    <div class="code-box" style="margin-top: 15px;">
+suricata -r /path/to/file.pcap
+                    </div>
+                    <p style="margin-top: 15px;">Opzioni aggiuntive:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><span class="tech-term">-k none</span> - Bypassa checksum</li>
+                        <li><span class="tech-term">-l .</span> - Log nella directory corrente</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Input Live (LibPCAP)</div>
+                <div class="card-text">
+                    <p>Per catturare traffico live da un'interfaccia:</p>
+                    <div class="code-box" style="margin-top: 15px;">
+sudo suricata --pcap=ens160 -vv
+                    </div>
+                    <p style="margin-top: 15px;">Suricata creerà vari log (principalmente eve.json, fast.log, e stats.log) nella directory di default <span class="tech-term">/var/log/suricata</span>.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">Input Live (AF_PACKET)</div>
+                <div class="card-text">
+                    <p>Per utilizzare AF_PACKET (migliore performance):</p>
+                    <div class="code-box" style="margin-top: 15px;">
+sudo suricata -i ens160
+# oppure
+sudo suricata --af-packet=ens160
+                    </div>
+                    <p style="margin-top: 15px;">L'opzione <span class="tech-term">-i</span> aiuta Suricata a scegliere la migliore opzione di input. Nel caso di Linux, la migliore opzione è AF_PACKET.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">Input Inline (NFQ)</div>
+                <div class="card-text">
+                    <p>Per modalità inline IPS con NFQ:</p>
+                    <div class="code-box" style="margin-top: 15px;">
+# Prima configura IPTables
+sudo iptables -I FORWARD -j NFQUEUE
+
+# Poi avvia Suricata
+sudo suricata -q 0
+                    </div>
+                    <p style="margin-top: 15px;">NFQ necessita di regole drop per Suricata per bloccare efficacemente i pacchetti.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 7;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

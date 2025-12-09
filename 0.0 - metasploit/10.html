@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Ricerca Moduli in MSFconsole</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🔎 Ricerca Moduli in MSFconsole</h1>
+        <div class="subtitle">Come trovare l'exploit giusto per il tuo target</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Il Comando Search</div>
+            <div class="card-text">
+                <p>Metasploit offre una <strong>funzione di ricerca ben sviluppata</strong> per cercare tra tutti i moduli esistenti usando tag specifici.</p>
+                <br>
+                <p><strong>Sintassi base:</strong></p>
+                <div class="code-box">msf6 > search &lt;keyword&gt;</div>
+                <br>
+                <p><strong>Esempio:</strong></p>
+                <div class="code-box">msf6 > search eternalromance</div>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">🏷️ Keywords di Ricerca</div>
+                <div class="card-text">
+                    <ul style="line-height: 1.8;">
+                        <li><span class="tech-term">cve:</span> - Ricerca per CVE ID</li>
+                        <li><span class="tech-term">type:</span> - Tipo di modulo (exploit, auxiliary, post)</li>
+                        <li><span class="tech-term">platform:</span> - Sistema operativo (windows, linux, etc.)</li>
+                        <li><span class="tech-term">name:</span> - Nome descrittivo</li>
+                        <li><span class="tech-term">port:</span> - Porta specifica</li>
+                        <li><span class="tech-term">rank:</span> - Affidabilità dell'exploit</li>
+                        <li><span class="tech-term">author:</span> - Autore del modulo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">✨ Ricerca Avanzata</div>
+                <div class="card-text">
+                    <p><strong>Combinare multipli criteri:</strong></p>
+                    <div class="code-box">msf6 > search type:exploit platform:windows cve:2021 rank:excellent microsoft</div>
+                    <br>
+                    <p><strong>Escludere risultati:</strong></p>
+                    <div class="code-box">msf6 > search cve:2009 type:exploit platform:-linux</div>
+                    <br>
+                    <p style="color: #667eea;">Il prefisso <span class="tech-term">-</span> esclude i risultati che matchano quel criterio.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">🎪 Esempio Pratico</div>
+            <div class="card-text">
+                <p><strong>Scenario:</strong> Hai scansionato un target e trovato SMB (porta 445) su Windows 7.</p>
+                <br>
+                <p><strong>Ricerca dell'exploit MS17-010:</strong></p>
+                <div class="code-box">msf6 > search ms17_010
+
+Matching Modules
+================
+   #  Name                                    Rank     Check
+   -  ----                                    ----     -----
+   0  exploit/windows/smb/ms17_010_eternalblue  average  Yes
+   1  exploit/windows/smb/ms17_010_psexec       normal   Yes
+   2  auxiliary/admin/smb/ms17_010_command      normal   No
+   3  auxiliary/scanner/smb/smb_ms17_010        normal   No</div>
+                <br>
+                <p style="color: #FFD54F;">💡 I risultati mostrano rank (affidabilità) e se supportano la verifica (check) prima dell'exploit.</p>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">🚀 Pro Tips</div>
+            <div class="card-text">
+                <p><strong>1. Ordinare risultati:</strong> Usa <span class="tech-term">-s &lt;column&gt;</span> per ordinare</p>
+                <p><strong>2. Output su file:</strong> Usa <span class="tech-term">-o &lt;file&gt;</span> per salvare in CSV</p>
+                <p><strong>3. Use automatico:</strong> Usa <span class="tech-term">-u</span> per usare il modulo se c'è un solo risultato</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 10;</script>
+    <script src="main.js"></script>
+</body>
+</html>

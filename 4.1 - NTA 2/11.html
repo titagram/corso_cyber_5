@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>ICMP Tunneling - Slide 11</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">ICMP Tunneling</h1>
+        <div class="subtitle">"È solo un innocente Ping... o no?"</div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">📦 Il Cavallo di Troia</div>
+                <div class="card-text">
+                    <p>Molti firewall bloccano tutto... tranne ICMP, perché "serve per il troubleshooting". Grave errore.</p>
+                    <p>L'attaccante usa il <strong>Tunneling</strong>. Prende i dati rubati (nomi utenti, password file), li nasconde dentro il payload di un pacchetto ICMP e li spedisce fuori.</p>
+                    <p>Se vedi un ping con un payload di 38.000 byte invece dei soliti 48... abbiamo un problema.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🕵️‍♀️ Decodifica</div>
+                <div class="card-text">
+                    <p>Analizzando il payload, spesso troviamo stringhe codificate in Base64 per eludere i controlli base (e per trasmettere dati binari in testo).</p>
+                    <p>Wireshark ci mostra il contenuto. Linux ci aiuta a svelarlo.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow">
+            <div class="card-title">⚡ Esercizio Guidato</div>
+            <div class="card-text">
+                <p>Apri <code>ICMP-tunneling.pcap</code> (o simile).</p>
+                <p>1. Filtra per ICMP. Cerca pacchetti (es. 147 o 180) con un payload sospetto.</p>
+                <p>2. Troverai una stringa simile a: <code>VGhpcyBpcyBhIHNlY3VyZSBrZXk6IEtleTEyMzQ1Njc4OQo=</code></p>
+                <p>3. Decodificala: <code>echo 'STRINGA' | base64 -d</code></p>
+                <p><strong>Risposta Attesa:</strong> <span class="spoiler">This is a secure key: Key123456789</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 11;</script>
+    <script src="main.js"></script>
+</body>
+</html>

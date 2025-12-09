@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>IPv4 e IPv6</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Indirizzamento IP</h1>
+        <div class="subtitle">IPv4 e IPv6</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">IPv4</div>
+                <div class="card-text">
+                    <p><strong>Formato:</strong> 32-bit, quattro ottetti rappresentati in formato decimale</p>
+                    <p style="margin-top: 15px;"><strong>Esempio:</strong> <span class="tech-term">192.168.86.243</span></p>
+                    <p style="margin-top: 15px;">Ogni ottetto può essere rappresentato da un numero da 0 a 255</p>
+                    <p style="margin-top: 15px;"><strong>Layer:</strong> Layer 3 (Network) OSI / Layer 2 (Internet) TCP-IP</p>
+                    <p style="margin-top: 15px;">Standard dominante attuale per l'instradamento di pacchetti attraverso reti</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">IPv6</div>
+                <div class="card-text">
+                    <p><strong>Formato:</strong> 128-bit, 16 ottetti rappresentati in formato esadecimale</p>
+                    <p style="margin-top: 15px;"><strong>Spazio indirizzi:</strong> Molto più grande di IPv4</p>
+                    <p style="margin-top: 15px;"><strong>Vantaggi:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Miglior supporto per Multicasting</li>
+                        <li>Indirizzamento globale per dispositivo</li>
+                        <li>Sicurezza integrata (IPSec)</li>
+                        <li>Header semplificati</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <img src="img/Addressing (1).png" alt="IPv4 Address" style="max-width: 500px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: inline-block; margin-right: 20px;">
+            <img src="img/Addressing (2).png" alt="IPv6 Address" style="max-width: 500px; width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: inline-block;">
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Tipi di Indirizzi IPv6</div>
+            <div class="card-text">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <th style="padding: 10px; text-align: left;">Tipo</th>
+                        <th style="padding: 10px; text-align: left;">Descrizione</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">Unicast</span></td>
+                        <td style="padding: 10px;">Indirizzi per una singola interfaccia</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">Anycast</span></td>
+                        <td style="padding: 10px;">Indirizzi per più interfacce, solo una riceve il pacchetto</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">Multicast</span></td>
+                        <td style="padding: 10px;">Indirizzi per più interfacce, tutte ricevono lo stesso pacchetto</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><span class="tech-term">Broadcast</span></td>
+                        <td style="padding: 10px;">Non esiste, realizzato con indirizzi multicast</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 9;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

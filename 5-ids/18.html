@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Architettura e Log di Zeek</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Architettura e Log di Zeek</h1>
+        <div class="subtitle">Componenti e Output</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Architettura di Zeek</div>
+                <div class="card-text">
+                    <p>L'architettura di Zeek comprende due componenti primarie:</p>
+                    <p style="margin-top: 15px;"><strong>1. Event Engine (Core):</strong> Prende un flusso di pacchetti in entrata e lo trasforma in una serie di eventi di alto livello. Questi eventi descrivono attività di rete in termini policy-neutral, informandoci di cosa sta succedendo senza offrire interpretazione.</p>
+                    <p style="margin-top: 15px;"><strong>2. Script Interpreter:</strong> Esegue un insieme di event handler scritti nel linguaggio di scripting Zeek, esprimendo la policy di sicurezza del sito.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Processo di Eventi</div>
+                <div class="card-text">
+                    <p>Gli eventi generati dal core di Zeek sono accodati in modo ordinato, aspettando il loro turno per essere processati su base first-come-first-served.</p>
+                    <p style="margin-top: 15px;">La maggior parte degli eventi di Zeek sono definiti in file .bif localizzati in <span class="tech-term">/scripts/base/bif/plugins/</span>.</p>
+                    <p style="margin-top: 15px;">L'interpretazione o analisi è fornita dallo script interpreter, che definisce azioni da intraprendere al rilevamento di certi eventi.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">Log Principali di Zeek</div>
+            <div class="card-text">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <th style="padding: 10px; text-align: left;">Log</th>
+                        <th style="padding: 10px; text-align: left;">Descrizione</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">conn.log</span></td>
+                        <td style="padding: 10px;">Dettagli su connessioni IP, TCP, UDP e ICMP</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">dns.log</span></td>
+                        <td style="padding: 10px;">Dettagli di query e risposte DNS</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">http.log</span></td>
+                        <td style="padding: 10px;">Dettagli di richieste e risposte HTTP</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 10px;"><span class="tech-term">ftp.log</span></td>
+                        <td style="padding: 10px;">Dettagli di richieste e risposte FTP</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;"><span class="tech-term">smtp.log</span></td>
+                        <td style="padding: 10px;">Transazioni SMTP, come dettagli mittente e destinatario</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">Campi http.log</div>
+            <div class="card-text">
+                <p>Il file <span class="tech-term">http.log</span> è pieno di dati preziosi come:</p>
+                <ul style="margin-top: 15px; padding-left: 20px; line-height: 2;">
+                    <li><strong>host:</strong> Il dominio/IP HTTP</li>
+                    <li><strong>uri:</strong> L'URI HTTP</li>
+                    <li><strong>referrer:</strong> Il referrer della richiesta HTTP</li>
+                    <li><strong>user_agent:</strong> L'user agent del client</li>
+                    <li><strong>status_code:</strong> Il codice di stato HTTP</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 18;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

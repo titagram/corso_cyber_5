@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Architettura di Metasploit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🏗️ Architettura di Metasploit</h1>
+        <div class="subtitle">Comprendere la struttura interna del Framework</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">📂 Struttura delle Directory</div>
+            <div class="card-text">
+                <p>Per impostazione predefinita, tutti i file base di Metasploit Framework si trovano in:</p>
+                <div class="code-box">/usr/share/metasploit-framework</div>
+                <br>
+                <p style="color: #667eea;">💡 Conoscere la struttura delle directory è fondamentale per importare nuovi moduli o crearne di personalizzati.</p>
+            </div>
+        </div>
+
+        <div class="grid-3-col">
+            <div class="card border-green">
+                <div class="card-title">📦 Data, Lib, Documentation</div>
+                <div class="card-text">
+                    <p><strong>Data & Lib:</strong> Parti funzionali dell'interfaccia msfconsole</p>
+                    <br>
+                    <p><strong>Documentation:</strong> Tutti i dettagli tecnici sul progetto</p>
+                    <br>
+                    <p>Questi costituiscono i file base del Framework.</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">🔧 Modules</div>
+                <div class="card-text">
+                    <p>Contiene tutte le categorie di moduli:</p>
+                    <div class="code-box">auxiliary
+encoders
+evasion
+exploits
+nops
+payloads
+post</div>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">🔌 Plugins</div>
+                <div class="card-text">
+                    <p>Offrono flessibilità extra quando si usa msfconsole.</p>
+                    <br>
+                    <p>Possono essere caricati manualmente o automaticamente per fornire funzionalità aggiuntive e automazione durante l'assessment.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2-col" style="margin-top: 25px;">
+            <div class="card border-red">
+                <div class="card-title">📜 Scripts</div>
+                <div class="card-text">
+                    <p>Contengono funzionalità Meterpreter e altri script utili per:</p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Automazione post-exploitation</li>
+                        <li>Raccolta informazioni</li>
+                        <li>Privilege escalation</li>
+                        <li>Persistence</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">🛠️ Tools</div>
+                <div class="card-text">
+                    <p>Utility command-line che possono essere chiamate direttamente dal menu msfconsole.</p>
+                    <br>
+                    <p>Include strumenti per payload generation, pattern creation, hash cracking e altro.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 6;</script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Conclusioni - Slide 29</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Conclusioni</h1>
+        <div class="subtitle">Splunk per Cybersecurity</div>
+
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">Approcci di Detection</div>
+                <div class="card-text">
+                    <p><strong>1. Basato su TTP Conosciuti:</strong></p>
+                    <p>Riconoscere pattern che abbiamo visto prima, indicativi di minacce specifiche o vettori di attacco.</p>
+                    <p style="margin-top: 15px;"><strong>2. Basato su Analytics:</strong></p>
+                    <p>Analisi statistica e anomaly detection per identificare comportamenti anormali che deviano dalla baseline normale.</p>
+                </div>
+            </div>
+
+            <div class="card border-green">
+                <div class="card-title">Punti Chiave</div>
+                <div class="card-text">
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Comprendere i dati e l'ambiente</li>
+                        <li>Sintonizzare attentamente query e soglie</li>
+                        <li>Bilanciare accuratezza di detection con evitare falsi positivi</li>
+                        <li>Revisione e revisione continua delle query SPL</li>
+                        <li>Mantenere un alto livello di postura di sicurezza</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 30px;">
+            <div class="card-title">Competenze Acquisite</div>
+            <div class="card-text">
+                <p>Abbiamo acquisito competenze per:</p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Setacciare attraverso vaste quantità di dati</li>
+                    <li>Identificare potenziali minacce</li>
+                    <li>Esplorare il SIEM per fonti dati preziose</li>
+                    <li>Tracciare attacchi dalle loro potenziali sorgenti</li>
+                    <li>Creare alert potenti per monitorare minacce emergenti</li>
+                    <li>Creare query basate su TTP conosciuti</li>
+                    <li>Utilizzare analisi statistica per anomaly detection</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 30px;">
+            <div class="card-title">Considerazioni Finali</div>
+            <div class="card-text">
+                <p>Le tecniche discusse erano relativamente semplificate a causa del nostro dataset più piccolo di circa 500.000 eventi. Scenari reali possono comportare dataset molto più grandi o più piccoli, richiedendo tecniche più rigorose per identificare attività malevoli.</p>
+                <p style="margin-top: 15px;">Ricorda l'importanza di:</p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Mantenere strategie di ricerca efficaci</li>
+                    <li>Essere innovativi nell'analisi di dataset massicci</li>
+                    <li>Sfruttare strumenti di intelligence open-source come Google per identificare minacce</li>
+                    <li>Creare alert robusti che non siano facilmente bypassati</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <img src="img/162.png" alt="DLL Loading" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/163.png" alt="Transactions" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+            <img src="img/164.png" alt="Transaction Details" style="width: 100%; max-width: 600px; border-radius: 8px; margin: 10px auto; display: block;">
+        </div>
+    </div>
+
+    <script>const slideNumero = 29;</script>
+    <script src="main.js"></script>
+</body>
+</html>
+

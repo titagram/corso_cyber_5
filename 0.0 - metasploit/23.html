@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Plugins in Metasploit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🔌 Plugins in Metasploit</h1>
+        <div class="subtitle">Estendere le funzionalità del Framework</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Cosa sono i Plugins?</div>
+            <div class="card-text">
+                <p>I <strong>Plugins</strong> sono software di terze parti già integrati o integrabili nel Framework, che rendono la vita del pentester ancora più facile.</p>
+                <br>
+                <p><strong>Vantaggi:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>🔄 <strong>Integrazione seamless</strong> - Non serve cambiare software</li>
+                    <li>📊 <strong>Documentazione automatica</strong> - Tutto salvato nel database</li>
+                    <li>🎯 <strong>At-a-glance view</strong> - Hosts, services, vulnerabilities immediatamente disponibili</li>
+                    <li>🔧 <strong>Automazione task</strong> - Automatizzare attività ripetitive</li>
+                    <li>🚀 <strong>Nuovi comandi</strong> - Aggiungere funzionalità a msfconsole</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">📂 Plugins Disponibili</div>
+                <div class="card-text">
+                    <p>Directory plugins:</p>
+                    <div class="code-box">$ ls /usr/share/metasploit-framework/plugins/
+
+aggregator.rb      libnotify.rb
+alias.rb           msfd.rb
+auto_add_route.rb  msgrpc.rb
+beholder.rb        nessus.rb
+db_credcollect.rb  nexpose.rb
+db_tracker.rb      openvas.rb
+event_tester.rb    pcap_log.rb
+ffautoregen.rb     request.rb
+ips_filter.rb      rssfeed.rb
+komand.rb          sample.rb
+lab.rb             session_notifier.rb
+                   session_tagger.rb
+                   socket_logger.rb
+                   sounds.rb
+                   sqlmap.rb
+                   thread.rb
+                   token_adduser.rb
+                   token_hunter.rb
+                   wiki.rb
+                   wmap.rb</div>
+                </div>
+            </div>
+
+            <div class="card border-purple">
+                <div class="card-title">🚀 Caricare un Plugin</div>
+                <div class="card-text">
+                    <p><strong>Caricare plugin:</strong></p>
+                    <div class="code-box">msf6 > load nessus
+[*] Nessus Bridge for Metasploit
+[*] Type nessus_help for a command listing
+[*] Successfully loaded Plugin: Nessus</div>
+                    <br>
+                    <p><strong>Help del plugin:</strong></p>
+                    <div class="code-box">msf6 > nessus_help
+
+Command                 Help Text
+-------                 ---------
+nessus_connect          Connect to Nessus
+nessus_logout           Logout
+nessus_scan_new         Create new scan
+nessus_scan_launch      Launch scan
+nessus_report_list      List reports</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-yellow" style="margin-top: 25px;">
+            <div class="card-title">🔧 Plugin Popolari</div>
+            <div class="card-text">
+                <div class="grid-3-col">
+                    <div>
+                        <p><strong>🔍 Nessus</strong></p>
+                        <p>Integrazione con Tenable Nessus vulnerability scanner.</p>
+                        <div class="code-box">msf6 > load nessus</div>
+                    </div>
+                    <div>
+                        <p><strong>🎯 Nexpose</strong></p>
+                        <p>Integrazione con Rapid7 Nexpose scanner.</p>
+                        <div class="code-box">msf6 > load nexpose</div>
+                    </div>
+                    <div>
+                        <p><strong>🛡️ OpenVAS</strong></p>
+                        <p>Integrazione con OpenVAS vulnerability scanner.</p>
+                        <div class="code-box">msf6 > load openvas</div>
+                    </div>
+                </div>
+                <br>
+                <div class="grid-3-col" style="margin-top: 15px;">
+                    <div>
+                        <p><strong>🗺️ wmap</strong></p>
+                        <p>Web application vulnerability scanner.</p>
+                        <div class="code-box">msf6 > load wmap</div>
+                    </div>
+                    <div>
+                        <p><strong>💉 sqlmap</strong></p>
+                        <p>Integrazione con sqlmap per SQL injection.</p>
+                        <div class="code-box">msf6 > load sqlmap</div>
+                    </div>
+                    <div>
+                        <p><strong>🔄 auto_add_route</strong></p>
+                        <p>Routing automatico per pivoting.</p>
+                        <div class="code-box">msf6 > load auto_add_route</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">📦 Installare Plugin Custom</div>
+            <div class="card-text">
+                <p><strong>1. Download del plugin (.rb file):</strong></p>
+                <div class="code-box">$ git clone https://github.com/darkoperator/Metasploit-Plugins
+$ cd Metasploit-Plugins</div>
+                <br>
+                <p><strong>2. Copiare nella directory plugins:</strong></p>
+                <div class="code-box">$ sudo cp pentest.rb /usr/share/metasploit-framework/plugins/</div>
+                <br>
+                <p><strong>3. Caricare in msfconsole:</strong></p>
+                <div class="code-box">msf6 > load pentest
+[*] Successfully loaded plugin: pentest</div>
+                <br>
+                <p style="color: #F44336;">⚠️ Assicurati che i file abbiano i permessi corretti!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 23;</script>
+    <script src="main.js"></script>
+</body>
+</html>

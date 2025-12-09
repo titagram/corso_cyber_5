@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Database in Metasploit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🗄️ Database in Metasploit</h1>
+        <div class="subtitle">PostgreSQL per organizzare i risultati degli assessment</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Perché il Database?</div>
+            <div class="card-text">
+                <p>Metasploit integra <strong>PostgreSQL</strong> per memorizzare e organizzare automaticamente:</p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li>🖥️ <strong>Hosts</strong> scoperti e informazioni OS</li>
+                    <li>🔌 <strong>Services</strong> e porte aperte</li>
+                    <li>🔐 <strong>Credentials</strong> raccolte</li>
+                    <li>🎯 <strong>Vulnerabilities</strong> identificate</li>
+                    <li>📊 <strong>Scan results</strong> da Nmap, Nessus, Nexpose</li>
+                    <li>💎 <strong>Loot</strong> (hash dumps, files sensibili)</li>
+                </ul>
+                <br>
+                <p style="color: #4CAF50; font-weight: 600;">✨ Tutto automaticamente documentato e disponibile a colpo d'occhio!</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">🚀 Setup Database</div>
+                <div class="card-text">
+                    <p><strong>1. Verificare stato PostgreSQL:</strong></p>
+                    <div class="code-box">$ sudo systemctl status postgresql</div>
+                    <br>
+                    <p><strong>2. Avviare PostgreSQL:</strong></p>
+                    <div class="code-box">$ sudo systemctl start postgresql</div>
+                    <br>
+                    <p><strong>3. Inizializzare DB Metasploit:</strong></p>
+                    <div class="code-box">$ sudo msfdb init</div>
+                    <br>
+                    <p><strong>4. Verificare connessione in msfconsole:</strong></p>
+                    <div class="code-box">msf6 > db_status
+[*] Connected to msf. Connection type: postgresql.</div>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">📋 Comandi Database</div>
+                <div class="card-text">
+                    <p><strong>Gestione base:</strong></p>
+                    <div class="code-box">msf6 > db_status    # Stato connessione
+msf6 > db_nmap      # Esegui nmap e salva
+msf6 > db_import    # Importa scan
+msf6 > db_export    # Esporta dati
+msf6 > db_rebuild_cache  # Rebuild cache</div>
+                    <br>
+                    <p><strong>Visualizzare dati:</strong></p>
+                    <div class="code-box">msf6 > hosts       # Hosts scoperti
+msf6 > services    # Servizi trovati
+msf6 > creds       # Credenziali
+msf6 > loot        # Loot raccolto
+msf6 > vulns       # Vulnerabilità</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🗂️ Workspaces</div>
+            <div class="card-text">
+                <p>I <strong>Workspaces</strong> permettono di organizzare assessment multipli separatamente:</p>
+                <br>
+                <p><strong>Gestione workspaces:</strong></p>
+                <div class="code-box">msf6 > workspace          # Lista workspaces
+default *
+
+msf6 > workspace -a client1   # Crea nuovo
+msf6 > workspace client1      # Cambia workspace
+msf6 > workspace -d test      # Elimina workspace</div>
+                <br>
+                <p style="color: #667eea;">💡 Ogni workspace mantiene separati hosts, services, credentials, etc.</p>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">💾 Backup e Export</div>
+            <div class="card-text">
+                <p><strong>Esportare dati workspace:</strong></p>
+                <div class="code-box">msf6 > db_export -f xml /root/backup.xml
+[*] Starting export of workspace default to /root/backup.xml [ xml ]...
+[*] Finished export of workspace default to /root/backup.xml [ xml ]...</div>
+                <br>
+                <p><strong>Formati supportati:</strong></p>
+                <ul style="margin-top: 10px; line-height: 1.8;">
+                    <li><span class="tech-term">xml</span> - Export completo in XML</li>
+                    <li><span class="tech-term">pwdump</span> - Solo password hashes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 21;</script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>MSF Engagement Structure</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🎯 MSF Engagement Structure</h1>
+        <div class="subtitle">Le 5 fasi di un penetration test con Metasploit</div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">📋 Metodologia Strutturata</div>
+            <div class="card-text">
+                <p>La struttura MSF può essere divisa in <strong>5 categorie principali</strong>, rendendo più facile trovare e selezionare le funzionalità appropriate in modo strutturato.</p>
+                <br>
+                <p>Ogni categoria ha sottocategorie specifiche per scopi particolari, come Service Validation e Vulnerability Research.</p>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">1️⃣ Enumeration</div>
+                <div class="card-text">
+                    <p><strong>Fase di ricognizione e raccolta informazioni</strong></p>
+                    <br>
+                    <p>Identificare:</p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Servizi pubblici in esecuzione</li>
+                        <li>Versioni software</li>
+                        <li>Porte aperte</li>
+                        <li>Sistema operativo</li>
+                        <li>Configurazioni esposte</li>
+                    </ul>
+                    <br>
+                    <p style="color: #4CAF50; font-weight: 600;">Le versioni sono la chiave per determinare se il target è vulnerabile!</p>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">2️⃣ Preparation</div>
+                <div class="card-text">
+                    <p><strong>Configurazione e preparazione dell'attacco</strong></p>
+                    <br>
+                    <p>Attività:</p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>Ricerca vulnerabilità</li>
+                        <li>Selezione exploit appropriato</li>
+                        <li>Configurazione payload</li>
+                        <li>Impostazione parametri</li>
+                        <li>Testing preliminare</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-3-col" style="margin-top: 25px;">
+            <div class="card border-purple">
+                <div class="card-title">3️⃣ Exploitation</div>
+                <div class="card-text">
+                    <p><strong>Esecuzione dell'attacco</strong></p>
+                    <br>
+                    <p>Sfruttare la vulnerabilità identificata per ottenere accesso iniziale al sistema.</p>
+                </div>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-title">4️⃣ Privilege Escalation</div>
+                <div class="card-text">
+                    <p><strong>Elevazione privilegi</strong></p>
+                    <br>
+                    <p>Ottenere privilegi amministrativi o SYSTEM per controllo completo.</p>
+                </div>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-title">5️⃣ Post-Exploitation</div>
+                <div class="card-text">
+                    <p><strong>Attività post-compromissione</strong></p>
+                    <br>
+                    <p>Raccolta dati, persistenza, lateral movement, cleanup.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-green" style="margin-top: 25px;">
+            <div class="card-title">💡 Importanza della Struttura</div>
+            <div class="card-text">
+                <p>È cruciale familiarizzare con questa struttura. Durante il modulo, esamineremo ciascuna di queste categorie, ma si raccomanda di esplorare i componenti individuali autonomamente e sperimentare con le diverse funzioni.</p>
+                <br>
+                <p style="color: #667eea; font-weight: 600;">🔬 La sperimentazione è parte integrante dell'apprendimento di un nuovo strumento o skill!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 7;</script>
+    <script src="main.js"></script>
+</body>
+</html>

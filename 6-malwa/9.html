@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Malware Analysis - Slide 9</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Architettura Windows</h1>
+        <div class="subtitle">Gli anelli del potere</div>
+
+        
+        <img src="img/windows_architecture.png" class="slide-image" alt="Architettura Windows" style="max-height: 400px;">
+        <div class="card border-blue">
+            <div class="card-text">
+                <p>Notate come le applicazioni (Ring 3) siano separate dall'Hardware. Per scrivere un file su disco, un'app deve passare attraverdo le subsystem DLL (es. kernel32.dll), che chiamano ntdll.dll, che esegue una <strong>Syscall</strong> per passare in Kernel Mode.</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>const slideNumero = 9;</script>
+    <script src="main.js"></script>
+</body>
+</html>

