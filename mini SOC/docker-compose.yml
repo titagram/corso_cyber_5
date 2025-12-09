@@ -1,0 +1,170 @@
+###########################################################
+# Mini SOC - DVWA + ELK Stack + WAF (ModSecurity)
+# Corso Cyber Security
+###########################################################
+
+networks:
+  soc-network:
+    driver: bridge
+
+volumes:
+  esdata:
+  modsec-logs:
+  dvwa-db:
+
+services:
+
+  ###########################################################
+  # 1. Elasticsearch (SIEM Core)
+  ###########################################################
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - soc-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200 | grep -q 'cluster_name'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  ###########################################################
+  # 2. Kibana (Dashboard SIEM)
+  ###########################################################
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.0
+    container_name: kibana
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - "5601:5601"
+    networks:
+      - soc-network
+    restart: unless-stopped
+
+  ###########################################################
+  # 3. Logstash (Pipeline dei log)
+  ###########################################################
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.13.0
+    container_name: logstash
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+    ports:
+      - "5044:5044"
+    networks:
+      - soc-network
+    restart: unless-stopped
+
+  ###########################################################
+  # 4. Filebeat (lettura log ModSecurity)
+  ###########################################################
+  filebeat:
+    build:
+      context: ./filebeat
+      dockerfile: Dockerfile
+    container_name: filebeat
+    depends_on:
+      - logstash
+      - waf
+    volumes:
+      - modsec-logs:/var/log/modsecurity:ro
+    user: root
+    networks:
+      - soc-network
+    restart: unless-stopped
+
+  ###########################################################
+  # 5. Database MariaDB per DVWA
+  ###########################################################
+  db:
+    image: docker.io/library/mariadb:10
+    container_name: dvwa-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=dvwa
+      - MYSQL_DATABASE=dvwa
+      - MYSQL_USER=dvwa
+      - MYSQL_PASSWORD=p@ssw0rd
+    volumes:
+      - dvwa-db:/var/lib/mysql
+    networks:
+      - soc-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ###########################################################
+  # 6. Web Application (DVWA)
+  ###########################################################
+  webapp:
+    image: ghcr.io/digininja/dvwa:latest
+    container_name: dvwa
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_SERVER=db
+      - DB_USER=dvwa
+      - DB_PASSWORD=p@ssw0rd
+      - DB_NAME=dvwa
+      - DEFAULT_SECURITY_LEVEL=low
+    networks:
+      - soc-network
+    restart: unless-stopped
+    # Porta diretta per debug (opzionale, rimuovi in produzione)
+    # ports:
+    #   - "8081:80"
+
+  ###########################################################
+  # 7. Web Application Firewall (Nginx + ModSecurity + CRS)
+  ###########################################################
+  waf:
+    build:
+      context: ./waf
+      dockerfile: Dockerfile
+    container_name: waf
+    depends_on:
+      - webapp
+    ports:
+      - "8080:8080"
+    environment:
+      # Proxy verso DVWA
+      - BACKEND=http://webapp:80
+      # Abilita ModSecurity in modalità detection (SecRuleEngine DetectionOnly)
+      # Cambia in "On" per bloccare gli attacchi
+      - MODSEC_RULE_ENGINE=DetectionOnly
+      # Logga TUTTE le richieste (On), non solo quelle rilevanti (RelevantOnly)
+      - MODSEC_AUDIT_ENGINE=On
+      # Paranoia Level (1-4, più alto = più restrittivo)
+      - PARANOIA=2
+      # Abilita logging JSON
+      - MODSEC_AUDIT_LOG=/var/log/modsecurity/modsec_audit.log
+      - MODSEC_AUDIT_LOG_FORMAT=JSON
+    volumes:
+      - modsec-logs:/var/log/modsecurity
+    networks:
+      - soc-network
+    restart: unless-stopped
+

@@ -1,0 +1,36 @@
+###########################################################
+# Filebeat Configuration - Mini SOC
+# Legge i log di ModSecurity e li invia a Logstash
+###########################################################
+
+filebeat.inputs:
+  - type: filestream
+    id: modsec-audit-log
+    enabled: true
+    paths:
+      - /var/log/modsecurity/modsec_audit.log
+    # Parser per JSON (ModSecurity audit log in formato JSON)
+    parsers:
+      - ndjson:
+          target: ""
+          add_error_key: true
+
+  - type: filestream
+    id: modsec-all-logs
+    enabled: true
+    paths:
+      - /var/log/modsecurity/*.log
+    exclude_files: ['modsec_audit\.log$']
+
+# Output verso Logstash
+output.logstash:
+  hosts: ["logstash:5044"]
+
+# Logging di Filebeat stesso
+logging.level: info
+logging.to_files: false
+
+# Evita errori di permessi
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
