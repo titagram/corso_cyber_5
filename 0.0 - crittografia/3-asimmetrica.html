@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crittografia Asimmetrica</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.intro { border-color: #3b82f6; }
+        .concept-section.intro h2 { color: #3b82f6; }
+        
+        .concept-section.analogy { border-color: #4ade80; }
+        .concept-section.analogy h2 { color: #4ade80; }
+        
+        .concept-section.why { border-color: #fbbf24; }
+        .concept-section.why h2 { color: #fbbf24; }
+        
+        .concept-section.where { border-color: #a78bfa; }
+        .concept-section.where h2 { color: #a78bfa; }
+        
+        .concept-section.algorithms { border-color: #f472b6; }
+        .concept-section.algorithms h2 { color: #f472b6; }
+        
+        .concept-section.compare { border-color: #06b6d4; }
+        .concept-section.compare h2 { color: #06b6d4; }
+        
+        .concept-section.choose { border-color: #f87171; }
+        .concept-section.choose h2 { color: #f87171; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Visual flow */
+        .visual-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .flow-step.alice {
+            border-color: #3b82f6;
+        }
+        
+        .flow-step.bob {
+            border-color: #4ade80;
+        }
+        
+        .flow-step.eve {
+            border-color: #f87171;
+        }
+        
+        .flow-step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        
+        .flow-content {
+            flex: 1;
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            color: #64748b;
+            font-size: 1.5em;
+            margin: -5px 0;
+        }
+
+        /* Key visualization */
+        .key-visual {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .key-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 2px solid;
+            text-align: center;
+        }
+        
+        .key-box.public {
+            border-color: #3b82f6;
+        }
+        
+        .key-box.private {
+            border-color: #f87171;
+        }
+        
+        .key-box h5 {
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .key-value {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 6px;
+            color: #94a3b8;
+        }
+
+        /* Use case cards */
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .use-case-card {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        .use-case-card.tls {
+            border-color: #3b82f6;
+        }
+        
+        .use-case-card.signatures {
+            border-color: #4ade80;
+        }
+        
+        .use-case-card.ssh {
+            border-color: #fbbf24;
+        }
+        
+        .use-case-card.crypto {
+            border-color: #a78bfa;
+        }
+        
+        .use-case-card.email {
+            border-color: #f472b6;
+        }
+        
+        .use-case-card h5 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .use-case-card ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        /* Algorithm card */
+        .algorithm-card {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border-left: 4px solid;
+            margin: 15px 0;
+        }
+        
+        .algorithm-card.rsa {
+            border-color: #3b82f6;
+        }
+        
+        .algorithm-card.ecdh {
+            border-color: #4ade80;
+        }
+        
+        .algorithm-card.ed25519 {
+            border-color: #fbbf24;
+        }
+        
+        .algorithm-card h4 {
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .algorithm-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .spec-item {
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+        
+        .spec-label {
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        
+        .spec-value {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Analogy box */
+        .analogy-box {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .analogy-box h4 {
+            color: #4ade80;
+            margin: 0 0 12px 0;
+        }
+
+        /* Decision tree */
+        .decision-tree {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .decision-node {
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .decision-arrow {
+            text-align: center;
+            color: #64748b;
+            font-size: 1.5em;
+            margin: 5px 0;
+        }
+        
+        .decision-result {
+            padding: 15px;
+            background: rgba(74, 222, 128, 0.2);
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4ade80;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="0-intro.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna all'introduzione
+        </a>
+
+        <h1 class="title">🔐 Crittografia Asimmetrica</h1>
+        <div class="subtitle">Due chiavi: una pubblica, una privata. La soluzione al problema della distribuzione chiavi</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#intro">Cos'è</a>
+            <a href="#analogy">Analogia Semplice</a>
+            <a href="#why">Perché Usarla</a>
+            <a href="#where">Dove si Usa</a>
+            <a href="#algorithms">Algoritmi Principali</a>
+            <a href="#compare">Confronto</a>
+            <a href="#choose">Come Scegliere</a>
+        </div>
+
+        <!-- ==================== INTRODUZIONE ==================== -->
+        <div class="concept-section intro" id="intro">
+            <h2>🔑 Cos'è la Crittografia Asimmetrica?</h2>
+            <p class="subtitle">Due chiavi: una che tutti possono vedere, una che solo tu conosci</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered">
+                        <strong>Asimmetrica:</strong> Chiave Pubblica + Chiave Privata
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Definizione Semplice</h4>
+                        <p>La crittografia asimmetrica usa <strong>due chiavi diverse</strong>:</p>
+                        <ul>
+                            <li><strong>Chiave Pubblica:</strong> può essere condivisa con tutti</li>
+                            <li><strong>Chiave Privata:</strong> segreta, solo tu la conosci</li>
+                        </ul>
+                        <p><strong>Proprietà magica:</strong> ciò che cifri con una chiave, puoi decifrare solo con l'altra!</p>
+                    </div>
+
+                    <div class="key-visual">
+                        <div class="key-box public">
+                            <h5>🔓 Chiave Pubblica</h5>
+                            <p style="color: #3b82f6; font-weight: bold; margin: 10px 0;">Può essere condivisa con tutti!</p>
+                            <div class="key-value">
+                                -----BEGIN PUBLIC KEY-----<br>
+                                MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...<br>
+                                -----END PUBLIC KEY-----
+                            </div>
+                            <p style="font-size: 0.85em; color: #94a3b8; margin-top: 10px;">
+                                Puoi pubblicarla su internet, condividerla, metterla ovunque
+                            </p>
+                        </div>
+                        <div class="key-box private">
+                            <h5>🔒 Chiave Privata</h5>
+                            <p style="color: #f87171; font-weight: bold; margin: 10px 0;">Mai condivisa con nessuno!</p>
+                            <div class="key-value">
+                                -----BEGIN PRIVATE KEY-----<br>
+                                MIIEvQIBADANBgkqhkiG9w0BAQEFAASC...<br>
+                                -----END PRIVATE KEY-----
+                            </div>
+                            <p style="font-size: 0.85em; color: #94a3b8; margin-top: 10px;">
+                                Solo tu la conosci. Se la perdi o la condividi, è un disastro!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="visual-flow">
+                        <div class="flow-step alice">
+                            <div class="flow-step-number">1</div>
+                            <div class="flow-content">
+                                <strong>Alice genera coppia di chiavi:</strong><br>
+                                Chiave Pubblica (condivisa) + Chiave Privata (segreta)
+                            </div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step bob">
+                            <div class="flow-step-number">2</div>
+                            <div class="flow-content">
+                                <strong>Bob vuole inviare messaggio ad Alice:</strong><br>
+                                Prende la chiave pubblica di Alice (tutti la possono vedere)
+                            </div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step bob">
+                            <div class="flow-step-number">3</div>
+                            <div class="flow-content">
+                                <strong>Bob cifra il messaggio:</strong><br>
+                                Messaggio + Chiave Pubblica Alice → Cifrato
+                            </div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step alice">
+                            <div class="flow-step-number">4</div>
+                            <div class="flow-content">
+                                <strong>Alice riceve e decifra:</strong><br>
+                                Cifrato + Chiave Privata Alice → Messaggio originale
+                            </div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step eve">
+                            <div class="flow-step-number">5</div>
+                            <div class="flow-content">
+                                <strong>Eve (attaccante) vede:</strong><br>
+                                Chiave Pubblica (inutile) + Cifrato (illeggibile senza chiave privata)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Vantaggi Chiave</h4>
+                        <ul>
+                            <li>✓ <strong>Risolve distribuzione chiavi:</strong> chiave pubblica può essere condivisa liberamente</li>
+                            <li>✓ <strong>Firme digitali:</strong> puoi firmare con chiave privata</li>
+                            <li>✓ <strong>Autenticazione:</strong> verifica identità del mittente</li>
+                            <li>✓ <strong>Non ripudio:</strong> mittente non può negare di aver inviato</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Svantaggi</h4>
+                        <ul>
+                            <li>✗ <strong>Lenta:</strong> 100-1000× più lenta della simmetrica</li>
+                            <li>✗ <strong>Chiavi lunghe:</strong> RSA-2048 = 256 byte (vs AES-256 = 32 byte)</li>
+                            <li>✗ <strong>Limitata:</strong> solo piccole quantità di dati</li>
+                            <li>✗ <strong>Complessità:</strong> più difficile da implementare correttamente</li>
+                        </ul>
+                        <p><strong>Soluzione:</strong> Usa asimmetrica per scambiare chiave, poi simmetrica per i dati!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ANALOGIA SEMPLICE ==================== -->
+        <div class="concept-section analogy" id="analogy">
+            <h2>🎭 Analogia: La Cassetta delle Lettere</h2>
+            <p class="subtitle">Il modo più semplice per capire chiave pubblica e privata</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="analogy-box">
+                        <h4>📮 Analogia della Cassetta delle Lettere</h4>
+                        <p><strong>Immagina una cassetta delle lettere:</strong></p>
+                        <ul>
+                            <li><strong>Chiave Pubblica = Serratura della cassetta:</strong> chiunque può inserire lettere (cifrare messaggi)</li>
+                            <li><strong>Chiave Privata = Chiave della cassetta:</strong> solo tu puoi aprire e leggere (decifrare messaggi)</li>
+                        </ul>
+                        <p><strong>Proprietà magica:</strong> chiunque può mettere lettere nella cassetta, ma solo tu puoi leggerle!</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔐 Come Funziona in Pratica</h4>
+                        <p><strong>Scenario:</strong> Bob vuole inviare un messaggio segreto ad Alice</p>
+                        <ol>
+                            <li><strong>Alice ha una cassetta:</strong> serratura pubblica (tutti la vedono), chiave privata (solo Alice)</li>
+                            <li><strong>Bob prende la serratura:</strong> usa la chiave pubblica di Alice</li>
+                            <li><strong>Bob inserisce il messaggio:</strong> cifra con chiave pubblica → messaggio va nella "cassetta"</li>
+                            <li><strong>Alice apre la cassetta:</strong> usa la sua chiave privata → legge il messaggio</li>
+                            <li><strong>Eve vede:</strong> la serratura (inutile) e la cassetta chiusa (non può aprirla!)</li>
+                        </ol>
+                    </div>
+
+                    <div class="formula">
+Esempio concreto:
+
+Alice genera chiavi:
+- Pubblica: "chiave_pubblica_alice_12345..."
+- Privata: "chiave_privata_alice_segreta_xyz..."
+
+Bob vuole inviare "CIAO":
+1. Bob: "CIAO" + chiave_pubblica_alice → "a8f3k9x2..."
+2. Bob invia "a8f3k9x2..." ad Alice
+3. Alice: "a8f3k9x2..." + chiave_privata_alice → "CIAO"
+
+Eve vede "a8f3k9x2..." ma non può decifrarlo!
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>💡 Perché Funziona?</h4>
+                        <p>La matematica garantisce che:</p>
+                        <ul>
+                            <li>✓ Cifrare con chiave pubblica → solo chiave privata può decifrare</li>
+                            <li>✓ È computazionalmente impossibile derivare chiave privata da pubblica</li>
+                            <li>✓ Basato su problemi matematici difficili (fattorizzazione, logaritmo discreto)</li>
+                        </ul>
+                        <p><strong>Esempio:</strong> RSA si basa sulla fattorizzazione di numeri grandi. Fattorizzare 2048 bit richiede migliaia di anni!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Esempio Reale: Email</h4>
+                        <p><strong>Scenario:</strong> Vuoi inviare email cifrata a un collega</p>
+                        <ol>
+                            <li>Il collega pubblica la sua chiave pubblica sul sito web</li>
+                            <li>Tu scarichi la chiave pubblica</li>
+                            <li>Cifri l'email con la sua chiave pubblica</li>
+                            <li>Invii l'email cifrata</li>
+                            <li>Il collega decifra con la sua chiave privata</li>
+                        </ol>
+                        <p><strong>Vantaggio:</strong> Non avete mai condiviso una chiave segreta! La chiave pubblica può essere pubblica.</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Confronto con Simmetrica</h4>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspetto</th>
+                                <th>Simmetrica</th>
+                                <th>Asimmetrica</th>
+                            </tr>
+                            <tr>
+                                <td>Numero chiavi</td>
+                                <td>1 (condivisa)</td>
+                                <td>2 (pubblica + privata)</td>
+                            </tr>
+                            <tr>
+                                <td>Distribuzione</td>
+                                <td class="bad">❌ Problema</td>
+                                <td class="good">✅ Facile (pubblica)</td>
+                            </tr>
+                            <tr>
+                                <td>Velocità</td>
+                                <td class="good">✅ Veloce</td>
+                                <td class="bad">❌ Lenta</td>
+                            </tr>
+                            <tr>
+                                <td>Uso tipico</td>
+                                <td>Dati</td>
+                                <td>Chiavi, firme</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PERCHÉ USARLA ==================== -->
+        <div class="concept-section why" id="why">
+            <h2>⚡ Perché Usare Crittografia Asimmetrica?</h2>
+            <p class="subtitle">Risolve il problema della distribuzione chiavi e abilita firme digitali</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎯 Problema Risolto: Distribuzione Chiavi</h4>
+                        <p><strong>Con crittografia simmetrica:</strong></p>
+                        <ul>
+                            <li>✗ Devi condividere chiave segreta in modo sicuro</li>
+                            <li>✗ Se invii chiave su canale non sicuro → vulnerabile</li>
+                            <li>✗ Se incontri di persona → non sempre possibile</li>
+                            <li>✗ Con N persone: N×(N-1)/2 chiavi da gestire!</li>
+                        </ul>
+                        <p><strong>Con crittografia asimmetrica:</strong></p>
+                        <ul>
+                            <li>✓ Chiave pubblica può essere condivisa liberamente</li>
+                            <li>✓ Puoi pubblicarla su internet, sito web, email</li>
+                            <li>✓ Con N persone: solo N chiavi pubbliche (tutte pubbliche!)</li>
+                            <li>✓ Ognuno tiene segreta solo la propria chiave privata</li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+Esempio: 100 persone vogliono comunicare
+
+Simmetrica:
+- Chiavi necessarie: 100 × 99 / 2 = 4,950 chiavi!
+- Ogni coppia deve condividere una chiave segreta
+
+Asimmetrica:
+- Chiavi pubbliche: 100 (tutte pubbliche, su sito web)
+- Chiavi private: 100 (ognuno tiene la sua segreta)
+- Totale: 200 chiavi, ma solo 100 sono segrete!
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>✍️ Firma Digitale</h4>
+                        <p>La crittografia asimmetrica abilita le <strong>firme digitali</strong>:</p>
+                        <ul>
+                            <li>Firmi con chiave privata (solo tu puoi)</li>
+                            <li>Chiunque può verificare con chiave pubblica</li>
+                            <li>Garantisce autenticità e non ripudio</li>
+                        </ul>
+                        <p><strong>Esempio:</strong> Bitcoin usa ECDSA per firmare transazioni. Solo chi ha la chiave privata può spendere i bitcoin!</p>
+                    </div>
+
+                    <div class="visual-flow">
+                        <div class="flow-step alice">
+                            <div class="flow-step-number">1</div>
+                            <div class="flow-content">
+                                <strong>Alice firma documento:</strong><br>
+                                Hash(Documento) + Chiave Privata → Firma Digitale
+                            </div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step bob">
+                            <div class="flow-step-number">2</div>
+                            <div class="flow-content">
+                                <strong>Bob riceve:</strong><br>
+                                Documento + Firma Digitale + Chiave Pubblica Alice
+                            </div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step bob">
+                            <div class="flow-step-number">3</div>
+                            <div class="flow-content">
+                                <strong>Bob verifica:</strong><br>
+                                Verifica(Documento, Firma, Chiave Pubblica) → ✓ Vero o ✗ Falso
+                            </div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step alice">
+                            <div class="flow-step-number">4</div>
+                            <div class="flow-content">
+                                <strong>Risultato:</strong><br>
+                                Se verifica = ✓: documento autentico, Alice non può negare
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Casi d'Uso Principali</h4>
+                        <ul>
+                            <li>✓ <strong>Scambio chiavi:</strong> condividi chiave simmetrica in modo sicuro</li>
+                            <li>✓ <strong>Firme digitali:</strong> autentica documenti, transazioni</li>
+                            <li>✓ <strong>Certificati SSL/TLS:</strong> verifica identità server</li>
+                            <li>✓ <strong>SSH:</strong> autenticazione senza password</li>
+                            <li>✓ <strong>Email PGP:</strong> email cifrate e firmate</li>
+                            <li>✓ <strong>Blockchain:</strong> Bitcoin, Ethereum firmano transazioni</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== DOVE SI USA ==================== -->
+        <div class="concept-section where" id="where">
+            <h2>🌍 Dove si Usa la Crittografia Asimmetrica Oggi</h2>
+            <p class="subtitle">Onnipresente: ogni comunicazione sicura inizia con asimmetrica</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="use-case-grid">
+                        <div class="use-case-card tls">
+                            <h5>🔒 TLS/HTTPS Handshake</h5>
+                            <p><strong>Algoritmo:</strong> RSA, ECDH, ECDSA</p>
+                            <p><strong>Uso:</strong> Scambio chiavi iniziale per HTTPS</p>
+                            <ul>
+                                <li>Server invia certificato con chiave pubblica</li>
+                                <li>Client verifica certificato</li>
+                                <li>Client genera chiave simmetrica</li>
+                                <li>Client cifra chiave simmetrica con chiave pubblica server</li>
+                                <li>Dopo: tutto il traffico usa AES (simmetrica)</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché asimmetrica:</strong> Risolve distribuzione chiavi senza incontro fisico
+                            </p>
+                        </div>
+
+                        <div class="use-case-card signatures">
+                            <h5>✍️ Firme Digitali</h5>
+                            <p><strong>Algoritmo:</strong> RSA-PSS, ECDSA, Ed25519</p>
+                            <p><strong>Uso:</strong> Autentica documenti, software, transazioni</p>
+                            <ul>
+                                <li>Firma software (verifica integrità)</li>
+                                <li>Firma documenti PDF</li>
+                                <li>Firma transazioni blockchain</li>
+                                <li>Firma email (PGP/S/MIME)</li>
+                                <li>Certificati SSL/TLS</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché asimmetrica:</strong> Solo chi ha chiave privata può firmare, tutti possono verificare
+                            </p>
+                        </div>
+
+                        <div class="use-case-card ssh">
+                            <h5>🔐 SSH (Secure Shell)</h5>
+                            <p><strong>Algoritmo:</strong> RSA, Ed25519, ECDSA</p>
+                            <p><strong>Uso:</strong> Accesso remoto sicuro a server</p>
+                            <ul>
+                                <li>Autenticazione con chiavi (no password)</li>
+                                <li>Chiave pubblica sul server</li>
+                                <li>Chiave privata sul client</li>
+                                <li>Server verifica firma del client</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché asimmetrica:</strong> Più sicuro delle password, autenticazione forte
+                            </p>
+                        </div>
+
+                        <div class="use-case-card crypto">
+                            <h5>₿ Blockchain / Criptovalute</h5>
+                            <p><strong>Algoritmo:</strong> ECDSA (Bitcoin), Ed25519 (Algorand)</p>
+                            <p><strong>Uso:</strong> Firma transazioni, controllo wallet</p>
+                            <ul>
+                                <li>Chiave privata = controllo wallet</li>
+                                <li>Chiave pubblica = indirizzo wallet</li>
+                                <li>Firma transazioni con chiave privata</li>
+                                <li>Verifica con chiave pubblica</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché asimmetrica:</strong> Solo chi ha chiave privata può spendere, verifica pubblica
+                            </p>
+                        </div>
+
+                        <div class="use-case-card email">
+                            <h5>📧 Email PGP / S/MIME</h5>
+                            <p><strong>Algoritmo:</strong> RSA, ECDH</p>
+                            <p><strong>Uso:</strong> Email cifrate e firmate</p>
+                            <ul>
+                                <li>Cifri email con chiave pubblica destinatario</li>
+                                <li>Firmi email con tua chiave privata</li>
+                                <li>Destinatario decifra e verifica firma</li>
+                                <li>Garantisce confidenzialità e autenticità</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché asimmetrica:</strong> Non serve condividere chiavi segrete, chiavi pubbliche su key server
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>📊 Statistiche di Uso</h4>
+                        <p>Secondo SSL Labs (2024):</p>
+                        <ul>
+                            <li><strong>~60%</strong> dei siti HTTPS usa RSA per certificati</li>
+                            <li><strong>~40%</strong> usa ECDSA (in crescita)</li>
+                            <li><strong>100%</strong> dei siti usa asimmetrica per handshake</li>
+                            <li><strong>~80%</strong> degli SSH usa Ed25519 o RSA</li>
+                            <li><strong>100%</strong> delle blockchain usa ECDSA/Ed25519</li>
+                        </ul>
+                        <p><strong>Conclusione:</strong> Asimmetrica è essenziale per sicurezza moderna!</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Perché Proprio Questi Algoritmi?</h4>
+                        <p><strong>RSA:</strong></p>
+                        <ul>
+                            <li>✓ Standard maturo (1977), testato per 40+ anni</li>
+                            <li>✓ Supporto universale</li>
+                            <li>✓ Facile da capire (fattorizzazione)</li>
+                            <li>✓ Standard de facto per certificati</li>
+                        </ul>
+                        <p><strong>ECDH/ECDSA:</strong></p>
+                        <ul>
+                            <li>✓ Chiavi più corte (256 bit vs 2048 bit RSA)</li>
+                            <li>✓ Più veloce di RSA</li>
+                            <li>✓ Standard NIST</li>
+                            <li>✓ Perfetto per mobile/IoT</li>
+                        </ul>
+                        <p><strong>Ed25519:</strong></p>
+                        <ul>
+                            <li>✓ Molto veloce</li>
+                            <li>✓ Chiavi corte (256 bit)</li>
+                            <li>✓ Resistente a timing attacks</li>
+                            <li>✓ Standard moderno (2011)</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Limitazioni</h4>
+                        <p>La crittografia asimmetrica NON è usata per:</p>
+                        <ul>
+                            <li>✗ Cifrare grandi quantità di dati (troppo lenta)</li>
+                            <li>✗ Traffico web continuo (dopo handshake)</li>
+                            <li>✗ File di grandi dimensioni</li>
+                            <li>✗ Streaming video/audio</li>
+                        </ul>
+                        <p><strong>Regola:</strong> Asimmetrica per chiavi e firme, simmetrica per dati!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ALGORITMI PRINCIPALI ==================== -->
+        <div class="concept-section algorithms" id="algorithms">
+            <h2>🔐 Algoritmi Principali: RSA, ECDH, Ed25519</h2>
+            <p class="subtitle">Tre standard moderni, ognuno con i suoi vantaggi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="algorithm-card rsa">
+                        <h4>🔷 RSA - Rivest-Shamir-Adleman</h4>
+                        <p><strong>Creato:</strong> 1977 (primo algoritmo asimmetrico pratico)</p>
+                        <p><strong>Designer:</strong> Ron Rivest, Adi Shamir, Leonard Adleman</p>
+                        <p><strong>Standard:</strong> PKCS#1, RFC 8017</p>
+                        <p><strong>Problema matematico:</strong> Fattorizzazione di numeri grandi</p>
+                        
+                        <div class="algorithm-specs">
+                            <div class="spec-item">
+                                <div class="spec-label">Chiavi tipiche</div>
+                                <div class="spec-value">2048, 3072, 4096 bit</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Dimensione chiave pubblica</div>
+                                <div class="spec-value">256-512 byte</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Velocità cifratura</div>
+                                <div class="spec-value">~1-10 MB/s</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Sicurezza equivalente</div>
+                                <div class="spec-value">112-128 bit (2048)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Uso principale</div>
+                                <div class="spec-value">Certificati, firme</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Maturità</div>
+                                <div class="spec-value">40+ anni</div>
+                            </div>
+                        </div>
+
+                        <div class="formula" style="margin-top: 15px;">
+Come funziona (semplificato):
+1. Genera due numeri primi grandi: p, q
+2. Calcola: n = p × q (pubblico)
+3. Chiave pubblica: (n, e)
+4. Chiave privata: (n, d)
+5. Cifra: c = m^e mod n
+6. Decifra: m = c^d mod n
+
+Sicurezza: fattorizzare n = p × q è difficile!
+                        </div>
+
+                        <div class="success-box" style="margin-top: 15px;">
+                            <h4>✅ Vantaggi RSA</h4>
+                            <ul>
+                                <li>✓ Standard maturo, testato per 40+ anni</li>
+                                <li>✓ Supporto universale</li>
+                                <li>✓ Facile da capire (fattorizzazione)</li>
+                                <li>✓ Standard de facto per certificati SSL</li>
+                                <li>✓ Hardware acceleration disponibile</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box" style="margin-top: 15px;">
+                            <h4>⚠️ Svantaggi RSA</h4>
+                            <ul>
+                                <li>✗ Chiavi lunghe (2048-4096 bit)</li>
+                                <li>✗ Lento (100-1000× più lento di simmetrica)</li>
+                                <li>✗ Vulnerabile se implementato male</li>
+                                <li>✗ Richiede padding sicuro (OAEP, PSS)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="algorithm-card ecdh">
+                        <h4>🌐 ECDH / ECDSA - Elliptic Curve</h4>
+                        <p><strong>Creato:</strong> 1985 (variante su curve ellittiche)</p>
+                        <p><strong>Standard:</strong> NIST P-256, P-384, P-521</p>
+                        <p><strong>Problema matematico:</strong> Logaritmo discreto su curve ellittiche (ECDLP)</p>
+                        
+                        <div class="algorithm-specs">
+                            <div class="spec-item">
+                                <div class="spec-label">Chiavi tipiche</div>
+                                <div class="spec-value">256, 384, 521 bit</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Dimensione chiave pubblica</div>
+                                <div class="spec-value">32-66 byte</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Velocità</div>
+                                <div class="spec-value">~10-50 MB/s</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Sicurezza equivalente</div>
+                                <div class="spec-value">128 bit (P-256)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Uso principale</div>
+                                <div class="spec-value">TLS, Bitcoin, mobile</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Maturità</div>
+                                <div class="spec-value">30+ anni</div>
+                            </div>
+                        </div>
+
+                        <div class="formula" style="margin-top: 15px;">
+Come funziona (semplificato):
+1. Curva ellittica: y² = x³ + ax + b
+2. Punto generatore G sulla curva
+3. Chiave privata: numero k
+4. Chiave pubblica: P = k × G
+5. Scambio chiavi: S = k₁ × P₂ = k₂ × P₁
+
+Sicurezza: trovare k da P = k × G è difficile!
+                        </div>
+
+                        <div class="success-box" style="margin-top: 15px;">
+                            <h4>✅ Vantaggi ECDH/ECDSA</h4>
+                            <ul>
+                                <li>✓ Chiavi 8× più corte di RSA (256 vs 2048 bit)</li>
+                                <li>✓ Più veloce di RSA</li>
+                                <li>✓ Standard NIST</li>
+                                <li>✓ Perfetto per mobile/IoT</li>
+                                <li>✓ Usato da Bitcoin, Ethereum</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box" style="margin-top: 15px;">
+                            <h4>⚠️ Svantaggi ECDH/ECDSA</h4>
+                            <ul>
+                                <li>✗ Matematica più complessa</li>
+                                <li>✗ Curve devono essere scelte con cura</li>
+                                <li>✗ Alcune curve sono state compromesse (NIST P-256 ok)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="algorithm-card ed25519">
+                        <h4>⭐ Ed25519 - Curve25519</h4>
+                        <p><strong>Creato:</strong> 2011 (Daniel J. Bernstein)</p>
+                        <p><strong>Standard:</strong> RFC 8032 (IETF)</p>
+                        <p><strong>Curva:</strong> Curve25519 (non NIST)</p>
+                        
+                        <div class="algorithm-specs">
+                            <div class="spec-item">
+                                <div class="spec-label">Chiave</div>
+                                <div class="spec-value">256 bit (32 byte)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Velocità</div>
+                                <div class="spec-value">~50-100 MB/s</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Sicurezza</div>
+                                <div class="spec-value">128 bit</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Uso principale</div>
+                                <div class="spec-value">SSH, firme, modern apps</div>
+                            </div>
+                        </div>
+
+                        <div class="success-box" style="margin-top: 15px;">
+                            <h4>✅ Vantaggi Ed25519</h4>
+                            <ul>
+                                <li>✓ Molto veloce</li>
+                                <li>✓ Chiavi corte (256 bit)</li>
+                                <li>✓ Resistente a timing attacks</li>
+                                <li>✓ Design moderno e sicuro</li>
+                                <li>✓ Usato da SSH moderno, Signal</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box" style="margin-top: 15px;">
+                            <h4>⚠️ Svantaggi Ed25519</h4>
+                            <ul>
+                                <li>✗ Più recente (meno "battle-tested")</li>
+                                <li>✗ Non standard NIST (alcuni compliance non accettano)</li>
+                                <li>✗ Meno diffuso di RSA/ECDSA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONFRONTO ==================== -->
+        <div class="concept-section compare" id="compare">
+            <h2>⚖️ Confronto: RSA vs ECDH vs Ed25519</h2>
+            <p class="subtitle">Quale scegliere? Dipende dal contesto</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Caratteristica</th>
+                            <th>RSA</th>
+                            <th>ECDH/ECDSA</th>
+                            <th>Ed25519</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Dimensione chiave (128 bit sicurezza)</strong></td>
+                            <td class="bad">2048 bit (256 byte)</td>
+                            <td class="good">256 bit (32 byte)</td>
+                            <td class="good">256 bit (32 byte)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Velocità</strong></td>
+                            <td class="bad">Lenta (~1-10 MB/s)</td>
+                            <td>Media (~10-50 MB/s)</td>
+                            <td class="good">Veloce (~50-100 MB/s)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Maturità</strong></td>
+                            <td class="good">40+ anni</td>
+                            <td>30+ anni</td>
+                            <td>10+ anni</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Supporto</strong></td>
+                            <td class="good">Universale</td>
+                            <td class="good">Ottimo</td>
+                            <td>Buono (in crescita)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mobile/IoT</strong></td>
+                            <td class="bad">Pesante</td>
+                            <td class="good">Ottimo</td>
+                            <td class="good">Eccellente</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Standard</strong></td>
+                            <td>PKCS#1, RFC 8017</td>
+                            <td>NIST P-256/384/521</td>
+                            <td>RFC 8032 (IETF)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uso tipico</strong></td>
+                            <td>Certificati SSL</td>
+                            <td>TLS, Bitcoin</td>
+                            <td>SSH, firme moderne</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>💡 Quando Scegliere RSA</h4>
+                        <p>Scegli RSA quando:</p>
+                        <ul>
+                            <li>✓ Compliance richiede standard PKCS#1</li>
+                            <li>✓ Hai bisogno di supporto universale</li>
+                            <li>✓ Certificati SSL/TLS legacy</li>
+                            <li>✓ Preferisci algoritmo più "battle-tested"</li>
+                        </ul>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Quando Scegliere ECDH/ECDSA</h4>
+                        <p>Scegli ECDH/ECDSA quando:</p>
+                        <ul>
+                            <li>✓ Vuoi chiavi corte (mobile, IoT)</li>
+                            <li>✓ Compliance NIST richiesta</li>
+                            <li>✓ TLS moderno (1.3 preferisce ECDH)</li>
+                            <li>✓ Blockchain/crypto (Bitcoin, Ethereum)</li>
+                        </ul>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Quando Scegliere Ed25519</h4>
+                        <p>Scegli Ed25519 quando:</p>
+                        <ul>
+                            <li>✓ SSH moderno (raccomandato)</li>
+                            <li>✓ Vuoi massima velocità</li>
+                            <li>✓ Preoccupato per timing attacks</li>
+                            <li>✓ Applicazioni moderne (non compliance NIST)</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Raccomandazione Generale</h4>
+                        <p><strong>Per nuovi progetti:</strong></p>
+                        <ul>
+                            <li>✓ <strong>TLS/HTTPS:</strong> ECDH (TLS 1.3 preferisce)</li>
+                            <li>✓ <strong>SSH:</strong> Ed25519 (raccomandato)</li>
+                            <li>✓ <strong>Firme:</strong> Ed25519 o ECDSA</li>
+                            <li>✓ <strong>Blockchain:</strong> ECDSA (Bitcoin) o Ed25519</li>
+                            <li>✓ <strong>Compliance NIST:</strong> ECDSA P-256</li>
+                        </ul>
+                        <p><strong>Regola:</strong> Preferisci ECDH/Ed25519 a RSA per nuovi progetti!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COME SCEGLIERE ==================== -->
+        <div class="concept-section choose" id="choose">
+            <h2>🎯 Come Scegliere l'Algoritmo Giusto</h2>
+            <p class="subtitle">Decision tree pratico per scegliere RSA, ECDH o Ed25519</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="decision-tree">
+                        <div class="decision-node">
+                            <strong>Domanda 1: Che tipo di applicazione?</strong>
+                        </div>
+                        <div class="decision-arrow">↓</div>
+                        <div class="decision-result">
+                            <strong>TLS/HTTPS:</strong> → ECDH (TLS 1.3) o RSA (legacy)<br>
+                            <strong>SSH:</strong> → Ed25519 (raccomandato) o RSA<br>
+                            <strong>Firme:</strong> → Ed25519 o ECDSA<br>
+                            <strong>Blockchain:</strong> → ECDSA o Ed25519
+                        </div>
+                        
+                        <div style="margin-top: 30px;">
+                            <div class="decision-node">
+                                <strong>Domanda 2: Hai bisogno di compliance?</strong>
+                            </div>
+                            <div class="decision-arrow">↓</div>
+                            <div class="decision-result">
+                                <strong>Sì (NIST/FIPS):</strong> → ECDSA P-256 o RSA<br>
+                                <strong>No:</strong> → Ed25519 (più veloce) o ECDSA
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 30px;">
+                            <div class="decision-node">
+                                <strong>Domanda 3: Dispositivo target?</strong>
+                            </div>
+                            <div class="decision-arrow">↓</div>
+                            <div class="decision-result">
+                                <strong>Server moderno:</strong> → Qualsiasi (RSA, ECDSA, Ed25519)<br>
+                                <strong>Mobile/IoT:</strong> → ECDSA o Ed25519 (chiavi corte)<br>
+                                <strong>Legacy:</strong> → RSA (supporto universale)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📋 Checklist di Scelta</h4>
+                        <p><strong>Usa RSA se:</strong></p>
+                        <ul>
+                            <li>□ Compliance PKCS#1 richiesta</li>
+                            <li>□ Supporto universale necessario</li>
+                            <li>□ Certificati SSL legacy</li>
+                            <li>□ Preferisci algoritmo più maturo</li>
+                        </ul>
+                        <p><strong>Usa ECDH/ECDSA se:</strong></p>
+                        <ul>
+                            <li>□ Vuoi chiavi corte (mobile/IoT)</li>
+                            <li>□ Compliance NIST richiesta</li>
+                            <li>□ TLS moderno (1.3)</li>
+                            <li>□ Blockchain/crypto</li>
+                        </ul>
+                        <p><strong>Usa Ed25519 se:</strong></p>
+                        <ul>
+                            <li>□ SSH moderno</li>
+                            <li>□ Vuoi massima velocità</li>
+                            <li>□ Preoccupato per timing attacks</li>
+                            <li>□ Applicazioni moderne (no compliance NIST)</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Esempi Pratici</h4>
+                        <p><strong>HTTPS Server (Cloudflare):</strong></p>
+                        <ul>
+                            <li>Supporta RSA, ECDH, Ed25519</li>
+                            <li>Negozia: preferisce ECDH per TLS 1.3</li>
+                            <li>RSA per compatibilità legacy</li>
+                        </ul>
+                        <p><strong>SSH Server (GitHub):</strong></p>
+                        <ul>
+                            <li>Raccomanda Ed25519</li>
+                            <li>Supporta anche RSA per compatibilità</li>
+                            <li>Ed25519: chiavi corte, veloce, sicuro</li>
+                        </ul>
+                        <p><strong>Bitcoin:</strong></p>
+                        <ul>
+                            <li>Usa ECDSA (secp256k1)</li>
+                            <li>Chiavi corte (256 bit)</li>
+                            <li>Firma transazioni</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Regole d'Oro</h4>
+                        <ul>
+                            <li>✓ <strong>Nuovi progetti:</strong> preferisci ECDH/Ed25519 a RSA</li>
+                            <li>✓ <strong>SSH:</strong> usa Ed25519 (raccomandato)</li>
+                            <li>✓ <strong>TLS:</strong> supporta ECDH (TLS 1.3 preferisce)</li>
+                            <li>✓ <strong>Mobile/IoT:</strong> ECDSA o Ed25519 (chiavi corte)</li>
+                            <li>✓ <strong>Compliance:</strong> verifica requisiti (NIST, FIPS)</li>
+                            <li>✓ <strong>Non inventare algoritmi:</strong> usa solo standard testati</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>Crittografia asimmetrica:</strong> due chiavi (pubblica + privata)</li>
+                    <li><strong>Chiave pubblica:</strong> può essere condivisa con tutti</li>
+                    <li><strong>Chiave privata:</strong> segreta, mai condivisa</li>
+                    <li><strong>Vantaggi:</strong> risolve distribuzione chiavi, abilita firme digitali</li>
+                    <li><strong>Svantaggi:</strong> lenta, chiavi lunghe, solo piccoli dati</li>
+                    <li><strong>Uso:</strong> scambio chiavi, firme, certificati, SSH, blockchain</li>
+                    <li><strong>Algoritmi:</strong> RSA (maturo), ECDH/ECDSA (chiavi corte), Ed25519 (veloce)</li>
+                    <li><strong>Regola:</strong> asimmetrica per chiavi e firme, simmetrica per dati!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Event listeners per interattività futura
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inizializza
+        });
+    </script>
+</body>
+</html>
+

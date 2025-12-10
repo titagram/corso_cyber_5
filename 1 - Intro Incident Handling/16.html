@@ -38,20 +38,29 @@
             <div class="card border-red">
                 <div class="card-title">Endpoint Hardening</div>
                 <div class="card-text">
+                    <p style="margin-bottom: 5px;"><strong>Linux/macOS:</strong></p>
+                    <ul style="margin-left: 20px; font-size: 0.9em;  margin-bottom: 10px;">
+                        <li>Restringere i privilegi con `sudoers`.</li>
+                        <li>Installare `fail2ban` contro brute-force.</li>
+                        <li>Configurare firewall locali (es. `ufw`, `pf`).</li>
+                        <li>Utilizzare SELinux/AppArmor.</li>
+                    </ul>
+                    <p style="margin-bottom: 5px;"><strong>Windows:</strong></p>
                     <ul style="margin-left: 20px; font-size: 0.9em;">
                         <li>Disabilitare LLMNR/NetBIOS.</li>
                         <li>LAPS per admin locali.</li>
-                        <li>PowerShell Constrained Mode.</li>
-                        <li><strong>EDR:</strong> Visibilità essenziale (es. integrazione AMSI).</li>
+                        <li>PowerShell Constrained Mode & Logging.</li>
+                        <li>EDR con integrazione AMSI.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="card border-purple">
-                <div class="card-title">Network & AD</div>
+                <div class="card-title">Network & Directory</div>
                 <div class="card-text">
-                    <p>Segmentazione rete (isolare sistemi critici).</p>
-                    <p><strong>Purple Teaming:</strong> Esercizi continui per testare le difese reali.</p>
+                    <p>Segmentazione della rete (VLAN, firewall).</p>
+                    <p>Protezione servizi di directory (AD, LDAP).</p>
+                    <p><strong>Purple Teaming:</strong> Esercizi continui per testare le difese.</p>
                 </div>
             </div>
         </div>

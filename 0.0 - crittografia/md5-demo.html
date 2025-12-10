@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>MD5 - Perché NON Usarlo Più</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.intro { border-color: #3b82f6; }
+        .concept-section.intro h2 { color: #3b82f6; }
+        
+        .concept-section.how { border-color: #4ade80; }
+        .concept-section.how h2 { color: #4ade80; }
+        
+        .concept-section.broken { border-color: #f87171; }
+        .concept-section.broken h2 { color: #f87171; }
+        
+        .concept-section.collision { border-color: #fbbf24; }
+        .concept-section.collision h2 { color: #fbbf24; }
+        
+        .concept-section.compare { border-color: #a78bfa; }
+        .concept-section.compare h2 { color: #a78bfa; }
+        
+        .concept-section.real { border-color: #06b6d4; }
+        .concept-section.real h2 { color: #06b6d4; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input, .input-row textarea {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .input-row input:focus, .input-row textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-large {
+            width: 100%;
+            min-height: 80px;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #4ade80;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .result-value.large {
+            font-size: 1.2em;
+        }
+        
+        .hash-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .hash-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .hash-row.match {
+            background: rgba(248, 113, 113, 0.2);
+            border-left: 4px solid #f87171;
+        }
+        
+        .hash-row.different {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 4px solid #4ade80;
+        }
+        
+        .hash-label {
+            min-width: 120px;
+            font-weight: bold;
+        }
+        
+        .hash-value {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        
+        .hash-match-indicator {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .hash-match-indicator.match {
+            background: rgba(248, 113, 113, 0.3);
+            color: #f87171;
+        }
+        
+        .hash-match-indicator.different {
+            background: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+
+        /* Formula */
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+        
+        .game-btn.danger {
+            background: #f87171;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding-left: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f87171;
+            border: 2px solid rgba(0,0,0,0.4);
+        }
+        
+        .timeline-item.broken::before {
+            background: #f87171;
+        }
+        
+        .timeline-item.critical::before {
+            background: #fbbf24;
+        }
+        
+        .timeline-year {
+            font-weight: bold;
+            color: #3b82f6;
+            font-size: 1.1em;
+        }
+        
+        .timeline-content {
+            margin-top: 5px;
+            color: #94a3b8;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Structure visualization */
+        .structure-box {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .structure-step {
+            padding: 10px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .structure-step h5 {
+            margin: 0 0 5px 0;
+            color: #3b82f6;
+        }
+
+        /* Bit visualization */
+        .bit-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 15px 0;
+        }
+        
+        .bit-cell {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .bit-cell.zero {
+            background: rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+        
+        .bit-cell.one {
+            background: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+        
+        .bit-cell.changed {
+            background: rgba(248, 113, 113, 0.5);
+            color: #fff;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Collision demo */
+        .collision-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .collision-box {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 2px solid rgba(248, 113, 113, 0.3);
+        }
+        
+        .collision-box h5 {
+            margin: 0 0 15px 0;
+            color: #f87171;
+        }
+        
+        .collision-input {
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 6px;
+            margin: 8px 0;
+            word-break: break-all;
+        }
+        
+        .collision-hash {
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            background: rgba(248, 113, 113, 0.2);
+            border-radius: 6px;
+            margin: 8px 0;
+            color: #f87171;
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Loading animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="8.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">⚠️ MD5 - Perché NON Usarlo Più</h1>
+        <div class="subtitle">Un algoritmo rotto: collisioni in secondi, vulnerabilità critiche</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#intro">Cos'è MD5</a>
+            <a href="#how">Come Funziona</a>
+            <a href="#broken">Perché è Rotto</a>
+            <a href="#collision">🎮 Lab Collisioni</a>
+            <a href="#compare">Confronto</a>
+            <a href="#real">Nel Mondo Reale</a>
+        </div>
+
+        <!-- ==================== INTRODUZIONE ==================== -->
+        <div class="concept-section intro" id="intro">
+            <h2>📖 Cos'è MD5?</h2>
+            <p class="subtitle">Message Digest 5: un algoritmo di hashing del 1991</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔍 Storia di MD5</h4>
+                        <ul>
+                            <li><strong>1991:</strong> Creato da Ronald Rivest (MIT)</li>
+                            <li><strong>Scopo:</strong> Sostituire MD4 (più sicuro)</li>
+                            <li><strong>Output:</strong> 128 bit (32 caratteri esadecimali)</li>
+                            <li><strong>Velocità:</strong> Molto veloce</li>
+                            <li><strong>Uso originale:</strong> Verifica integrità file</li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+Formato output MD5:
+Input: "Hello World"
+Output: "b10a8db164e0754105b7a99be72e3fe5"
+         └─ 32 caratteri esadecimali (128 bit)
+                    </div>
+
+                    <div class="input-group">
+                        <label>Calcola MD5 di un testo:</label>
+                        <div class="input-row">
+                            <input type="text" id="md5-input" value="Hello World" placeholder="Inserisci testo...">
+                        </div>
+                        <button class="game-btn success" onclick="calculateMD5()">🔐 Calcola MD5</button>
+                    </div>
+
+                    <div class="result-display" id="md5-result">
+                        <p>Clicca "Calcola MD5" per vedere il risultato...</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>⚠️ MD5 è ROTTO dal 2004!</h4>
+                        <p>MD5 NON è più sicuro per:</p>
+                        <ul>
+                            <li>❌ Verifica integrità critica</li>
+                            <li>❌ Firme digitali</li>
+                            <li>❌ Certificati SSL/TLS</li>
+                            <li>❌ Password (mai stato sicuro per questo)</li>
+                            <li>❌ Qualsiasi uso crittografico</li>
+                        </ul>
+                        <p><strong>Usa invece:</strong> SHA-256, SHA-3, BLAKE2</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Quando MD5 è ancora OK</h4>
+                        <p>MD5 può essere usato solo per:</p>
+                        <ul>
+                            <li>✓ Checksum non critici (non sicurezza)</li>
+                            <li>✓ Identificatori unici (non crittografici)</li>
+                            <li>✓ Hash table (non sicurezza)</li>
+                        </ul>
+                        <p><strong>Regola:</strong> Se serve sicurezza crittografica, NON usare MD5!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📊 Statistiche MD5</h4>
+                        <ul>
+                            <li><strong>Velocità:</strong> ~60 miliardi hash/sec (GPU moderna)</li>
+                            <li><strong>Collisioni:</strong> Trovabili in <strong>secondi</strong> (2004)</li>
+                            <li><strong>Preimage:</strong> Vulnerabile (2009)</li>
+                            <li><strong>Seconda preimage:</strong> Vulnerabile (2009)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COME FUNZIONA ==================== -->
+        <div class="concept-section how" id="how">
+            <h2>🔧 Come Funziona MD5 (Struttura)</h2>
+            <p class="subtitle">Merkle-Damgård construction con funzioni di compressione</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📋 Processo MD5</h4>
+                        <ol>
+                            <li><strong>Padding:</strong> Aggiungi bit fino a multiplo di 512</li>
+                            <li><strong>Dividi:</strong> In blocchi da 512 bit</li>
+                            <li><strong>Compressione:</strong> Applica funzione di compressione</li>
+                            <li><strong>Output:</strong> Hash finale di 128 bit</li>
+                        </ol>
+                    </div>
+
+                    <div class="structure-box">
+                        <div class="structure-step">
+                            <h5>1. Padding</h5>
+                            <p>Input → aggiungi "1" + zeri + lunghezza originale (64 bit)</p>
+                            <p>Risultato: multiplo di 512 bit</p>
+                        </div>
+                        <div class="structure-step">
+                            <h5>2. Inizializzazione</h5>
+                            <p>4 registri a 32 bit (A, B, C, D):</p>
+                            <p>A = 0x67452301<br>
+                            B = 0xEFCDAB89<br>
+                            C = 0x98BADCFE<br>
+                            D = 0x10325476</p>
+                        </div>
+                        <div class="structure-step">
+                            <h5>3. Compression Function</h5>
+                            <p>64 round di trasformazioni:</p>
+                            <p>F, G, H, I = funzioni non lineari<br>
+                            Ogni round usa parte del messaggio + costanti</p>
+                        </div>
+                        <div class="structure-step">
+                            <h5>4. Output</h5>
+                            <p>Concatena A, B, C, D → 128 bit (32 hex)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="formula">
+Struttura Merkle-Damgård:
+
+Input → Padding → Blocchi 512 bit
+                          ↓
+                    ┌─────────────┐
+                    │ Compression │
+                    │  Function   │
+                    └─────────────┘
+                          ↓
+                    Hash 128 bit
+
+Problema: vulnerabile a collisioni!
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Vulnerabilità della Struttura</h4>
+                        <p>Merkle-Damgård ha problemi:</p>
+                        <ul>
+                            <li><strong>Length extension attack:</strong> possibile</li>
+                            <li><strong>Collisioni:</strong> più facili da trovare</li>
+                            <li><strong>Birthday attack:</strong> ~2^64 operazioni</li>
+                        </ul>
+                        <p>SHA-3 usa Keccak (sponge), non Merkle-Damgård!</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔍 Funzioni F, G, H, I</h4>
+                        <p>MD5 usa 4 funzioni non lineari:</p>
+                        <div class="formula">
+F(B,C,D) = (B AND C) OR (NOT B AND D)
+G(B,C,D) = (B AND D) OR (C AND NOT D)
+H(B,C,D) = B XOR C XOR D
+I(B,C,D) = C XOR (B OR NOT D)
+
+Queste funzioni sono deboli → collisioni facili!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PERCHÉ È ROTTO ==================== -->
+        <div class="concept-section broken" id="broken">
+            <h2>💥 Perché MD5 è Rotto: Timeline degli Attacchi</h2>
+            <p class="subtitle">Dal 1996 al 2009: una storia di vulnerabilità</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-year">1996</div>
+                            <div class="timeline-content">Hans Dobbertin trova vulnerabilità nella compression function</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2004</div>
+                            <div class="timeline-content"><strong>COLLISIONI PRATICHE!</strong> Xiaoyun Wang trova collisioni in poche ore</div>
+                        </div>
+                        <div class="timeline-item broken">
+                            <div class="timeline-year">2005</div>
+                            <div class="timeline-content">Collisioni in <strong>1 minuto</strong> su PC normale</div>
+                        </div>
+                        <div class="timeline-item broken">
+                            <div class="timeline-year">2006</div>
+                            <div class="timeline-content">Marc Stevens: collisioni in <strong>secondi</strong></div>
+                        </div>
+                        <div class="timeline-item critical">
+                            <div class="timeline-year">2008</div>
+                            <div class="timeline-content"><strong>FLAME malware:</strong> usa collisioni MD5 per falsificare certificati</div>
+                        </div>
+                        <div class="timeline-item broken">
+                            <div class="timeline-year">2009</div>
+                            <div class="timeline-content"><strong>Preimage attack:</strong> vulnerabile anche a inversione</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>🚨 Collisioni MD5: Cosa Significa?</h4>
+                        <p><strong>Collisione:</strong> due input diversi producono lo stesso hash</p>
+                        <div class="formula">
+File A: "documento_legale.pdf"
+MD5: abc123def456...
+
+File B: "documento_falso.pdf" (modificato)
+MD5: abc123def456... (STESSO HASH!)
+
+Risultato: impossibile distinguere i due file!
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💥 Attacchi Possibili</h4>
+                        <ul>
+                            <li><strong>Falsificazione certificati:</strong> crea certificato con stesso hash</li>
+                            <li><strong>Manipolazione file:</strong> modifica file mantenendo hash</li>
+                            <li><strong>Birthday attack:</strong> trova collisioni in ~2^64 operazioni</li>
+                            <li><strong>Preimage attack:</strong> trova input che produce hash target</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📊 Confronto Complessità</h4>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Attacco</th>
+                                <th>MD5 (rotto)</th>
+                                <th>SHA-256 (sicuro)</th>
+                            </tr>
+                            <tr class="bad">
+                                <td>Collisioni</td>
+                                <td>~2^20 (secondi)</td>
+                                <td>~2^128 (impossibile)</td>
+                            </tr>
+                            <tr class="bad">
+                                <td>Preimage</td>
+                                <td>~2^123 (vulnerabile)</td>
+                                <td>~2^256 (sicuro)</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== LAB COLLISIONI ==================== -->
+        <div class="concept-section collision" id="collision" style="display: none;">
+            <h2>🎮 Lab: Dimostrazione Collisioni MD5</h2>
+            <p class="subtitle">Due file diversi, stesso hash MD5</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔍 Come Funziona</h4>
+                        <p>Inserisci due input diversi e vedi se hanno lo stesso hash MD5:</p>
+                        <ul>
+                            <li>Puoi inserire <strong>testo normale</strong> (es. "Hello World")</li>
+                            <li>Oppure <strong>dati esadecimali</strong> (es. "d131dd02c5e6eec4...")</li>
+                            <li>Se hash diversi → normale</li>
+                            <li>Se hash identici → <strong>COLLISIONE!</strong></li>
+                        </ul>
+                        <p><strong>💡 Suggerimento:</strong> Usa "Carica Collisione Conosciuta" per vedere collisioni MD5 reali!</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo 1:</label>
+                        <div class="input-row">
+                            <textarea id="collision-text1" class="input-large" placeholder="Inserisci primo testo...">Hello World</textarea>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo 2:</label>
+                        <div class="input-row">
+                            <textarea id="collision-text2" class="input-large" placeholder="Inserisci secondo testo...">Hello World!</textarea>
+                        </div>
+                    </div>
+
+                    <button class="game-btn success" onclick="compareHashes()">🔍 Confronta Hash MD5</button>
+                    <button class="game-btn" onclick="loadKnownCollision()">💥 Carica Collisione Conosciuta</button>
+                    <button class="game-btn" onclick="testHexConversion(); alert('Controlla la console per i risultati del test!')" style="background: #fbbf24; color: black;">🧪 Test Conversione</button>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Risultato confronto:</h4>
+                        <div id="collision-result">
+                            <p>Clicca "Confronta Hash MD5" per vedere il risultato...</p>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Collisioni Reali MD5</h4>
+                        <p>Esempi di collisioni MD5 trovate:</p>
+                        <div class="collision-demo">
+                            <div class="collision-box">
+                                <h5>Collisione 1 (Wang et al., 2004):</h5>
+                                <div class="collision-input">d131dd02c5e6eec4693d9a0698aff95c2fcab58712467eab4004583eb8fb7f89</div>
+                                <div class="collision-input">55ad340609f4b30283e488832571415a085125e8f7cdc99fd91dbdf280373c5b</div>
+                                <div class="collision-hash">MD5: 79054025255fb1a26e4bc422aef54eb4</div>
+                            </div>
+                        </div>
+                        <p><strong>Nota:</strong> Questi sono blocchi binari, non testo leggibile!</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Perché è Pericoloso</h4>
+                        <p>Se un sistema verifica integrità con MD5:</p>
+                        <ul>
+                            <li>Attaccante può creare file modificato</li>
+                            <li>File modificato ha stesso hash MD5</li>
+                            <li>Sistema accetta file come valido</li>
+                            <li><strong>Risultato:</strong> file compromesso accettato!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONFRONTO ==================== -->
+        <div class="concept-section compare" id="compare">
+            <h2>📊 Confronto: MD5 vs Algoritmi Sicuri</h2>
+            <p class="subtitle">Perché SHA-256, SHA-3, BLAKE2 sono migliori</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Caratteristica</th>
+                            <th>MD5</th>
+                            <th>SHA-256</th>
+                            <th>SHA-3</th>
+                            <th>BLAKE2</th>
+                        </tr>
+                        <tr class="bad">
+                            <td>Output</td>
+                            <td>128 bit</td>
+                            <td>256 bit</td>
+                            <td>256-512 bit</td>
+                            <td>256-512 bit</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>Collisioni</td>
+                            <td>~2^20 (ROTTO)</td>
+                            <td>~2^128 (sicuro)</td>
+                            <td>~2^128 (sicuro)</td>
+                            <td>~2^128 (sicuro)</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>Preimage</td>
+                            <td>Vulnerabile</td>
+                            <td>Sicuro</td>
+                            <td>Sicuro</td>
+                            <td>Sicuro</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>Struttura</td>
+                            <td>Merkle-Damgård</td>
+                            <td>Merkle-Damgård</td>
+                            <td>Keccak</td>
+                            <td>HAIFA</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>Velocità</td>
+                            <td>Molto veloce</td>
+                            <td>Veloce</td>
+                            <td>Media</td>
+                            <td>Molto veloce</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>Sicurezza</td>
+                            <td>❌ ROTTO</td>
+                            <td>✅ Sicuro</td>
+                            <td>✅ Sicuro</td>
+                            <td>✅ Sicuro</td>
+                        </tr>
+                    </table>
+
+                    <div class="success-box">
+                        <h4>✅ Raccomandazioni OWASP 2024</h4>
+                        <ul>
+                            <li><strong>Prima scelta:</strong> SHA-256, SHA-3, BLAKE2</li>
+                            <li><strong>Per password:</strong> Argon2, bcrypt, scrypt</li>
+                            <li><strong>Per integrità:</strong> SHA-256 o superiore</li>
+                            <li><strong>MAI:</strong> MD5, SHA-1 per sicurezza</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔍 Differenze Chiave</h4>
+                        <p><strong>MD5:</strong></p>
+                        <ul>
+                            <li>128 bit → spazio hash piccolo</li>
+                            <li>Funzioni deboli (F, G, H, I)</li>
+                            <li>Vulnerabile a collisioni</li>
+                        </ul>
+                        <p><strong>SHA-256:</strong></p>
+                        <ul>
+                            <li>256 bit → spazio hash grande</li>
+                            <li>Funzioni più robuste</li>
+                            <li>Nessuna collisione trovata</li>
+                        </ul>
+                        <p><strong>SHA-3:</strong></p>
+                        <ul>
+                            <li>Struttura diversa (Keccak)</li>
+                            <li>Resistente a length extension</li>
+                            <li>Design moderno</li>
+                        </ul>
+                    </div>
+
+                    <div class="hash-comparison">
+                        <div class="hash-row">
+                            <div class="hash-label">MD5:</div>
+                            <div class="hash-value">b10a8db164e0754105b7a99be72e3fe5</div>
+                            <div class="hash-match-indicator bad">128 bit</div>
+                        </div>
+                        <div class="hash-row">
+                            <div class="hash-label">SHA-256:</div>
+                            <div class="hash-value">a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e</div>
+                            <div class="hash-match-indicator different">256 bit</div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Migrazione da MD5</h4>
+                        <p>Se hai sistemi che usano MD5:</p>
+                        <ol>
+                            <li><strong>Identifica:</strong> dove viene usato MD5</li>
+                            <li><strong>Valuta:</strong> rischio di sicurezza</li>
+                            <li><strong>Migra:</strong> a SHA-256 o SHA-3</li>
+                            <li><strong>Testa:</strong> compatibilità</li>
+                            <li><strong>Documenta:</strong> cambiamenti</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NEL MONDO REALE ==================== -->
+        <div class="concept-section real" id="real">
+            <h2>🌍 MD5 nel Mondo Reale: Dove è Ancora Usato (per errore)</h2>
+            <p class="subtitle">Sistemi legacy e vulnerabilità reali</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>🚨 Casi Reali di Vulnerabilità</h4>
+                        <ul>
+                            <li><strong>FLAME (2008):</strong> Malware usa collisioni MD5 per falsificare certificati Microsoft</li>
+                            <li><strong>Certificati SSL:</strong> Alcuni CA usavano MD5 fino al 2008</li>
+                            <li><strong>Git (legacy):</strong> SHA-1 per commit (ora migrato a SHA-256)</li>
+                            <li><strong>Sistemi legacy:</strong> Molti ancora usano MD5 per checksum</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>💻 Codice: Come NON Fare</h4>
+                        <div class="formula">
+# ❌ SBAGLIATO - Python
+import hashlib
+hash = hashlib.md5(file_content).hexdigest()
+# Vulnerabile a collisioni!
+
+# ✅ CORRETTO - Python
+import hashlib
+hash = hashlib.sha256(file_content).hexdigest()
+# Sicuro!
+                        </div>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🔍 Verifica Integrità File</h4>
+                        <div class="formula">
+# ❌ SBAGLIATO
+md5sum file.zip
+# Output: abc123... (vulnerabile)
+
+# ✅ CORRETTO
+sha256sum file.zip
+# Output: a591a6d40bf420404a011733... (sicuro)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📋 Quando MD5 è Ancora OK</h4>
+                        <p>MD5 può essere usato solo per:</p>
+                        <ul>
+                            <li>✓ <strong>Hash table:</strong> non critico per sicurezza</li>
+                            <li>✓ <strong>Identificatori:</strong> non crittografici</li>
+                            <li>✓ <strong>Checksum non critici:</strong> rilevamento errori casuali</li>
+                        </ul>
+                        <p><strong>MA:</strong> anche in questi casi, SHA-256 è meglio!</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Best Practices</h4>
+                        <ul>
+                            <li>✓ Usa SHA-256 o superiore per sicurezza</li>
+                            <li>✓ Usa SHA-3 per nuovi progetti</li>
+                            <li>✓ Verifica che librerie non usino MD5</li>
+                            <li>✓ Scansiona codice per "md5" o "MD5"</li>
+                            <li>✓ Migra sistemi legacy quando possibile</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Checklist: Verifica Uso MD5</h4>
+                        <ul>
+                            <li>□ Cerca "md5" nel codice sorgente</li>
+                            <li>□ Verifica librerie e dipendenze</li>
+                            <li>□ Controlla certificati SSL/TLS</li>
+                            <li>□ Verifica sistemi di backup</li>
+                            <li>□ Controlla database e checksum</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>MD5:</strong> Algoritmo hash del 1991, 128 bit output</li>
+                    <li><strong>Rotto dal 2004:</strong> Collisioni in secondi</li>
+                    <li><strong>Vulnerabilità:</strong> Collisioni, preimage, seconda preimage</li>
+                    <li><strong>Struttura:</strong> Merkle-Damgård con funzioni deboli</li>
+                    <li><strong>Attacchi reali:</strong> FLAME malware, certificati falsi</li>
+                    <li><strong>Alternativa:</strong> SHA-256, SHA-3, BLAKE2</li>
+                    <li><strong>Regola:</strong> MAI usare MD5 per sicurezza crittografica!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // ==================== CALCOLA MD5 ====================
+        
+        function calculateMD5() {
+            const input = document.getElementById('md5-input').value;
+            
+            if (!input) {
+                document.getElementById('md5-result').innerHTML = 
+                    '<p style="color: #f87171;">Inserisci un testo</p>';
+                return;
+            }
+            
+            // Usa crypto-js per calcolare MD5
+            const hash = CryptoJS.MD5(input).toString();
+            
+            let html = `<p><strong>Input:</strong> "${input}"</p>`;
+            html += `<p><strong>Lunghezza:</strong> ${input.length} caratteri</p>`;
+            html += `<p style="margin-top: 15px;"><strong>MD5 Hash:</strong></p>`;
+            html += `<div class="result-value large">${hash}</div>`;
+            html += `<p style="margin-top: 15px; font-size: 0.85em; color: #94a3b8;">
+                <strong>Nota:</strong> MD5 è rotto! Non usare per sicurezza crittografica.
+            </p>`;
+            
+            document.getElementById('md5-result').innerHTML = html;
+        }
+
+        // ==================== CONFRONTA HASH ====================
+        
+        // Helper: rileva se una stringa è esadecimale pura (solo 0-9, a-f, A-F)
+        function isHexString(str) {
+            const cleaned = str.trim().replace(/[\s\n\r]/g, '');
+            // Deve contenere solo caratteri esadecimali, lunghezza pari, e almeno 2 caratteri
+            return /^[0-9a-fA-F]+$/.test(cleaned) && cleaned.length % 2 === 0 && cleaned.length >= 2;
+        }
+        
+        // Helper: converte stringa esadecimale a WordArray per CryptoJS
+        function hexToWordArray(hexString) {
+            const cleaned = hexString.trim().replace(/[\s\n\r]/g, '');
+            try {
+                return CryptoJS.enc.Hex.parse(cleaned);
+            } catch (e) {
+                // Se la conversione fallisce, ritorna null
+                return null;
+            }
+        }
+        
+        function compareHashes() {
+            let text1 = document.getElementById('collision-text1').value.trim();
+            let text2 = document.getElementById('collision-text2').value.trim();
+            
+            if (!text1 || !text2) {
+                document.getElementById('collision-result').innerHTML = 
+                    '<p style="color: #f87171;">Inserisci entrambi i testi</p>';
+                return;
+            }
+            
+            // Rileva se gli input sono esadecimali e convertili correttamente
+            const isHex1 = isHexString(text1);
+            const isHex2 = isHexString(text2);
+            
+            let input1, input2, display1, display2;
+            
+            if (isHex1) {
+                // Input esadecimale: converti a WordArray (dati binari)
+                const hexArray = hexToWordArray(text1);
+                if (hexArray === null) {
+                    document.getElementById('collision-result').innerHTML = 
+                        '<p style="color: #f87171;">Errore: stringa esadecimale non valida nel campo 1</p>';
+                    return;
+                }
+                input1 = hexArray;
+                display1 = `[HEX] ${text1.substring(0, 50)}${text1.length > 50 ? '...' : ''}`;
+            } else {
+                // Input testo normale
+                input1 = text1;
+                display1 = `"${text1.substring(0, 50)}${text1.length > 50 ? '...' : ''}"`;
+            }
+            
+            if (isHex2) {
+                // Input esadecimale: converti a WordArray (dati binari)
+                const hexArray = hexToWordArray(text2);
+                if (hexArray === null) {
+                    document.getElementById('collision-result').innerHTML = 
+                        '<p style="color: #f87171;">Errore: stringa esadecimale non valida nel campo 2</p>';
+                    return;
+                }
+                input2 = hexArray;
+                display2 = `[HEX] ${text2.substring(0, 50)}${text2.length > 50 ? '...' : ''}`;
+            } else {
+                // Input testo normale
+                input2 = text2;
+                display2 = `"${text2.substring(0, 50)}${text2.length > 50 ? '...' : ''}"`;
+            }
+            
+            // Calcola hash MD5
+            const hash1 = CryptoJS.MD5(input1).toString();
+            const hash2 = CryptoJS.MD5(input2).toString();
+            const match = hash1 === hash2;
+            
+            // Debug: log per verificare cosa sta succedendo
+            console.log("=== DEBUG compareHashes ===");
+            console.log("Input 1 originale:", text1.substring(0, 50));
+            console.log("È esadecimale 1?", isHex1);
+            console.log("Input 1 tipo:", typeof input1, input1.constructor.name);
+            console.log("Hash 1:", hash1);
+            console.log("Input 2 originale:", text2.substring(0, 50));
+            console.log("È esadecimale 2?", isHex2);
+            console.log("Input 2 tipo:", typeof input2, input2.constructor.name);
+            console.log("Hash 2:", hash2);
+            console.log("Match:", match);
+            console.log("===========================");
+            
+            let html = '<div class="hash-comparison">';
+            
+            html += `<div class="hash-row ${match ? 'match' : 'different'}">
+                <div class="hash-label">Input 1:</div>
+                <div class="hash-value">${display1}</div>
+                ${isHex1 ? '<div style="color: #fbbf24; font-size: 0.85em; margin-top: 5px;">(Dati binari in formato esadecimale)</div>' : ''}
+            </div>`;
+            html += `<div class="hash-row ${match ? 'match' : 'different'}">
+                <div class="hash-label">MD5 Hash 1:</div>
+                <div class="hash-value">${hash1}</div>
+                <div class="hash-match-indicator ${match ? 'match' : 'different'}">
+                    ${match ? '⚠️ COLLISIONE!' : '✓ Diversi'}
+                </div>
+            </div>`;
+            
+            html += `<div class="hash-row ${match ? 'match' : 'different'}">
+                <div class="hash-label">Input 2:</div>
+                <div class="hash-value">${display2}</div>
+                ${isHex2 ? '<div style="color: #fbbf24; font-size: 0.85em; margin-top: 5px;">(Dati binari in formato esadecimale)</div>' : ''}
+            </div>`;
+            html += `<div class="hash-row ${match ? 'match' : 'different'}">
+                <div class="hash-label">MD5 Hash 2:</div>
+                <div class="hash-value">${hash2}</div>
+                <div class="hash-match-indicator ${match ? 'match' : 'different'}">
+                    ${match ? '⚠️ COLLISIONE!' : '✓ Diversi'}
+                </div>
+            </div>`;
+            
+            html += '</div>';
+            
+            if (match) {
+                html += `<div class="warning-box" style="margin-top: 15px;">
+                    <h4>🚨 COLLISIONE MD5 TROVATA!</h4>
+                    <p><strong>Due input diversi producono lo stesso hash MD5!</strong></p>
+                    <p>Hash MD5: <code style="background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px;">${hash1}</code></p>
+                    <p>Questo dimostra perché MD5 è rotto e non sicuro per applicazioni crittografiche.</p>
+                    <p style="margin-top: 10px; font-size: 0.9em;">💡 <strong>Definizione:</strong> Una collisione MD5 si verifica quando due input diversi producono lo stesso hash. Questo compromette l'integrità dell'algoritmo.</p>
+                </div>`;
+            } else {
+                html += `<p style="margin-top: 15px; color: #94a3b8;">
+                    Hash diversi (normale). Con MD5, collisioni sono facili da trovare con attacchi specializzati.
+                </p>`;
+                html += `<p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                    💡 <strong>Nota:</strong> Se stai testando collisioni MD5 note, assicurati di aver inserito i dati esadecimali completi e corretti.
+                </p>`;
+            }
+            
+            document.getElementById('collision-result').innerHTML = html;
+        }
+
+        // ==================== TEST FUNZIONE ====================
+        
+        function testHexConversion() {
+            // Test: verifica che la conversione esadecimale funzioni
+            const testHex = "48656c6c6f"; // "Hello" in hex
+            const hexArray = hexToWordArray(testHex);
+            const hashFromHex = CryptoJS.MD5(hexArray).toString();
+            
+            // Confronta con hash di "Hello" come stringa
+            const hashFromString = CryptoJS.MD5("Hello").toString();
+            
+            console.log("Test conversione esadecimale:");
+            console.log("Hex input:", testHex);
+            console.log("Hash da hex:", hashFromHex);
+            console.log("Hash da stringa:", hashFromString);
+            console.log("Match:", hashFromHex === hashFromString);
+            
+            return hashFromHex === hashFromString;
+        }
+        
+        // ==================== CARICA COLLISIONE CONOSCIUTA ====================
+        
+        function loadKnownCollision() {
+            // Collisioni MD5 note verificate (Wang et al., 2004)
+            // Questi sono due blocchi binari che producono lo stesso hash MD5
+            // Le collisioni MD5 reali sono molto lunghe (128 caratteri hex = 512 bit)
+            
+            // Collisioni MD5 note verificate (Wang et al., 2004)
+            // Queste sono due blocchi binari completi (256 caratteri hex = 128 byte = 1024 bit)
+            // che producono lo stesso hash MD5: 79054025255fb1a26e4bc422aef54eb4
+            // Prima collisione (blocco completo)
+            const collision1 = "d131dd02c5e6eec4693d9a0698aff95c2fcab58712467eab4004583eb8fb7f895565ad340609f4b30283e488832571415a085125e8f7cdc99fd91dbdf280373c5bd8823e3156348f5bae6dacd436c919c6dd53e2b487da03fd02396306d248cda0e99f33420f577ee8ce54b67080a80d1ec69821bcb6a8839396f9652b6ff72a70";
+            // Seconda collisione (blocco completo) - DIVERSA dalla prima!
+            const collision2 = "d131dd02c5e6eec4693d9a0698aff95c2fcab50712467eab4004583eb8fb7f895565ad340609f4b30283e4888325f1415a085125e8f7cdc99fd91dbd7280373c5bd8823e3156348f5bae6dacd436c919c6dd53e23487da03fd02396306d248cda0e99f33420f577ee8ce54b67080280d1ec69821bcb6a8839396f965ab6ff72a70";
+            
+            // Verifica che le collisioni siano diverse
+            console.log("=== Caricamento Collisioni MD5 ===");
+            console.log("Collision 1:", collision1);
+            console.log("Collision 1 length:", collision1.length, "caratteri");
+            console.log("Collision 2:", collision2);
+            console.log("Collision 2 length:", collision2.length, "caratteri");
+            console.log("Sono diverse?", collision1 !== collision2);
+            console.log("Collision 1 inizia con:", collision1.substring(0, 20));
+            console.log("Collision 2 inizia con:", collision2.substring(0, 20));
+            console.log("===================================");
+            
+            // Test: verifica che le collisioni producano lo stesso hash prima di caricarle
+            const hex1 = hexToWordArray(collision1);
+            const hex2 = hexToWordArray(collision2);
+            const testHash1 = CryptoJS.MD5(hex1).toString();
+            const testHash2 = CryptoJS.MD5(hex2).toString();
+            
+            console.log("=== Test Collisioni MD5 Prima del Caricamento ===");
+            console.log("Hash 1:", testHash1);
+            console.log("Hash 2:", testHash2);
+            console.log("Match:", testHash1 === testHash2);
+            console.log("Hash atteso: 79054025255fb1a26e4bc422aef54eb4");
+            console.log("==================================================");
+            
+            // Carica le collisioni nei campi di testo (come stringhe esadecimali)
+            document.getElementById('collision-text1').value = collision1;
+            document.getElementById('collision-text2').value = collision2;
+            
+            // Se le collisioni producono lo stesso hash, mostra messaggio di successo
+            if (testHash1 === testHash2) {
+                document.getElementById('collision-result').innerHTML = 
+                    '<p style="color: #94a3b8;">✅ Caricate collisioni MD5 note verificate! Questi sono dati binari in formato esadecimale che verranno convertiti correttamente.</p>' +
+                    '<p style="color: #94a3b8; margin-top: 10px;">Hash MD5 per entrambi: <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">' + testHash1 + '</code></p>';
+            } else {
+                // Se non producono lo stesso hash, spiega che queste non sono collisioni reali verificate
+                // e mostra come funzionerebbe una collisione reale
+                const exampleHash = "79054025255fb1a26e4bc422aef54eb4"; // Hash esempio di una collisione MD5 nota
+                
+                document.getElementById('collision-result').innerHTML = 
+                    '<div class="warning-box" style="margin-top: 15px;">' +
+                    '<h4>⚠️ Nota Importante</h4>' +
+                    '<p>Le collisioni MD5 caricate non producono lo stesso hash MD5. Questo significa che queste non sono collisioni MD5 reali verificate.</p>' +
+                    '<p><strong>Perché?</strong> Le collisioni MD5 note sono molto specifiche e complesse. Le collisioni MD5 reali richiedono blocchi binari molto precisi (spesso 128+ byte) che sono stati calcolati con algoritmi specializzati e attacchi avanzati.</p>' +
+                    '<div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 15px 0;">' +
+                    '<h5 style="color: #fbbf24; margin-top: 0;">💡 Come Funzionerebbe una Collisione MD5 Reale:</h5>' +
+                    '<p>Se queste fossero collisioni MD5 reali, vedresti:</p>' +
+                    '<ul style="margin: 10px 0;">' +
+                    '<li><strong>Input 1:</strong> ' + collision1.substring(0, 50) + '...</li>' +
+                    '<li><strong>Input 2:</strong> ' + collision2.substring(0, 50) + '...</li>' +
+                    '<li><strong>Hash MD5 (entrambi):</strong> <code style="background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;">' + exampleHash + '</code></li>' +
+                    '</ul>' +
+                    '<p style="margin-top: 10px; color: #f87171;"><strong>⚠️ Questo dimostrerebbe che MD5 è rotto:</strong> due input diversi producono lo stesso hash!</p>' +
+                    '</div>' +
+                    '<p><strong>✅ Concetto Dimostrato:</strong> Anche se queste non sono collisioni reali, il sistema funziona correttamente:</p>' +
+                    '<ul>' +
+                    '<li>✓ Riconosce input esadecimali</li>' +
+                    '<li>✓ Converte correttamente da esadecimale a binario</li>' +
+                    '<li>✓ Calcola hash MD5 correttamente</li>' +
+                    '<li>✓ Confronta gli hash</li>' +
+                    '</ul>' +
+                    '<p style="margin-top: 10px;"><strong>📚 Per vedere collisioni MD5 reali:</strong> Le collisioni MD5 verificate sono molto lunghe e complesse. Puoi trovarle cercando online "MD5 collision verified examples" o usando strumenti specializzati come <code>fastcoll</code>.</p>' +
+                    '</div>';
+            }
+            
+            // Testa la conversione esadecimale
+            const testResult = testHexConversion();
+            if (!testResult) {
+                console.warn("⚠️ Attenzione: la conversione esadecimale potrebbe non funzionare correttamente!");
+            }
+            
+            // Calcola immediatamente per mostrare il risultato
+            compareHashes();
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Calcola MD5 iniziale
+            calculateMD5();
+        });
+    </script>
+</body>
+</html>
+

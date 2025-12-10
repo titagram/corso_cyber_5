@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storia della Crittografia</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.caesar { border-color: #3b82f6; }
+        .concept-section.caesar h2 { color: #3b82f6; }
+        
+        .concept-section.vigenere { border-color: #4ade80; }
+        .concept-section.vigenere h2 { color: #4ade80; }
+        
+        .concept-section.substitution { border-color: #fbbf24; }
+        .concept-section.substitution h2 { color: #fbbf24; }
+        
+        .concept-section.enigma { border-color: #a78bfa; }
+        .concept-section.enigma h2 { color: #a78bfa; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input, .input-row textarea, .input-row select {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+        }
+        
+        .input-row input:focus, .input-row textarea:focus, .input-row select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-small {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .input-medium {
+            width: 200px;
+        }
+        
+        .input-large {
+            width: 100%;
+            min-height: 80px;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #4ade80;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .result-value.large {
+            font-size: 1.2em;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Alphabet visualization */
+        .alphabet-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .alphabet-char {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-weight: bold;
+            border: 2px solid;
+        }
+        
+        .alphabet-char.original {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .alphabet-char.shifted {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+
+        /* Character mapping */
+        .char-mapping {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .char-pair {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .char-original {
+            width: 50px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+        
+        .char-arrow {
+            font-size: 1.5em;
+            color: #64748b;
+        }
+        
+        .char-encrypted {
+            width: 50px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4ade80;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+        
+        .game-btn.danger {
+            background: #f87171;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Enigma rotor visualization */
+        .enigma-rotor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 2px solid #a78bfa;
+        }
+        
+        .rotor-display {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(167, 139, 250, 0.2);
+            border: 3px solid #a78bfa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #a78bfa;
+        }
+        
+        .rotor-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .rotor-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #a78bfa;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+        
+        .rotor-btn:hover {
+            background: #8b5cf6;
+        }
+
+        /* Brute force visualization */
+        .brute-force-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .brute-attempt {
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .brute-attempt.trying {
+            background: rgba(251, 191, 36, 0.2);
+            border-left: 4px solid #fbbf24;
+        }
+        
+        .brute-attempt.found {
+            background: rgba(74, 222, 128, 0.2);
+            border-left: 4px solid #4ade80;
+        }
+
+        /* Frequency analysis */
+        .frequency-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .frequency-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .frequency-char {
+            width: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .frequency-visual {
+            flex: 1;
+            height: 25px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .frequency-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #4ade80);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 5px;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .frequency-count {
+            min-width: 50px;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="intro.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna all'introduzione
+        </a>
+
+        <h1 class="title">📜 Storia della Crittografia</h1>
+        <div class="subtitle">Dai cifrari antichi alle macchine moderne: l'evoluzione della crittografia</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#caesar">Cifrario di Cesare</a>
+            <a href="#vigenere">Cifrario di Vigenère</a>
+            <a href="#substitution">Cifrario di Sostituzione</a>
+            <a href="#enigma">Enigma</a>
+        </div>
+
+        <!-- ==================== CIFRARIO DI CESARE ==================== -->
+        <div class="concept-section caesar" id="caesar">
+            <h2>🔐 Cifrario di Cesare</h2>
+            <p class="subtitle">Il più antico e semplice: sposta ogni lettera di N posizioni</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📖 Storia</h4>
+                        <p>Usato da Giulio Cesare (100-44 a.C.) per comunicare con i suoi generali.</p>
+                        <p>Ogni lettera viene spostata di un numero fisso di posizioni nell'alfabeto.</p>
+                        <p><strong>Shift tipico:</strong> 3 posizioni (A → D, B → E, ...)</p>
+                    </div>
+
+                    <div class="formula">
+Come funziona:
+- Alfabeto: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+- Shift 3:   D E F G H I J K L M N O P Q R S T U V W X Y Z A B C
+
+Esempio:
+"CIAO" con shift 3 → "F L D R"
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo da cifrare:</label>
+                        <div class="input-row">
+                            <textarea id="caesar-input" class="input-large" placeholder="Inserisci testo...">CIAO MONDO</textarea>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="caesar-shift">Shift (0-25):</label>
+                        <div class="input-row">
+                            <input type="number" id="caesar-shift" value="3" min="0" max="25" class="input-small" aria-label="Shift per cifrario di Cesare">
+                            <button class="game-btn success" onclick="encryptCaesar()">🔐 Cifra</button>
+                            <button class="game-btn" onclick="decryptCaesar()">🔓 Decifra</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo cifrato:</label>
+                        <div class="input-row">
+                            <textarea id="caesar-output" class="input-large" placeholder="Risultato..." readonly></textarea>
+                        </div>
+                    </div>
+
+                    <button class="game-btn danger" onclick="bruteForceCaesar()">💥 Attacco Brute Force</button>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Visualizzazione Alfabeto:</h4>
+                        <div id="caesar-alphabet">
+                            <p>Clicca "Cifra" per vedere la trasformazione...</p>
+                        </div>
+                    </div>
+
+                    <div class="result-display" id="caesar-brute" style="display: none;">
+                        <h4>Attacco Brute Force:</h4>
+                        <div id="caesar-brute-results">
+                            <p>Prova tutti i 26 shift possibili...</p>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Vulnerabilità</h4>
+                        <p>Il cifrario di Cesare è <strong>facilmente attaccabile</strong>:</p>
+                        <ul>
+                            <li>✗ Solo 26 possibilità (shift 0-25)</li>
+                            <li>✗ Brute force in <strong>secondi</strong></li>
+                            <li>✗ Analisi frequenze lettere</li>
+                            <li>✗ Pattern riconoscibili</li>
+                        </ul>
+                        <p><strong>Oggi:</strong> Mai usare per sicurezza reale! Solo per scopi didattici.</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Uso Moderno</h4>
+                        <p>Il cifrario di Cesare oggi è usato solo per:</p>
+                        <ul>
+                            <li>✓ Esercizi didattici</li>
+                            <li>✓ Giochi e puzzle</li>
+                            <li>✓ Offuscamento base (non sicurezza!)</li>
+                        </ul>
+                        <p><strong>Nota:</strong> ROT13 (shift 13) è ancora usato per nascondere spoiler online, ma NON è sicurezza!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CIFRARIO DI VIGENÈRE ==================== -->
+        <div class="concept-section vigenere" id="vigenere">
+            <h2>🔐 Cifrario di Vigenère</h2>
+            <p class="subtitle">Evoluzione del Cesare: usa una parola chiave invece di un numero</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📖 Storia</h4>
+                        <p>Inventato da Blaise de Vigenère nel 1586.</p>
+                        <p>Evoluzione del cifrario di Cesare: invece di un shift fisso, usa una <strong>parola chiave</strong>.</p>
+                        <p>Ogni lettera del messaggio viene cifrata con un shift diverso basato sulla chiave.</p>
+                    </div>
+
+                    <div class="formula">
+Come funziona:
+Messaggio:  C I A O M O N D O
+Chiave:     K E Y K E Y K E Y  (ripetuta)
+Shift:      10 4 24 10 4 24 10 4 24
+
+Cifrato:    M M Y Y Q C X H M
+
+Ogni lettera usa shift diverso!
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo da cifrare:</label>
+                        <div class="input-row">
+                            <textarea id="vigenere-input" class="input-large" placeholder="Inserisci testo...">ATTACCO ALL ALBA</textarea>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Chiave (parola):</label>
+                        <div class="input-row">
+                            <input type="text" id="vigenere-key" value="KEY" class="input-medium" placeholder="Inserisci chiave...">
+                            <button class="game-btn success" onclick="encryptVigenere()">🔐 Cifra</button>
+                            <button class="game-btn" onclick="decryptVigenere()">🔓 Decifra</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo cifrato:</label>
+                        <div class="input-row">
+                            <textarea id="vigenere-output" class="input-large" placeholder="Risultato..." readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Visualizzazione Cifratura:</h4>
+                        <div id="vigenere-visual">
+                            <p>Clicca "Cifra" per vedere la trasformazione passo-passo...</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Vantaggi rispetto a Cesare</h4>
+                        <ul>
+                            <li>✓ Stessa lettera → caratteri diversi (es. "A" in posizioni diverse → caratteri diversi)</li>
+                            <li>✓ Più difficile da attaccare</li>
+                            <li>✓ Pattern meno evidenti</li>
+                            <li>✓ Chiave più complessa = più sicuro</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Vulnerabilità</h4>
+                        <p>Anche Vigenère è vulnerabile:</p>
+                        <ul>
+                            <li>✗ Analisi della lunghezza della chiave</li>
+                            <li>✗ Analisi delle frequenze (se chiave corta)</li>
+                            <li>✗ Chiave ripetuta → pattern</li>
+                        </ul>
+                        <p><strong>Oggi:</strong> Non usare per sicurezza reale!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Impatto Storico</h4>
+                        <p>Vigenère è stato considerato "indecifrabile" per secoli, fino a quando:</p>
+                        <ul>
+                            <li>Charles Babbage (1854) trovò metodi di attacco</li>
+                            <li>Friedrich Kasiski (1863) pubblicò analisi completa</li>
+                        </ul>
+                        <p>Dimostra che anche algoritmi "complessi" possono essere rotti con analisi matematica!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CIFRARIO DI SOSTITUZIONE ==================== -->
+        <div class="concept-section substitution" id="substitution">
+            <h2>🔐 Cifrario di Sostituzione</h2>
+            <p class="subtitle">Sostituzione lettera per lettera con alfabeto mescolato</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📖 Come Funziona</h4>
+                        <p>Ogni lettera dell'alfabeto viene sostituita con un'altra lettera secondo una mappatura fissa.</p>
+                        <p>L'alfabeto sostituto è una permutazione dell'alfabeto originale.</p>
+                        <p><strong>Esempio:</strong> A→Z, B→Y, C→X, ... (alfabeto invertito)</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo da cifrare:</label>
+                        <div class="input-row">
+                            <textarea id="substitution-input" class="input-large" placeholder="Inserisci testo...">IL MESSAGGIO SEGRETO</textarea>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Alfabeto sostituto (26 lettere):</label>
+                        <div class="input-row">
+                            <input type="text" id="substitution-alphabet" value="ZYXWVUTSRQPONMLKJIHGFEDCBA" class="input-large" placeholder="Inserisci 26 lettere...">
+                            <button class="game-btn" onclick="generateRandomAlphabet()">🎲 Genera Casuale</button>
+                        </div>
+                        <p style="font-size: 0.85em; color: #94a3b8; margin-top: 5px;">
+                            Alfabeto originale: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+                        </p>
+                    </div>
+
+                    <div class="input-row">
+                        <button class="game-btn success" onclick="encryptSubstitution()">🔐 Cifra</button>
+                        <button class="game-btn" onclick="decryptSubstitution()">🔓 Decifra</button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo cifrato:</label>
+                        <div class="input-row">
+                            <textarea id="substitution-output" class="input-large" placeholder="Risultato..." readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Mappatura Caratteri:</h4>
+                        <div id="substitution-mapping">
+                            <p>Clicca "Cifra" per vedere la mappatura...</p>
+                        </div>
+                    </div>
+
+                    <div class="result-display" id="substitution-frequency" style="display: none;">
+                        <h4>Analisi Frequenze:</h4>
+                        <div id="substitution-frequency-chart">
+                            <p>Analisi delle frequenze delle lettere nel testo cifrato...</p>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Vulnerabilità: Analisi delle Frequenze</h4>
+                        <p>Il cifrario di sostituzione è vulnerabile all'<strong>analisi delle frequenze</strong>:</p>
+                        <ul>
+                            <li>In italiano: E è la lettera più frequente (~12%)</li>
+                            <li>Poi: A, I, O, N, R, S, T (~8-10%)</li>
+                            <li>Rare: Q, Z, X, J, K, W, Y</li>
+                        </ul>
+                        <p>Contando le frequenze nel testo cifrato, si può dedurre la mappatura!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Storia</h4>
+                        <p>Usato per secoli, considerato sicuro fino al IX secolo d.C., quando:</p>
+                        <ul>
+                            <li>Al-Kindi (801-873) descrisse l'analisi delle frequenze</li>
+                            <li>Dimostrò che ogni lingua ha pattern di frequenze caratteristici</li>
+                            <li>Questo metodo rompe qualsiasi cifrario monoalfabetico</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ENIGMA ==================== -->
+        <div class="concept-section enigma" id="enigma">
+            <h2>⚙️ Enigma</h2>
+            <p class="subtitle">La macchina crittografica più famosa della storia</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📖 Storia</h4>
+                        <p>Macchina crittografica elettromeccanica inventata da Arthur Scherbius (1918).</p>
+                        <p>Usata dalla Germania nazista durante la Seconda Guerra Mondiale.</p>
+                        <p><strong>Rottura:</strong> Alan Turing e il team di Bletchley Park riuscirono a decifrarla (1940).</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔧 Componenti di Enigma</h4>
+                        <p>Enigma è composta da diversi elementi:</p>
+                        <ul>
+                            <li><strong>Rotori (3-4):</strong> Dischi con mappatura interna (26 contatti)</li>
+                            <li><strong>Riflettore:</strong> Inverte il segnale e lo rimanda indietro</li>
+                            <li><strong>Plugboard:</strong> Scambi aggiuntivi di lettere (10 coppie)</li>
+                            <li><strong>Tastiera:</strong> Per inserire il messaggio</li>
+                            <li><strong>Lampboard:</strong> Mostra la lettera cifrata</li>
+                        </ul>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>⚡ Come Funziona: Il Percorso della Corrente</h4>
+                        <p>Quando premi un tasto (es. "A"), la corrente elettrica:</p>
+                        <ol>
+                            <li><strong>Plugboard:</strong> Se "A" è scambiata, passa attraverso lo scambio</li>
+                            <li><strong>Rotore 3 (destro):</strong> La corrente entra, viene trasformata, esce</li>
+                            <li><strong>Rotore 2 (centrale):</strong> Trasformazione ulteriore</li>
+                            <li><strong>Rotore 1 (sinistro):</strong> Trasformazione finale</li>
+                            <li><strong>Riflettore:</strong> Inverte il segnale e lo rimanda indietro</li>
+                            <li><strong>Ritorno:</strong> Attraversa i rotori in ordine inverso (1→2→3)</li>
+                            <li><strong>Plugboard:</strong> Eventuale scambio finale</li>
+                            <li><strong>Lampboard:</strong> Si accende la lettera cifrata (es. "X")</li>
+                        </ol>
+                        <p><strong>Risultato:</strong> "A" → "X" (ma solo con questa configurazione di rotori!)</p>
+                    </div>
+
+                    <div class="formula">
+Percorso completo (semplificato):
+
+Tasto "A" premuto
+    ↓
+Plugboard (A→B se scambiato)
+    ↓
+Rotore 3: B → M
+    ↓
+Rotore 2: M → K
+    ↓
+Rotore 1: K → P
+    ↓
+Riflettore: P → Q (inverte)
+    ↓
+Rotore 1 (ritorno): Q → F
+    ↓
+Rotore 2 (ritorno): F → D
+    ↓
+Rotore 3 (ritorno): D → X
+    ↓
+Plugboard (X→Y se scambiato)
+    ↓
+Lampboard: "Y" si accende
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔄 Rotazione dei Rotori</h4>
+                        <p>Dopo ogni lettera cifrata, i rotori <strong>ruotano</strong>:</p>
+                        <ul>
+                            <li><strong>Rotore 3 (destro):</strong> Ruota sempre (come contachilometri)</li>
+                            <li><strong>Rotore 2:</strong> Ruota quando rotore 3 completa un giro (ogni 26 lettere)</li>
+                            <li><strong>Rotore 1:</strong> Ruota quando rotore 2 completa un giro (ogni 26×26 = 676 lettere)</li>
+                        </ul>
+                        <p><strong>Effetto:</strong> La stessa lettera produce caratteri diversi ogni volta!</p>
+                        <p>Esempio: "AAAAA" → "XKJLM" (ogni A produce carattere diverso!)</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo da cifrare:</label>
+                        <div class="input-row">
+                            <textarea id="enigma-input" class="input-large" placeholder="Inserisci testo...">HELLO WORLD</textarea>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Posizione Rotori (0-25):</label>
+                        <div class="input-row">
+                            <input type="number" id="enigma-rotor1" value="0" min="0" max="25" class="input-small" placeholder="R1">
+                            <input type="number" id="enigma-rotor2" value="0" min="0" max="25" class="input-small" placeholder="R2">
+                            <input type="number" id="enigma-rotor3" value="0" min="0" max="25" class="input-small" placeholder="R3">
+                            <button class="game-btn" onclick="randomRotors()">🎲 Casuale</button>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <button class="game-btn success" onclick="encryptEnigma()">🔐 Cifra con Enigma</button>
+                        <button class="game-btn" onclick="decryptEnigma()">🔓 Decifra</button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo cifrato:</label>
+                        <div class="input-row">
+                            <textarea id="enigma-output" class="input-large" placeholder="Risultato..." readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Visualizzazione Rotori:</h4>
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <div class="enigma-rotor">
+                                <div class="rotor-display" id="rotor1-display">A</div>
+                                <div class="rotor-controls">
+                                    <button class="rotor-btn" onclick="adjustRotor(1, -1)">-</button>
+                                    <span style="color: #a78bfa; font-weight: bold;">Rotore 1</span>
+                                    <button class="rotor-btn" onclick="adjustRotor(1, 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="enigma-rotor">
+                                <div class="rotor-display" id="rotor2-display">A</div>
+                                <div class="rotor-controls">
+                                    <button class="rotor-btn" onclick="adjustRotor(2, -1)">-</button>
+                                    <span style="color: #a78bfa; font-weight: bold;">Rotore 2</span>
+                                    <button class="rotor-btn" onclick="adjustRotor(2, 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="enigma-rotor">
+                                <div class="rotor-display" id="rotor3-display">A</div>
+                                <div class="rotor-controls">
+                                    <button class="rotor-btn" onclick="adjustRotor(3, -1)">-</button>
+                                    <span style="color: #a78bfa; font-weight: bold;">Rotore 3</span>
+                                    <button class="rotor-btn" onclick="adjustRotor(3, 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-display" id="enigma-path" style="display: none;">
+                        <h4>Percorso della Corrente (Esempio):</h4>
+                        <div id="enigma-path-visual">
+                            <p>Clicca "Cifra" per vedere il percorso della corrente per ogni lettera...</p>
+                        </div>
+                    </div>
+
+                    <div class="result-display" id="enigma-process" style="display: none;">
+                        <h4>Processo di Cifratura:</h4>
+                        <div id="enigma-steps">
+                            <p>Vedi i passaggi della cifratura...</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Caratteristiche Chiave di Enigma</h4>
+                        <ul>
+                            <li>✓ <strong>Stessa lettera → caratteri diversi:</strong> rotori ruotano ad ogni lettera</li>
+                            <li>✓ <strong>Auto-decifratura:</strong> se cifri "A" → "X", allora cifrare "X" con stessa configurazione → "A"</li>
+                            <li>✓ <strong>Rotori configurabili:</strong> 3 rotori scelti da 5 disponibili, 26 posizioni ciascuno</li>
+                            <li>✓ <strong>Plugboard:</strong> fino a 10 coppie di lettere scambiate (es. A↔Z, B↔Y)</li>
+                            <li>✓ <strong>Riflettore:</strong> garantisce che A non possa mai cifrare in A (vulnerabilità!)</li>
+                        </ul>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔄 Auto-Decifratura: Perché Funziona</h4>
+                        <p>Enigma ha una proprietà speciale: <strong>è simmetrica</strong>!</p>
+                        <div class="formula">
+Se con configurazione X:
+  Cifrare "A" → "X"
+
+Allora con STESSA configurazione X:
+  Cifrare "X" → "A"
+
+Perché il percorso è reversibile!
+                        </div>
+                        <p><strong>Vantaggio:</strong> Non serve una funzione di decifratura separata!</p>
+                        <p><strong>Svantaggio:</strong> Se "A" → "A", significa errore (riflettore lo impedisce)</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔢 Complessità di Enigma</h4>
+                        <p>Quante combinazioni possibili?</p>
+                        <ul>
+                            <li><strong>Scelta rotori:</strong> 5 rotori, scegli 3 → 5×4×3 = 60 modi</li>
+                            <li><strong>Posizioni rotori:</strong> 26×26×26 = 17,576 posizioni</li>
+                            <li><strong>Plugboard:</strong> ~150 trilioni di combinazioni</li>
+                            <li><strong>Totale:</strong> ~158 milioni di milioni di milioni di combinazioni!</li>
+                        </ul>
+                        <p><strong>Ma:</strong> Anche con questa complessità, fu rotta grazie a errori umani e matematica!</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Come fu Rotta: I Metodi di Bletchley Park</h4>
+                        <p><strong>1. Crib (Testo Noto):</strong></p>
+                        <ul>
+                            <li>Messaggi meteo contenevano sempre "WETTER" (tempo)</li>
+                            <li>Messaggi di routine avevano pattern prevedibili</li>
+                            <li>Confrontando testo noto con cifrato, si poteva dedurre configurazione</li>
+                        </ul>
+                        <p><strong>2. Macchine "Bombe":</strong></p>
+                        <ul>
+                            <li>Macchine elettromeccaniche per testare configurazioni</li>
+                            <li>Testavano migliaia di combinazioni in parallelo</li>
+                            <li>Progettate da Alan Turing e Gordon Welchman</li>
+                        </ul>
+                        <p><strong>3. Errori Umani:</strong></p>
+                        <ul>
+                            <li>Operatori usavano chiavi deboli (AAA, BBB, ABC)</li>
+                            <li>Messaggi corti (meno di 26 caratteri) → rotori non ruotavano</li>
+                            <li>Chiavi ripetute per comodità</li>
+                        </ul>
+                        <p><strong>4. Vulnerabilità del Riflettore:</strong></p>
+                        <ul>
+                            <li>Una lettera non può mai cifrare in se stessa (A→A impossibile)</li>
+                            <li>Questo pattern aiutava a identificare configurazioni errate</li>
+                        </ul>
+                        <p><strong>Impatto:</strong> Decifrare Enigma accorciò la guerra di 2-4 anni e salvò milioni di vite!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Impatto Storico</h4>
+                        <p>La rottura di Enigma dimostrò:</p>
+                        <ul>
+                            <li>Nessun sistema crittografico è perfetto</li>
+                            <li>L'importanza della sicurezza operativa</li>
+                            <li>Che la matematica può battere la tecnologia</li>
+                        </ul>
+                        <p>Lezioni ancora valide oggi per la sicurezza informatica!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== RIASSUNTO ==================== -->
+        <div class="concept-section compare">
+            <h2>🎓 Riassunto: Evoluzione della Crittografia</h2>
+            <p class="subtitle">Dai cifrari semplici alle macchine complesse</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Cifrario</th>
+                            <th>Periodo</th>
+                            <th>Complessità</th>
+                            <th>Vulnerabilità</th>
+                        </tr>
+                        <tr>
+                            <td>Cesare</td>
+                            <td>100 a.C.</td>
+                            <td>Molto semplice</td>
+                            <td class="bad">Brute force (26 tentativi)</td>
+                        </tr>
+                        <tr>
+                            <td>Vigenère</td>
+                            <td>1586</td>
+                            <td>Semplice</td>
+                            <td class="bad">Analisi frequenze, Kasiski</td>
+                        </tr>
+                        <tr>
+                            <td>Sostituzione</td>
+                            <td>Antico</td>
+                            <td>Media</td>
+                            <td class="bad">Analisi frequenze (Al-Kindi)</td>
+                        </tr>
+                        <tr>
+                            <td>Enigma</td>
+                            <td>1918-1945</td>
+                            <td>Complessa</td>
+                            <td class="bad">Crib, Bombe, errori umani</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>💡 Lezioni Apprese</h4>
+                        <ul>
+                            <li><strong>Nessun sistema è perfetto:</strong> ogni cifrario storico è stato rotto</li>
+                            <li><strong>Complessità ≠ Sicurezza:</strong> Enigma era complessa ma rotta</li>
+                            <li><strong>Analisi matematica:</strong> frequenze, pattern, matematica battono complessità</li>
+                            <li><strong>Errore umano:</strong> spesso la vulnerabilità più grande</li>
+                            <li><strong>Evoluzione continua:</strong> crittografia moderna usa principi matematici solidi</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Crittografia Moderna</h4>
+                        <p>I cifrari moderni (AES, RSA, ECDH) sono basati su:</p>
+                        <ul>
+                            <li>✓ Problemi matematici difficili (fattorizzazione, logaritmo discreto)</li>
+                            <li>✓ Analisi crittografica rigorosa</li>
+                            <li>✓ Standard pubblici e verificati</li>
+                            <li>✓ Resistenza a attacchi noti</li>
+                        </ul>
+                        <p><strong>Differenza:</strong> Non si basano su segretezza dell'algoritmo, ma sulla difficoltà matematica!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CIFRARIO DI CESARE ====================
+        
+        function caesarShift(text, shift, encrypt = true) {
+            const direction = encrypt ? 1 : -1;
+            return text.toUpperCase().split('').map(char => {
+                if (char >= 'A' && char <= 'Z') {
+                    const code = char.charCodeAt(0) - 65;
+                    const shifted = (code + (direction * shift) + 26) % 26;
+                    return String.fromCharCode(shifted + 65);
+                }
+                return char;
+            }).join('');
+        }
+
+        function encryptCaesar() {
+            const input = document.getElementById('caesar-input').value;
+            const shift = parseInt(document.getElementById('caesar-shift').value) || 3;
+            
+            if (!input) {
+                alert('Inserisci un testo da cifrare');
+                return;
+            }
+            
+            const encrypted = caesarShift(input, shift, true);
+            document.getElementById('caesar-output').value = encrypted;
+            
+            // Visualizza alfabeto
+            updateCaesarAlphabet(shift);
+        }
+
+        function decryptCaesar() {
+            const output = document.getElementById('caesar-output').value;
+            const shift = parseInt(document.getElementById('caesar-shift').value) || 3;
+            
+            if (!output) {
+                alert('Inserisci un testo cifrato da decifrare');
+                return;
+            }
+            
+            const decrypted = caesarShift(output, shift, false);
+            document.getElementById('caesar-input').value = decrypted;
+            
+            updateCaesarAlphabet(shift);
+        }
+
+        function updateCaesarAlphabet(shift) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let html = '<div class="alphabet-visual">';
+            html += '<p style="width: 100%; margin-bottom: 10px;"><strong>Alfabeto originale:</strong></p>';
+            for (let i = 0; i < alphabet.length; i++) {
+                html += `<div class="alphabet-char original">${alphabet[i]}</div>`;
+            }
+            html += '</div>';
+            html += '<div class="alphabet-visual" style="margin-top: 15px;">';
+            html += '<p style="width: 100%; margin-bottom: 10px;"><strong>Alfabeto cifrato (shift ' + shift + '):</strong></p>';
+            for (let i = 0; i < alphabet.length; i++) {
+                const shifted = (i + shift) % 26;
+                html += `<div class="alphabet-char shifted">${alphabet[shifted]}</div>`;
+            }
+            html += '</div>';
+            document.getElementById('caesar-alphabet').innerHTML = html;
+        }
+
+        function bruteForceCaesar() {
+            const ciphertext = document.getElementById('caesar-output').value;
+            
+            if (!ciphertext) {
+                alert('Prima cifra un messaggio!');
+                return;
+            }
+            
+            document.getElementById('caesar-brute').style.display = 'block';
+            let html = '<div class="brute-force-demo">';
+            html += '<p><strong>Provo tutti i 26 shift possibili:</strong></p>';
+            
+            for (let shift = 0; shift < 26; shift++) {
+                const decrypted = caesarShift(ciphertext, shift, false);
+                const isLikely = /[AEIOU]/.test(decrypted) && decrypted.length > 3;
+                html += `<div class="brute-attempt ${isLikely ? 'found' : ''}">
+                    <span style="min-width: 80px;"><strong>Shift ${shift}:</strong></span>
+                    <span style="font-family: 'Courier New', monospace;">${decrypted}</span>
+                    ${isLikely ? '<span style="color: #4ade80; margin-left: auto;">✓ Probabile!</span>' : ''}
+                </div>`;
+            }
+            
+            html += '</div>';
+            html += '<p style="margin-top: 15px; color: #f87171;">⚠️ Con solo 26 tentativi, il cifrario di Cesare è facilmente attaccabile!</p>';
+            
+            document.getElementById('caesar-brute-results').innerHTML = html;
+        }
+
+        // ==================== CIFRARIO DI VIGENÈRE ====================
+        
+        function vigenereCipher(text, key, encrypt = true) {
+            const direction = encrypt ? 1 : -1;
+            const upperText = text.toUpperCase();
+            const upperKey = key.toUpperCase().replace(/[^A-Z]/g, '');
+            
+            if (!upperKey) return text;
+            
+            let keyIndex = 0;
+            return upperText.split('').map(char => {
+                if (char >= 'A' && char <= 'Z') {
+                    const textCode = char.charCodeAt(0) - 65;
+                    const keyCode = upperKey[keyIndex % upperKey.length].charCodeAt(0) - 65;
+                    const shifted = (textCode + (direction * keyCode) + 26) % 26;
+                    keyIndex++;
+                    return String.fromCharCode(shifted + 65);
+                }
+                return char;
+            }).join('');
+        }
+
+        function encryptVigenere() {
+            const input = document.getElementById('vigenere-input').value;
+            const key = document.getElementById('vigenere-key').value;
+            
+            if (!input || !key) {
+                alert('Inserisci testo e chiave');
+                return;
+            }
+            
+            const encrypted = vigenereCipher(input, key, true);
+            document.getElementById('vigenere-output').value = encrypted;
+            
+            updateVigenereVisual(input, key, encrypted);
+        }
+
+        function decryptVigenere() {
+            const output = document.getElementById('vigenere-output').value;
+            const key = document.getElementById('vigenere-key').value;
+            
+            if (!output || !key) {
+                alert('Inserisci testo cifrato e chiave');
+                return;
+            }
+            
+            const decrypted = vigenereCipher(output, key, false);
+            document.getElementById('vigenere-input').value = decrypted;
+            
+            updateVigenereVisual(decrypted, key, output);
+        }
+
+        function updateVigenereVisual(text, key, encrypted) {
+            const upperText = text.toUpperCase();
+            const upperKey = key.toUpperCase().replace(/[^A-Z]/g, '');
+            let keyIndex = 0;
+            
+            let html = '<div class="char-mapping">';
+            html += '<p><strong>Trasformazione passo-passo:</strong></p>';
+            
+            for (let i = 0; i < Math.min(upperText.length, 20); i++) {
+                const char = upperText[i];
+                if (char >= 'A' && char <= 'Z') {
+                    const keyChar = upperKey[keyIndex % upperKey.length];
+                    const shift = keyChar.charCodeAt(0) - 65;
+                    const encChar = encrypted[i] || '';
+                    
+                    html += `<div class="char-pair">
+                        <div class="char-original">${char}</div>
+                        <div class="char-arrow">+</div>
+                        <div class="char-original" style="color: #fbbf24;">${keyChar} (${shift})</div>
+                        <div class="char-arrow">→</div>
+                        <div class="char-encrypted">${encChar}</div>
+                    </div>`;
+                    keyIndex++;
+                }
+            }
+            
+            if (upperText.length > 20) {
+                html += '<p style="color: #94a3b8; font-size: 0.9em;">... (mostrati primi 20 caratteri)</p>';
+            }
+            
+            html += '</div>';
+            document.getElementById('vigenere-visual').innerHTML = html;
+        }
+
+        // ==================== CIFRARIO DI SOSTITUZIONE ====================
+        
+        function substitutionCipher(text, alphabet, encrypt = true) {
+            const original = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const sub = alphabet.toUpperCase().replace(/[^A-Z]/g, '');
+            
+            if (sub.length !== 26) {
+                alert('L\'alfabeto sostituto deve avere esattamente 26 lettere!');
+                return text;
+            }
+            
+            const upperText = text.toUpperCase();
+            return upperText.split('').map(char => {
+                if (char >= 'A' && char <= 'Z') {
+                    if (encrypt) {
+                        const index = original.indexOf(char);
+                        return sub[index] || char;
+                    } else {
+                        const index = sub.indexOf(char);
+                        return original[index] || char;
+                    }
+                }
+                return char;
+            }).join('');
+        }
+
+        function generateRandomAlphabet() {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            // Fisher-Yates shuffle
+            for (let i = alphabet.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [alphabet[i], alphabet[j]] = [alphabet[j], alphabet[i]];
+            }
+            document.getElementById('substitution-alphabet').value = alphabet.join('');
+        }
+
+        function encryptSubstitution() {
+            const input = document.getElementById('substitution-input').value;
+            const alphabet = document.getElementById('substitution-alphabet').value;
+            
+            if (!input || !alphabet) {
+                alert('Inserisci testo e alfabeto sostituto');
+                return;
+            }
+            
+            const encrypted = substitutionCipher(input, alphabet, true);
+            document.getElementById('substitution-output').value = encrypted;
+            
+            updateSubstitutionMapping(alphabet);
+            analyzeFrequency(encrypted);
+        }
+
+        function decryptSubstitution() {
+            const output = document.getElementById('substitution-output').value;
+            const alphabet = document.getElementById('substitution-alphabet').value;
+            
+            if (!output || !alphabet) {
+                alert('Inserisci testo cifrato e alfabeto sostituto');
+                return;
+            }
+            
+            const decrypted = substitutionCipher(output, alphabet, false);
+            document.getElementById('substitution-input').value = decrypted;
+            
+            updateSubstitutionMapping(alphabet);
+        }
+
+        function updateSubstitutionMapping(alphabet) {
+            const original = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const sub = alphabet.toUpperCase().replace(/[^A-Z]/g, '');
+            
+            if (sub.length !== 26) return;
+            
+            let html = '<div class="char-mapping">';
+            for (let i = 0; i < 26; i++) {
+                html += `<div class="char-pair">
+                    <div class="char-original">${original[i]}</div>
+                    <div class="char-arrow">→</div>
+                    <div class="char-encrypted">${sub[i]}</div>
+                </div>`;
+            }
+            html += '</div>';
+            document.getElementById('substitution-mapping').innerHTML = html;
+        }
+
+        function analyzeFrequency(text) {
+            const upperText = text.toUpperCase().replace(/[^A-Z]/g, '');
+            const freq = {};
+            
+            for (let char of upperText) {
+                freq[char] = (freq[char] || 0) + 1;
+            }
+            
+            const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+            const total = upperText.length;
+            
+            let html = '<div class="frequency-chart">';
+            html += '<p><strong>Frequenze delle lettere nel testo cifrato:</strong></p>';
+            
+            for (let [char, count] of sorted) {
+                const percentage = ((count / total) * 100).toFixed(1);
+                html += `<div class="frequency-bar">
+                    <div class="frequency-char">${char}</div>
+                    <div class="frequency-visual">
+                        <div class="frequency-fill" style="width: ${(count / total) * 100}%;">${percentage}%</div>
+                    </div>
+                    <div class="frequency-count">${count}</div>
+                </div>`;
+            }
+            
+            html += '</div>';
+            html += '<p style="margin-top: 15px; color: #94a3b8; font-size: 0.9em;">💡 In italiano, E è la più frequente (~12%). Confronta queste frequenze con quelle attese per trovare la mappatura!</p>';
+            
+            document.getElementById('substitution-frequency-chart').innerHTML = html;
+            document.getElementById('substitution-frequency').style.display = 'block';
+        }
+
+        // ==================== ENIGMA (Semplificato) ====================
+        
+        // Simulazione semplificata di Enigma
+        // In realtà Enigma ha rotori con mappature complesse, riflettore, plugboard
+        function enigmaCipher(text, rotor1, rotor2, rotor3, encrypt = true) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const upperText = text.toUpperCase().replace(/[^A-Z]/g, '');
+            
+            // Mappature semplificate dei rotori (in realtà molto più complesse)
+            const rotorMappings = [
+                'EKMFLGDQVZNTOWYHXUSPAIBRCJ', // Rotore I (semplificato)
+                'AJDKSIRUXBLHWTMCQGZNPYFVOE', // Rotore II (semplificato)
+                'BDFHJLCPRTXVZNYEIWGAKMUSQO'  // Rotore III (semplificato)
+            ];
+            
+            let r1 = rotor1 % 26;
+            let r2 = rotor2 % 26;
+            let r3 = rotor3 % 26;
+            
+            let steps = [];
+            let result = '';
+            
+            for (let char of upperText) {
+                // Avanza rotori (semplificato: rotore 3 avanza sempre, altri quando necessario)
+                r3 = (r3 + 1) % 26;
+                if (r3 === 0) {
+                    r2 = (r2 + 1) % 26;
+                    if (r2 === 0) {
+                        r1 = (r1 + 1) % 26;
+                    }
+                }
+                
+                // Passa attraverso i rotori (semplificato)
+                let code = char.charCodeAt(0) - 65;
+                
+                // Rotore 3
+                code = (rotorMappings[2].charCodeAt((code + r3) % 26) - 65 - r3 + 26) % 26;
+                // Rotore 2
+                code = (rotorMappings[1].charCodeAt((code + r2) % 26) - 65 - r2 + 26) % 26;
+                // Rotore 1
+                code = (rotorMappings[0].charCodeAt((code + r1) % 26) - 65 - r1 + 26) % 26;
+                
+                // Riflettore (semplificato: inversione)
+                code = (25 - code) % 26;
+                
+                // Ritorno attraverso i rotori (inverso)
+                code = (rotorMappings[0].indexOf(String.fromCharCode(code + 65 + r1)) - r1 + 26) % 26;
+                code = (rotorMappings[1].indexOf(String.fromCharCode(code + 65 + r2)) - r2 + 26) % 26;
+                code = (rotorMappings[2].indexOf(String.fromCharCode(code + 65 + r3)) - r3 + 26) % 26;
+                
+                const output = String.fromCharCode(code + 65);
+                result += output;
+                
+                steps.push({
+                    input: char,
+                    r1: r1,
+                    r2: r2,
+                    r3: r3,
+                    output: output
+                });
+            }
+            
+            return { result, steps };
+        }
+
+        function encryptEnigma() {
+            const input = document.getElementById('enigma-input').value;
+            const r1 = parseInt(document.getElementById('enigma-rotor1').value) || 0;
+            const r2 = parseInt(document.getElementById('enigma-rotor2').value) || 0;
+            const r3 = parseInt(document.getElementById('enigma-rotor3').value) || 0;
+            
+            if (!input) {
+                alert('Inserisci un testo da cifrare');
+                return;
+            }
+            
+            const { result, steps } = enigmaCipher(input, r1, r2, r3, true);
+            document.getElementById('enigma-output').value = result;
+            
+            updateRotors(r1, r2, r3);
+            showEnigmaSteps(steps);
+        }
+
+        function decryptEnigma() {
+            const output = document.getElementById('enigma-output').value;
+            const r1 = parseInt(document.getElementById('enigma-rotor1').value) || 0;
+            const r2 = parseInt(document.getElementById('enigma-rotor2').value) || 0;
+            const r3 = parseInt(document.getElementById('enigma-rotor3').value) || 0;
+            
+            if (!output) {
+                alert('Inserisci un testo cifrato da decifrare');
+                return;
+            }
+            
+            // Enigma è auto-decifrante: stessa configurazione per decifrare
+            const { result, steps } = enigmaCipher(output, r1, r2, r3, true);
+            document.getElementById('enigma-input').value = result;
+            
+            updateRotors(r1, r2, r3);
+            showEnigmaSteps(steps);
+        }
+
+        function updateRotors(r1, r2, r3) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            document.getElementById('rotor1-display').textContent = alphabet[r1 % 26];
+            document.getElementById('rotor2-display').textContent = alphabet[r2 % 26];
+            document.getElementById('rotor3-display').textContent = alphabet[r3 % 26];
+        }
+
+        function adjustRotor(rotorNum, delta) {
+            const input = document.getElementById(`enigma-rotor${rotorNum}`);
+            const current = parseInt(input.value) || 0;
+            const newValue = (current + delta + 26) % 26;
+            input.value = newValue;
+            updateRotors(
+                parseInt(document.getElementById('enigma-rotor1').value) || 0,
+                parseInt(document.getElementById('enigma-rotor2').value) || 0,
+                parseInt(document.getElementById('enigma-rotor3').value) || 0
+            );
+        }
+
+        function randomRotors() {
+            document.getElementById('enigma-rotor1').value = Math.floor(Math.random() * 26);
+            document.getElementById('enigma-rotor2').value = Math.floor(Math.random() * 26);
+            document.getElementById('enigma-rotor3').value = Math.floor(Math.random() * 26);
+            updateRotors(
+                parseInt(document.getElementById('enigma-rotor1').value),
+                parseInt(document.getElementById('enigma-rotor2').value),
+                parseInt(document.getElementById('enigma-rotor3').value)
+            );
+        }
+
+        function showEnigmaSteps(steps) {
+            document.getElementById('enigma-process').style.display = 'block';
+            document.getElementById('enigma-path').style.display = 'block';
+            
+            let html = '<div style="font-family: \'Courier New\', monospace; font-size: 0.9em;">';
+            html += '<p><strong>Processo di cifratura (primi 5 caratteri):</strong></p>';
+            for (let i = 0; i < Math.min(5, steps.length); i++) {
+                const step = steps[i];
+                html += `<p style="margin: 10px 0; padding: 10px; background: rgba(167, 139, 250, 0.1); border-radius: 6px;">`;
+                html += `<strong>${step.input}</strong> → Rotori [${String.fromCharCode(65 + step.r1)}, ${String.fromCharCode(65 + step.r2)}, ${String.fromCharCode(65 + step.r3)}] → <strong style="color: #4ade80;">${step.output}</strong>`;
+                html += `</p>`;
+            }
+            if (steps.length > 5) {
+                html += `<p style="color: #94a3b8;">... (${steps.length - 5} altri caratteri)</p>`;
+            }
+            html += '</div>';
+            html += '<p style="margin-top: 15px; color: #94a3b8; font-size: 0.85em;">💡 Nota: Questa è una simulazione semplificata. Enigma reale aveva mappature complesse, riflettore, e plugboard.</p>';
+            document.getElementById('enigma-steps').innerHTML = html;
+            
+            // Mostra percorso della corrente per il primo carattere
+            if (steps.length > 0) {
+                const firstStep = steps[0];
+                let pathHtml = '<div style="font-family: \'Courier New\', monospace; font-size: 0.9em;">';
+                pathHtml += '<p><strong>Percorso della corrente per "' + firstStep.input + '":</strong></p>';
+                pathHtml += '<div style="padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; margin: 10px 0;">';
+                pathHtml += '<p style="color: #3b82f6;">1. Tasto premuto: <strong>' + firstStep.input + '</strong></p>';
+                pathHtml += '<p style="color: #fbbf24;">2. Attraverso Rotore 3 (posizione ' + String.fromCharCode(65 + firstStep.r3) + ')</p>';
+                pathHtml += '<p style="color: #fbbf24;">3. Attraverso Rotore 2 (posizione ' + String.fromCharCode(65 + firstStep.r2) + ')</p>';
+                pathHtml += '<p style="color: #fbbf24;">4. Attraverso Rotore 1 (posizione ' + String.fromCharCode(65 + firstStep.r1) + ')</p>';
+                pathHtml += '<p style="color: #a78bfa;">5. Riflettore: inverte il segnale</p>';
+                pathHtml += '<p style="color: #fbbf24;">6. Ritorno attraverso Rotore 1</p>';
+                pathHtml += '<p style="color: #fbbf24;">7. Ritorno attraverso Rotore 2</p>';
+                pathHtml += '<p style="color: #fbbf24;">8. Ritorno attraverso Rotore 3</p>';
+                pathHtml += '<p style="color: #4ade80;">9. Lampboard: <strong>' + firstStep.output + '</strong> si accende</p>';
+                pathHtml += '</div>';
+                pathHtml += '<p style="margin-top: 10px; color: #94a3b8; font-size: 0.85em;">💡 Dopo ogni lettera, il Rotore 3 avanza di 1 posizione, cambiando la mappatura per la lettera successiva!</p>';
+                pathHtml += '</div>';
+                document.getElementById('enigma-path-visual').innerHTML = pathHtml;
+            }
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inizializza rotori Enigma
+            updateRotors(0, 0, 0);
+            
+            // Inizializza alfabeto Cesare
+            updateCaesarAlphabet(3);
+        });
+    </script>
+</body>
+</html>
+

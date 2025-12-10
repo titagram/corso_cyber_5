@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo XOR - Reversibilità delle operazioni bitwise</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni di cifratura/decifratura */
+        .crypto-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .crypto-section.encrypt {
+            border: 2px solid #3b82f6;
+        }
+        
+        .crypto-section.decrypt {
+            border: 2px solid #4ade80;
+        }
+        
+        .crypto-section h2 {
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .crypto-section.encrypt h2 { color: #3b82f6; }
+        .crypto-section.decrypt h2 { color: #4ade80; }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            box-sizing: border-box;
+        }
+        
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .result-box {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-box h4 {
+            margin: 0 0 15px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            min-height: 24px;
+        }
+        
+        .result-value.success {
+            border-left: 4px solid #4ade80;
+            color: #4ade80;
+        }
+        
+        .result-value.error {
+            border-left: 4px solid #f87171;
+            color: #f87171;
+        }
+        
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* Visualizzazione bit */
+        .bit-visualization {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+        
+        .bit-visualization h4 {
+            margin: 0 0 15px 0;
+            color: #fbbf24;
+            font-size: 1em;
+        }
+        
+        .char-columns {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        
+        .char-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 75px;
+            padding: 10px 5px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .char-label {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .char-label.input { background: #3b82f6; color: white; }
+        .char-label.key { background: #a78bfa; color: white; }
+        .char-label.output { background: #4ade80; color: black; }
+        
+        .bit-row-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin: 5px 0;
+        }
+        
+        .bit-cell {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            border-radius: 3px;
+        }
+        
+        .bit-cell.one { background: #3b82f6; color: white; }
+        .bit-cell.zero { background: rgba(255,255,255,0.1); color: #64748b; }
+        .bit-cell.one.key-bit { background: #a78bfa; }
+        .bit-cell.one.result-bit { background: #4ade80; color: black; }
+        
+        .xor-symbol {
+            font-size: 1.2em;
+            color: #fbbf24;
+            margin: 5px 0;
+        }
+        
+        .equals-symbol {
+            font-size: 1.2em;
+            color: #4ade80;
+            margin: 5px 0;
+        }
+        
+        .ascii-code {
+            font-size: 0.75em;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Sezione confronto operazioni */
+        .operations-section {
+            margin-top: 40px;
+        }
+        
+        .live-comparison {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            border: 2px solid #fbbf24;
+        }
+        
+        .live-comparison h2 {
+            color: #fbbf24;
+            margin: 0 0 10px 0;
+        }
+        
+        .live-comparison .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        
+        .operation-row {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .operation-row h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .operation-row.xor { border-left: 4px solid #4ade80; }
+        .operation-row.xor h3 { color: #4ade80; }
+        
+        .operation-row.and { border-left: 4px solid #f87171; }
+        .operation-row.and h3 { color: #f87171; }
+        
+        .operation-row.or { border-left: 4px solid #fbbf24; }
+        .operation-row.or h3 { color: #fbbf24; }
+        
+        .operation-row.not { border-left: 4px solid #a78bfa; }
+        .operation-row.not h3 { color: #a78bfa; }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .status-badge.reversible { background: #166534; color: #4ade80; }
+        .status-badge.not-reversible { background: #7f1d1d; color: #f87171; }
+        
+        .operation-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        
+        .operation-bits {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: 'Courier New', monospace;
+            flex-shrink: 0;
+        }
+        
+        .bit-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .bit-line-label {
+            width: 100px;
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+        
+        .bits-display {
+            display: flex;
+            gap: 3px;
+        }
+        
+        .op-bit {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .op-bit.one { background: #3b82f6; color: white; }
+        .op-bit.zero { background: rgba(255,255,255,0.15); color: #64748b; }
+        .op-bit.result { background: #4ade80; color: black; }
+        .op-bit.result.zero { background: rgba(74, 222, 128, 0.3); color: #4ade80; }
+        
+        .operation-explanation {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .reverse-test {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .reverse-test.success {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+        }
+        
+        .reverse-test.fail {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+        }
+
+        /* Info e warning boxes */
+        .info-box {
+            padding: 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .info-box h4 {
+            margin: 0 0 10px 0;
+            color: #3b82f6;
+        }
+        
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+        
+        /* Tabella verità */
+        .truth-table {
+            width: 100%;
+            max-width: 400px;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .truth-table th, .truth-table td {
+            padding: 8px 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .truth-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .highlight-row {
+            background: rgba(248, 113, 113, 0.2) !important;
+        }
+
+        @media (max-width: 600px) {
+            .char-column {
+                min-width: 60px;
+            }
+            .bit-line-label {
+                width: 70px;
+                font-size: 0.8em;
+            }
+            .op-bit {
+                width: 24px;
+                height: 24px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="2.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">⊕ Perché XOR è l'operazione perfetta per la crittografia</h1>
+        <div class="subtitle">Dimostra la reversibilità dello XOR: cifra e decifra in tempo reale</div>
+
+        <!-- SEZIONE 1: CIFRATURA -->
+        <div class="crypto-section encrypt">
+            <h2>🔒 SEZIONE 1: Cifratura</h2>
+            
+            <div class="input-group">
+                <label>Messaggio da cifrare:</label>
+                <input type="text" id="encryptInput" value="Ciao" placeholder="Scrivi il messaggio..." maxlength="12">
+            </div>
+            
+            <div class="input-group">
+                <label>Chiave di cifratura:</label>
+                <input type="text" id="encryptKey" value="KEY" placeholder="Inserisci la chiave..." maxlength="12">
+            </div>
+            
+            <div class="result-box">
+                <h4>📤 RISULTATO CIFRATO (in esadecimale - copialo per la decifratura):</h4>
+                <div class="result-value" id="encryptedResult"></div>
+                <button class="copy-btn" onclick="copyEncrypted()">📋 Copia testo cifrato</button>
+            </div>
+            
+            <!-- Visualizzazione bit per bit -->
+            <div class="bit-visualization">
+                <h4>🔍 Visualizzazione BIT per BIT - Ecco cosa succede carattere per carattere:</h4>
+                <div class="char-columns" id="encryptBitView"></div>
+            </div>
+        </div>
+
+        <!-- SEZIONE 2: DECIFRATURA -->
+        <div class="crypto-section decrypt">
+            <h2>🔓 SEZIONE 2: Decifratura</h2>
+            
+            <div class="input-group">
+                <label>Testo cifrato (incolla qui l'esadecimale):</label>
+                <input type="text" id="decryptInput" placeholder="Incolla il testo cifrato in hex...">
+            </div>
+            
+            <div class="input-group">
+                <label>Chiave di decifratura (deve essere uguale!):</label>
+                <input type="text" id="decryptKey" placeholder="Inserisci la chiave..." maxlength="12">
+            </div>
+            
+            <div class="result-box">
+                <h4>📥 RISULTATO DECIFRATO:</h4>
+                <div class="result-value" id="decryptedResult"></div>
+                <div id="decryptStatus" style="margin-top: 15px;"></div>
+            </div>
+            
+            <!-- Visualizzazione bit per bit decifratura -->
+            <div class="bit-visualization">
+                <h4>🔍 Visualizzazione BIT per BIT della decifratura:</h4>
+                <div class="char-columns" id="decryptBitView"></div>
+            </div>
+        </div>
+
+        <!-- SEZIONE CONFRONTO OPERAZIONI -->
+        <div class="operations-section">
+            <div class="live-comparison">
+                <h2>📊 Confronto LIVE: Perché solo XOR è reversibile?</h2>
+                <p class="subtitle">Usando il primo carattere del tuo messaggio ("<span id="currentChar">C</span>" = <span id="currentCharCode">67</span>) e della chiave ("<span id="currentKeyChar">K</span>" = <span id="currentKeyCharCode">75</span>)</p>
+                
+                <!-- XOR -->
+                <div class="operation-row xor">
+                    <h3>⊕ XOR (OR Esclusivo) <span class="status-badge reversible">✓ REVERSIBILE</span></h3>
+                    <div class="operation-content">
+                        <div class="operation-bits">
+                            <div class="bit-line">
+                                <span class="bit-line-label">Carattere A:</span>
+                                <div class="bits-display" id="xor-char-bits"></div>
+                            </div>
+                            <div class="bit-line">
+                                <span class="bit-line-label">Chiave B:</span>
+                                <div class="bits-display" id="xor-key-bits"></div>
+                            </div>
+                            <div class="bit-line" style="border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px;">
+                                <span class="bit-line-label">A ⊕ B =</span>
+                                <div class="bits-display" id="xor-result-bits"></div>
+                            </div>
+                            <div class="reverse-test success">
+                                <div class="bit-line">
+                                    <span class="bit-line-label">Verifica: R ⊕ B =</span>
+                                    <div class="bits-display" id="xor-reverse-bits"></div>
+                                </div>
+                                <p style="margin: 10px 0 0 0; color: #4ade80;">✓ <strong>Recuperato A originale!</strong></p>
+                            </div>
+                        </div>
+                        <div class="operation-explanation">
+                            <strong>Perché funziona:</strong><br>
+                            XOR è l'unica operazione dove ogni combinazione di input produce un output UNICO e INVERTIBILE.
+                            <table class="truth-table">
+                                <tr><th>A</th><th>B</th><th>A⊕B</th></tr>
+                                <tr><td>0</td><td>0</td><td>0</td></tr>
+                                <tr><td>0</td><td>1</td><td>1</td></tr>
+                                <tr><td>1</td><td>0</td><td>1</td></tr>
+                                <tr><td>1</td><td>1</td><td>0</td></tr>
+                            </table>
+                            Conoscendo B e il risultato, puoi SEMPRE recuperare A.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AND -->
+                <div class="operation-row and">
+                    <h3>∧ AND <span class="status-badge not-reversible">✗ NON REVERSIBILE</span></h3>
+                    <div class="operation-content">
+                        <div class="operation-bits">
+                            <div class="bit-line">
+                                <span class="bit-line-label">Carattere A:</span>
+                                <div class="bits-display" id="and-char-bits"></div>
+                            </div>
+                            <div class="bit-line">
+                                <span class="bit-line-label">Chiave B:</span>
+                                <div class="bits-display" id="and-key-bits"></div>
+                            </div>
+                            <div class="bit-line" style="border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px;">
+                                <span class="bit-line-label">A ∧ B =</span>
+                                <div class="bits-display" id="and-result-bits"></div>
+                            </div>
+                            <div class="reverse-test fail">
+                                <p style="margin: 0; color: #f87171;">✗ <strong>INFORMAZIONE PERSA!</strong></p>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Se risultato=0 e B=1, A poteva essere 0 o 1</p>
+                            </div>
+                        </div>
+                        <div class="operation-explanation">
+                            <strong>Perché NON funziona:</strong><br>
+                            AND "schiaccia" l'informazione. Quando B=1 e il risultato=0, non sai se A era 0 o 1!
+                            <table class="truth-table">
+                                <tr><th>A</th><th>B</th><th>A∧B</th></tr>
+                                <tr><td>0</td><td>0</td><td>0</td></tr>
+                                <tr class="highlight-row"><td>0</td><td>1</td><td>0</td></tr>
+                                <tr class="highlight-row"><td>1</td><td>1</td><td>1</td></tr>
+                                <tr><td>1</td><td>0</td><td>0</td></tr>
+                            </table>
+                            Le righe evidenziate mostrano l'ambiguità: con B=1, due input diversi possono dare risultati diversi, ma con B=0 il risultato è SEMPRE 0!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OR -->
+                <div class="operation-row or">
+                    <h3>∨ OR <span class="status-badge not-reversible">✗ NON REVERSIBILE</span></h3>
+                    <div class="operation-content">
+                        <div class="operation-bits">
+                            <div class="bit-line">
+                                <span class="bit-line-label">Carattere A:</span>
+                                <div class="bits-display" id="or-char-bits"></div>
+                            </div>
+                            <div class="bit-line">
+                                <span class="bit-line-label">Chiave B:</span>
+                                <div class="bits-display" id="or-key-bits"></div>
+                            </div>
+                            <div class="bit-line" style="border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px;">
+                                <span class="bit-line-label">A ∨ B =</span>
+                                <div class="bits-display" id="or-result-bits"></div>
+                            </div>
+                            <div class="reverse-test fail">
+                                <p style="margin: 0; color: #f87171;">✗ <strong>INFORMAZIONE PERSA!</strong></p>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Se risultato=1 e B=1, A poteva essere 0 o 1</p>
+                            </div>
+                        </div>
+                        <div class="operation-explanation">
+                            <strong>Perché NON funziona:</strong><br>
+                            OR "satura" l'informazione. Quando B=1, il risultato è SEMPRE 1 indipendentemente da A!
+                            <table class="truth-table">
+                                <tr><th>A</th><th>B</th><th>A∨B</th></tr>
+                                <tr><td>0</td><td>0</td><td>0</td></tr>
+                                <tr class="highlight-row"><td>0</td><td>1</td><td>1</td></tr>
+                                <tr class="highlight-row"><td>1</td><td>1</td><td>1</td></tr>
+                                <tr><td>1</td><td>0</td><td>1</td></tr>
+                            </table>
+                            Le righe evidenziate mostrano: con B=1, qualsiasi valore di A produce 1. Impossibile risalire ad A!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOT -->
+                <div class="operation-row not">
+                    <h3>¬ NOT <span class="status-badge not-reversible">✗ INUTILIZZABILE</span></h3>
+                    <div class="operation-content">
+                        <div class="operation-bits">
+                            <div class="bit-line">
+                                <span class="bit-line-label">Carattere A:</span>
+                                <div class="bits-display" id="not-char-bits"></div>
+                            </div>
+                            <div class="bit-line" style="border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px;">
+                                <span class="bit-line-label">¬A =</span>
+                                <div class="bits-display" id="not-result-bits"></div>
+                            </div>
+                            <div class="reverse-test fail">
+                                <p style="margin: 0; color: #a78bfa;">⚠️ <strong>NESSUNA CHIAVE!</strong></p>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Tecnicamente reversibile (NOT NOT A = A), ma...</p>
+                            </div>
+                        </div>
+                        <div class="operation-explanation">
+                            <strong>Perché NON si usa:</strong><br>
+                            NOT è matematicamente reversibile, MA:
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li><strong>Non usa chiave</strong>: chiunque può invertire!</li>
+                                <li>L'operazione è sempre identica</li>
+                                <li>Zero sicurezza: è come scrivere al contrario</li>
+                                <li>Basta applicare NOT per "decifrare"</li>
+                            </ul>
+                            È come nascondere un messaggio scrivendolo al contrario: ovvio e banale.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning finale -->
+        <div class="warning-box">
+            <h4>⚠️ Attenzione: XOR da solo NON è sicuro per crittografia reale!</h4>
+            <p>Questa demo mostra perché XOR è <em>necessario</em> ma non <em>sufficiente</em>:</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><strong>Chiave corta riutilizzata</strong>: se la chiave è più corta del messaggio e viene ripetuta ciclicamente, emergono pattern</li>
+                <li><strong>Two-time pad</strong>: se cifri due messaggi con la stessa chiave: M1 ⊕ K e M2 ⊕ K, facendo XOR ottieni M1 ⊕ M2 (la chiave si annulla!)</li>
+                <li><strong>Chiave predicibile</strong>: se la chiave non è veramente casuale, attacchi statistici sono possibili</li>
+            </ul>
+            <p>Gli algoritmi moderni (AES, ChaCha20) usano XOR come <strong>componente</strong>, ma aggiungono permutazioni, sostituzioni e round multipli.</p>
+        </div>
+
+        <div class="info-box">
+            <h4>💡 Riepilogo: XOR è speciale perché...</h4>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>È <strong>reversibile</strong>: A ⊕ B ⊕ B = A (applicare due volte annulla)</li>
+                <li>È <strong>simmetrico</strong>: A ⊕ B = B ⊕ A</li>
+                <li><strong>Preserva l'entropia</strong>: non perde informazione</li>
+                <li><strong>Usa una chiave</strong>: senza la chiave corretta, non puoi invertire</li>
+                <li>È <strong>velocissimo</strong>: operazione hardware nativa su tutte le CPU</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', () => {
+            // Event listeners per cifratura
+            document.getElementById('encryptInput').addEventListener('input', updateEncryption);
+            document.getElementById('encryptKey').addEventListener('input', updateEncryption);
+            
+            // Event listeners per decifratura
+            document.getElementById('decryptInput').addEventListener('input', updateDecryption);
+            document.getElementById('decryptKey').addEventListener('input', updateDecryption);
+            
+            // Calcolo iniziale
+            updateEncryption();
+        });
+
+        // XOR tra stringa e chiave
+        function xorStrings(text, key) {
+            if (!key) key = ' ';
+            let result = [];
+            for (let i = 0; i < text.length; i++) {
+                result.push(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return result;
+        }
+
+        // Array di byte a stringa hex
+        function bytesToHex(bytes) {
+            return bytes.map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' ');
+        }
+
+        // Stringa hex a array di byte
+        function hexToBytes(hex) {
+            hex = hex.replace(/\s+/g, '');
+            let bytes = [];
+            for (let i = 0; i < hex.length; i += 2) {
+                bytes.push(parseInt(hex.substr(i, 2), 16));
+            }
+            return bytes;
+        }
+
+        // Byte a stringa binaria
+        function byteToBinary(byte) {
+            return byte.toString(2).padStart(8, '0');
+        }
+
+        // Crea display dei bit
+        function createBitsDisplay(byte, className = '') {
+            const binary = byteToBinary(byte);
+            return binary.split('').map(bit => 
+                `<div class="op-bit ${bit === '1' ? 'one' : 'zero'} ${className}">${bit}</div>`
+            ).join('');
+        }
+
+        // Aggiorna cifratura
+        function updateEncryption() {
+            const input = document.getElementById('encryptInput').value || '';
+            const key = document.getElementById('encryptKey').value || '';
+            
+            if (input.length === 0) {
+                document.getElementById('encryptedResult').textContent = '(inserisci un messaggio)';
+                document.getElementById('encryptBitView').innerHTML = '';
+                updateOperationsComparison(67, 75); // Default C, K
+                return;
+            }
+            
+            const encrypted = xorStrings(input, key || ' ');
+            const hexResult = bytesToHex(encrypted);
+            
+            document.getElementById('encryptedResult').textContent = hexResult;
+            
+            // Visualizzazione bit per bit
+            renderBitVisualization('encryptBitView', input, key || ' ', encrypted);
+            
+            // Aggiorna confronto operazioni con primo carattere
+            updateOperationsComparison(
+                input.charCodeAt(0),
+                (key || ' ').charCodeAt(0)
+            );
+        }
+
+        // Aggiorna decifratura
+        function updateDecryption() {
+            const hexInput = document.getElementById('decryptInput').value || '';
+            const key = document.getElementById('decryptKey').value || '';
+            
+            if (hexInput.length === 0) {
+                document.getElementById('decryptedResult').textContent = '(incolla il testo cifrato)';
+                document.getElementById('decryptedResult').className = 'result-value';
+                document.getElementById('decryptStatus').innerHTML = '';
+                document.getElementById('decryptBitView').innerHTML = '';
+                return;
+            }
+            
+            try {
+                const bytes = hexToBytes(hexInput);
+                const decryptedBytes = xorStrings(String.fromCharCode(...bytes), key || ' ');
+                // In realtà dobbiamo fare XOR direttamente sui byte
+                let decrypted = '';
+                for (let i = 0; i < bytes.length; i++) {
+                    decrypted += String.fromCharCode(bytes[i] ^ (key || ' ').charCodeAt(i % (key || ' ').length));
+                }
+                
+                document.getElementById('decryptedResult').textContent = decrypted;
+                
+                // Verifica se corrisponde al messaggio originale
+                const originalInput = document.getElementById('encryptInput').value;
+                const originalKey = document.getElementById('encryptKey').value;
+                
+                if (key === originalKey && decrypted === originalInput) {
+                    document.getElementById('decryptedResult').className = 'result-value success';
+                    document.getElementById('decryptStatus').innerHTML = 
+                        '<span style="color: #4ade80;">✓ <strong>Successo!</strong> La chiave è corretta, messaggio recuperato!</span>';
+                } else if (key !== originalKey && key.length > 0) {
+                    document.getElementById('decryptedResult').className = 'result-value error';
+                    document.getElementById('decryptStatus').innerHTML = 
+                        '<span style="color: #f87171;">✗ <strong>Chiave errata!</strong> Il risultato è spazzatura perché la chiave non corrisponde.</span>';
+                } else {
+                    document.getElementById('decryptedResult').className = 'result-value';
+                    document.getElementById('decryptStatus').innerHTML = '';
+                }
+                
+                // Visualizzazione bit
+                const inputStr = String.fromCharCode(...bytes);
+                renderBitVisualization('decryptBitView', inputStr, key || ' ', decrypted.split('').map(c => c.charCodeAt(0)), true);
+                
+            } catch (e) {
+                document.getElementById('decryptedResult').textContent = '(formato hex non valido)';
+                document.getElementById('decryptedResult').className = 'result-value error';
+            }
+        }
+
+        // Render visualizzazione bit per bit
+        function renderBitVisualization(containerId, input, key, output, isDecrypt = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            const maxChars = Math.min(input.length, 8); // Limita a 8 caratteri per spazio
+            
+            for (let i = 0; i < maxChars; i++) {
+                const charCode = input.charCodeAt(i);
+                const keyCode = key.charCodeAt(i % key.length);
+                const resultCode = typeof output[i] === 'number' ? output[i] : output[i].charCodeAt(0);
+                
+                const charBits = byteToBinary(charCode);
+                const keyBits = byteToBinary(keyCode);
+                const resultBits = byteToBinary(resultCode);
+                
+                const col = document.createElement('div');
+                col.className = 'char-column';
+                
+                col.innerHTML = `
+                    <div class="char-label ${isDecrypt ? 'output' : 'input'}">"${isDecrypt ? String.fromCharCode(charCode) : input[i]}"</div>
+                    <div class="ascii-code">${charCode}</div>
+                    <div class="bit-row-vertical">
+                        ${charBits.split('').map(b => `<div class="bit-cell ${b === '1' ? 'one' : 'zero'}">${b}</div>`).join('')}
+                    </div>
+                    <div class="xor-symbol">⊕</div>
+                    <div class="char-label key">"${key[i % key.length]}"</div>
+                    <div class="ascii-code">${keyCode}</div>
+                    <div class="bit-row-vertical">
+                        ${keyBits.split('').map(b => `<div class="bit-cell ${b === '1' ? 'one key-bit' : 'zero'}">${b}</div>`).join('')}
+                    </div>
+                    <div class="equals-symbol">=</div>
+                    <div class="char-label output">${isDecrypt ? '"' + String.fromCharCode(resultCode) + '"' : resultCode.toString(16).toUpperCase().padStart(2, '0')}</div>
+                    <div class="ascii-code">${resultCode}</div>
+                    <div class="bit-row-vertical">
+                        ${resultBits.split('').map(b => `<div class="bit-cell ${b === '1' ? 'one result-bit' : 'zero'}">${b}</div>`).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(col);
+            }
+            
+            if (input.length > maxChars) {
+                const more = document.createElement('div');
+                more.className = 'char-column';
+                more.innerHTML = `<div style="color: #64748b; padding: 20px;">... altri ${input.length - maxChars} caratteri</div>`;
+                container.appendChild(more);
+            }
+        }
+
+        // Aggiorna confronto operazioni live
+        function updateOperationsComparison(charCode, keyCode) {
+            // Aggiorna labels
+            document.getElementById('currentChar').textContent = String.fromCharCode(charCode);
+            document.getElementById('currentCharCode').textContent = charCode;
+            document.getElementById('currentKeyChar').textContent = String.fromCharCode(keyCode);
+            document.getElementById('currentKeyCharCode').textContent = keyCode;
+            
+            // XOR
+            const xorResult = charCode ^ keyCode;
+            const xorReverse = xorResult ^ keyCode;
+            document.getElementById('xor-char-bits').innerHTML = createBitsDisplay(charCode);
+            document.getElementById('xor-key-bits').innerHTML = createBitsDisplay(keyCode);
+            document.getElementById('xor-result-bits').innerHTML = createBitsDisplay(xorResult, 'result');
+            document.getElementById('xor-reverse-bits').innerHTML = createBitsDisplay(xorReverse, 'result');
+            
+            // AND
+            const andResult = charCode & keyCode;
+            document.getElementById('and-char-bits').innerHTML = createBitsDisplay(charCode);
+            document.getElementById('and-key-bits').innerHTML = createBitsDisplay(keyCode);
+            document.getElementById('and-result-bits').innerHTML = createBitsDisplay(andResult, 'result');
+            
+            // OR
+            const orResult = charCode | keyCode;
+            document.getElementById('or-char-bits').innerHTML = createBitsDisplay(charCode);
+            document.getElementById('or-key-bits').innerHTML = createBitsDisplay(keyCode);
+            document.getElementById('or-result-bits').innerHTML = createBitsDisplay(orResult, 'result');
+            
+            // NOT
+            const notResult = (~charCode) & 0xFF; // Mantieni a 8 bit
+            document.getElementById('not-char-bits').innerHTML = createBitsDisplay(charCode);
+            document.getElementById('not-result-bits').innerHTML = createBitsDisplay(notResult, 'result');
+        }
+
+        // Copia negli appunti
+        function copyEncrypted() {
+            const text = document.getElementById('encryptedResult').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✓ Copiato!';
+                setTimeout(() => {
+                    btn.innerHTML = '📋 Copia testo cifrato';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

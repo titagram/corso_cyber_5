@@ -5,6 +5,58 @@
     <meta charset="UTF-8">
     <title>Pyramid of Pain - Slide 15</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Stili per l'immagine cliccabile e il modale */
+        #clickable-img {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #clickable-img:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 1200px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 25px;
+            right: 45px;
+            color: #fff;
+            font-size: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,12 +108,41 @@
             </div>
         </div>
         <div style="text-align: center; margin-top: 10px;">
-            <img src="img/pyramid.png" alt="Pyramid of Pain" style="max-height: 150px; border-radius: 8px;">
+            <img src="img/pyramid.png" alt="Pyramid of Pain" style="max-height: 150px; border-radius: 8px;" id="clickable-img">
         </div>
+    </div>
+
+    <!-- Il Modale per l'immagine -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modal-img">
     </div>
 
     <script>const slideNumero = 15;</script>
     <script src="main.js"></script>
+
+    <script>
+        // Logica per il modale dell'immagine
+        var modal = document.getElementById("imageModal");
+        var img = document.getElementById("clickable-img");
+        var modalImg = document.getElementById("modal-img");
+        var span = document.getElementsByClassName("close-modal")[0];
+
+        img.onclick = function () {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+        }
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        modal.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>ECDH - Elliptic Curve Diffie-Hellman</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.intro { border-color: #3b82f6; }
+        .concept-section.intro h2 { color: #3b82f6; }
+        
+        .concept-section.curves { border-color: #4ade80; }
+        .concept-section.curves h2 { color: #4ade80; }
+        
+        .concept-section.math { border-color: #fbbf24; }
+        .concept-section.math h2 { color: #fbbf24; }
+        
+        .concept-section.how { border-color: #a78bfa; }
+        .concept-section.how h2 { color: #a78bfa; }
+        
+        .concept-section.compare { border-color: #f472b6; }
+        .concept-section.compare h2 { color: #f472b6; }
+        
+        .concept-section.lab { border-color: #06b6d4; }
+        .concept-section.lab h2 { color: #06b6d4; }
+        
+        .concept-section.real { border-color: #f87171; }
+        .concept-section.real h2 { color: #f87171; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input, .input-row select {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+        }
+        
+        .input-row input:focus, .input-row select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-small {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .input-medium {
+            width: 200px;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #4ade80;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .result-value.large {
+            font-size: 1.2em;
+        }
+
+        /* Formula */
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+        
+        .game-btn.danger {
+            background: #f87171;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Curve visualization */
+        .curve-container {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .curve-svg {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            margin: 20px auto;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .curve-point {
+            fill: #3b82f6;
+            stroke: white;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+        
+        .curve-point.selected {
+            fill: #4ade80;
+        }
+        
+        .curve-point.result {
+            fill: #fbbf24;
+        }
+        
+        .curve-line {
+            stroke: rgba(255,255,255,0.3);
+            stroke-width: 1;
+            stroke-dasharray: 5,5;
+        }
+
+        /* Step visualization */
+        .step-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .step-box {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .step-box h5 {
+            margin: 0 0 10px 0;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Lab visualization */
+        .lab-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .lab-person {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 2px solid;
+        }
+        
+        .lab-person.alice {
+            border-color: #3b82f6;
+        }
+        
+        .lab-person.bob {
+            border-color: #4ade80;
+        }
+        
+        .lab-person.eve {
+            border-color: #f87171;
+        }
+        
+        .lab-person h5 {
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .lab-value {
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 6px;
+            margin: 8px 0;
+            word-break: break-all;
+        }
+        
+        .lab-value.public {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .lab-value.private {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+        
+        .lab-value.shared {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Curve parameters */
+        .curve-params {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .param-box {
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .param-box h6 {
+            margin: 0 0 8px 0;
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+        
+        .param-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #3b82f6;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="7.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">🔐 ECDH - Elliptic Curve Diffie-Hellman</h1>
+        <div class="subtitle">Diffie-Hellman con curve ellittiche: stessa sicurezza, chiavi più corte</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#intro">Perché ECDH</a>
+            <a href="#curves">Curve Ellittiche</a>
+            <a href="#math">Matematica</a>
+            <a href="#how">Come Funziona</a>
+            <a href="#compare">vs DH Classico</a>
+            <a href="#lab">🎮 Lab Interattivo</a>
+            <a href="#real">Nel Mondo Reale</a>
+        </div>
+
+        <!-- ==================== INTRODUZIONE ==================== -->
+        <div class="concept-section intro" id="intro">
+            <h2>🚀 Perché ECDH?</h2>
+            <p class="subtitle">Diffie-Hellman classico funziona, ma le chiavi sono troppo lunghe</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📊 Il Problema di Diffie-Hellman Classico</h4>
+                        <p>Per sicurezza equivalente a RSA 2048 bit:</p>
+                        <ul>
+                            <li><strong>DH classico:</strong> chiavi da 2048-3072 bit</li>
+                            <li><strong>RSA:</strong> chiavi da 2048 bit</li>
+                            <li><strong>ECDH:</strong> chiavi da 256 bit!</li>
+                        </ul>
+                        <p><strong>Vantaggio:</strong> stessa sicurezza con chiavi 8× più corte!</p>
+                    </div>
+
+                    <div class="formula">
+Confronto chiavi per sicurezza equivalente:
+
+RSA 2048 bit     → Chiave: 256 byte
+DH 2048 bit      → Chiave: 256 byte
+ECDH P-256       → Chiave: 32 byte (256 bit)
+
+Stessa sicurezza, 8× meno spazio!
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Vantaggi ECDH</h4>
+                        <ul>
+                            <li>✓ Chiavi più corte (256 bit vs 2048 bit)</li>
+                            <li>✓ Calcoli più veloci</li>
+                            <li>✓ Meno banda (comunicazione)</li>
+                            <li>✓ Meno memoria</li>
+                            <li>✓ Perfetto per dispositivi mobili</li>
+                            <li>✓ Stessa sicurezza di DH classico</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Algoritmo</th>
+                            <th>Dimensione Chiave</th>
+                            <th>Sicurezza Equivalente</th>
+                        </tr>
+                        <tr>
+                            <td>RSA</td>
+                            <td>2048 bit</td>
+                            <td>112 bit</td>
+                        </tr>
+                        <tr>
+                            <td>DH classico</td>
+                            <td>2048 bit</td>
+                            <td>112 bit</td>
+                        </tr>
+                        <tr class="good">
+                            <td>ECDH P-256</td>
+                            <td>256 bit</td>
+                            <td>128 bit</td>
+                        </tr>
+                        <tr class="good">
+                            <td>ECDH P-384</td>
+                            <td>384 bit</td>
+                            <td>192 bit</td>
+                        </tr>
+                        <tr class="good">
+                            <td>ECDH P-521</td>
+                            <td>521 bit</td>
+                            <td>256 bit</td>
+                        </tr>
+                    </table>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Quando Usare ECDH</h4>
+                        <p>ECDH è perfetto per:</p>
+                        <ul>
+                            <li>✓ TLS/HTTPS (scambio chiavi)</li>
+                            <li>✓ Signal, WhatsApp (messaggi)</li>
+                            <li>✓ Bitcoin, Ethereum (firme)</li>
+                            <li>✓ Dispositivi IoT (bassa potenza)</li>
+                            <li>✓ Mobile (batteria limitata)</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📈 Adozione nel Mondo Reale</h4>
+                        <ul>
+                            <li><strong>TLS 1.3:</strong> ECDH obbligatorio</li>
+                            <li><strong>Signal:</strong> X3DH (ECDH-based)</li>
+                            <li><strong>Bitcoin:</strong> secp256k1</li>
+                            <li><strong>NIST:</strong> P-256, P-384, P-521</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CURVE ELLITTICHE ==================== -->
+        <div class="concept-section curves" id="curves">
+            <h2>📐 Cosa Sono le Curve Ellittiche?</h2>
+            <p class="subtitle">Geometria che diventa crittografia</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎨 Definizione Semplice</h4>
+                        <p>Una curva ellittica è un insieme di punti (x, y) che soddisfano:</p>
+                        <div class="formula centered">
+y² = x³ + ax + b
+                        </div>
+                        <p>Dove a e b sono parametri della curva.</p>
+                        <p><strong>Esempio:</strong> y² = x³ - 3x + 1</p>
+                    </div>
+
+                    <div class="curve-container">
+                        <h4>Visualizzazione Curva Ellittica</h4>
+                        <svg class="curve-svg" id="curve-svg" viewBox="-5 -5 10 10">
+                            <!-- Grid -->
+                            <defs>
+                                <pattern id="grid" width="1" height="1" patternUnits="userSpaceOnUse">
+                                    <path d="M 1 0 L 0 0 0 1" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.05"/>
+                                </pattern>
+                            </defs>
+                            <rect width="10" height="10" fill="url(#grid)" />
+                            
+                            <!-- Axes -->
+                            <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(255,255,255,0.3)" stroke-width="0.1"/>
+                            <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(255,255,255,0.3)" stroke-width="0.1"/>
+                            
+                            <!-- Curve: y² = x³ - 3x + 1 (simplified) -->
+                            <path id="curve-path" d="M -3 2 Q -2 1 -1 0 T 1 -1 T 3 2" 
+                                  fill="none" stroke="#3b82f6" stroke-width="0.2"/>
+                            
+                            <!-- Points will be added by JavaScript -->
+                        </svg>
+                        <p style="font-size: 0.85em; color: #94a3b8;">
+                            Curva ellittica semplificata: y² = x³ - 3x + 1
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>➕ Operazione Chiave: Addizione di Punti</h4>
+                        <p>Su una curva ellittica, possiamo "sommare" punti:</p>
+                        <ol>
+                            <li>Traccia retta tra P e Q</li>
+                            <li>Trova terzo punto R sulla curva</li>
+                            <li>Rifletti R sull'asse x → P + Q</li>
+                        </ol>
+                        <p><strong>Proprietà magica:</strong> questa operazione è difficile da invertire!</p>
+                    </div>
+
+                    <div class="formula">
+Operazione su curva ellittica:
+
+P + Q = R
+
+Dove:
+• P, Q sono punti sulla curva
+• R è il risultato (anche sulla curva)
+• L'operazione è commutativa: P + Q = Q + P
+• C'è un punto "zero" (infinito)
+
+Moltiplicazione scalare:
+k × P = P + P + ... + P (k volte)
+
+Questo è il "problema difficile"!
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Problema del Logaritmo Discreto su Curve Ellittiche (ECDLP)</h4>
+                        <p>Dati P e Q = k × P, trovare k è <strong>computazionalmente difficile</strong>.</p>
+                        <p>Questo è il problema su cui si basa ECDH!</p>
+                        <p><strong>Vantaggio:</strong> più difficile del DLP classico → chiavi più corte!</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Curve Standard (NIST)</h4>
+                        <ul>
+                            <li><strong>P-256:</strong> 256 bit, sicurezza 128 bit</li>
+                            <li><strong>P-384:</strong> 384 bit, sicurezza 192 bit</li>
+                            <li><strong>P-521:</strong> 521 bit, sicurezza 256 bit</li>
+                        </ul>
+                        <p><strong>Nota:</strong> secp256k1 (Bitcoin) è diversa da P-256!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MATEMATICA ==================== -->
+        <div class="concept-section math" id="math">
+            <h2>🔢 Matematica ECDH (Semplificata)</h2>
+            <p class="subtitle">Come funziona l'aritmetica su curve ellittiche</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📋 Parametri di una Curva</h4>
+                        <p>Una curva ellittica è definita da:</p>
+                        <ul>
+                            <li><strong>a, b:</strong> coefficienti dell'equazione</li>
+                            <li><strong>p:</strong> modulo primo (campo finito)</li>
+                            <li><strong>G:</strong> punto generatore (base point)</li>
+                            <li><strong>n:</strong> ordine del generatore</li>
+                        </ul>
+                    </div>
+
+                    <div class="curve-params">
+                        <div class="param-box">
+                            <h6>Curva P-256</h6>
+                            <div class="param-value">y² = x³ - 3x + b</div>
+                        </div>
+                        <div class="param-box">
+                            <h6>Modulo p</h6>
+                            <div class="param-value">2²⁵⁶ - 2²²⁴ + 2¹⁹² + 2⁹⁶ - 1</div>
+                        </div>
+                        <div class="param-box">
+                            <h6>Generatore G</h6>
+                            <div class="param-value">Punto fisso sulla curva</div>
+                        </div>
+                        <div class="param-box">
+                            <h6>Ordine n</h6>
+                            <div class="param-value">~2²⁵⁶</div>
+                        </div>
+                    </div>
+
+                    <div class="formula">
+Operazioni su curva ellittica (modulo p):
+
+Addizione punto:
+P = (x₁, y₁)
+Q = (x₂, y₂)
+P + Q = (x₃, y₃)
+
+Dove:
+λ = (y₂ - y₁) / (x₂ - x₁)  [se P ≠ Q]
+λ = (3x₁² + a) / (2y₁)     [se P = Q]
+x₃ = λ² - x₁ - x₂
+y₃ = λ(x₁ - x₃) - y₁
+
+Moltiplicazione scalare:
+k × P = P + P + ... + P (k volte)
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎯 Perché è Difficile?</h4>
+                        <p><strong>Direzione facile:</strong> k × P = Q</p>
+                        <ul>
+                            <li>Dato k e P, calcolare Q è veloce</li>
+                            <li>Usa "double-and-add" (simile a esponenziazione modulare)</li>
+                            <li>Complessità: O(log k)</li>
+                        </ul>
+                        <p><strong>Direzione difficile:</strong> Q = k × P, trovare k</p>
+                        <ul>
+                            <li>Dato Q e P, trovare k è difficile</li>
+                            <li>Richiede ~2^128 operazioni (P-256)</li>
+                            <li>Complessità: O(2^n/2) con n = bit chiave</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Confronto Complessità</h4>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Problema</th>
+                                <th>Complessità</th>
+                            </tr>
+                            <tr>
+                                <td>DLP classico (2048 bit)</td>
+                                <td>~2^112</td>
+                            </tr>
+                            <tr>
+                                <td>ECDLP (256 bit)</td>
+                                <td>~2^128</td>
+                            </tr>
+                            <tr>
+                                <td>Fattorizzazione RSA (2048 bit)</td>
+                                <td>~2^112</td>
+                            </tr>
+                        </table>
+                        <p><strong>Risultato:</strong> ECDLP è più difficile → chiavi più corte!</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Vantaggi Matematici</h4>
+                        <ul>
+                            <li>Struttura matematica più ricca</li>
+                            <li>Più difficile da attaccare</li>
+                            <li>Algoritmi più efficienti</li>
+                            <li>Resistente a molti attacchi noti</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COME FUNZIONA ==================== -->
+        <div class="concept-section how" id="how">
+            <h2>🔐 Come Funziona ECDH</h2>
+            <p class="subtitle">Stesso principio di Diffie-Hellman, su curve ellittiche</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="step-visual">
+                        <div class="step-box">
+                            <h5><span class="step-number">1</span> Setup Pubblico</h5>
+                            <p>Tutti concordano su:</p>
+                            <ul>
+                                <li>Curva ellittica (es. P-256)</li>
+                                <li>Punto generatore G</li>
+                                <li>Parametri della curva</li>
+                            </ul>
+                        </div>
+                        <div class="step-box">
+                            <h5><span class="step-number">2</span> Alice</h5>
+                            <p>Genera chiave privata: <strong>a</strong> (numero casuale)</p>
+                            <p>Calcola chiave pubblica: <strong>A = a × G</strong></p>
+                            <p>Invia A a Bob</p>
+                        </div>
+                        <div class="step-box">
+                            <h5><span class="step-number">3</span> Bob</h5>
+                            <p>Genera chiave privata: <strong>b</strong> (numero casuale)</p>
+                            <p>Calcola chiave pubblica: <strong>B = b × G</strong></p>
+                            <p>Invia B ad Alice</p>
+                        </div>
+                        <div class="step-box">
+                            <h5><span class="step-number">4</span> Alice Calcola</h5>
+                            <p>Chiave condivisa: <strong>S = a × B = a × (b × G)</strong></p>
+                        </div>
+                        <div class="step-box">
+                            <h5><span class="step-number">5</span> Bob Calcola</h5>
+                            <p>Chiave condivisa: <strong>S = b × A = b × (a × G)</strong></p>
+                        </div>
+                        <div class="step-box">
+                            <h5><span class="step-number">6</span> Risultato</h5>
+                            <p><strong>S = a × b × G</strong> (stesso valore per entrambi!)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="formula">
+Formule ECDH:
+
+Setup:
+• Curva: E
+• Generatore: G
+• Ordine: n
+
+Alice:
+• Privata: a ∈ [1, n-1]
+• Pubblica: A = a × G
+
+Bob:
+• Privata: b ∈ [1, n-1]
+• Pubblica: B = b × G
+
+Chiave condivisa:
+S = a × B = b × A = a × b × G
+
+Eve vede solo A e B, ma non può calcolare S!
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔒 Perché è Sicuro?</h4>
+                        <p>Eve vede:</p>
+                        <ul>
+                            <li>A = a × G</li>
+                            <li>B = b × G</li>
+                        </ul>
+                        <p>Per trovare S = a × b × G, deve:</p>
+                        <ul>
+                            <li>Trovare a da A (ECDLP)</li>
+                            <li>O trovare b da B (ECDLP)</li>
+                            <li>Entrambi computazionalmente impossibili!</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Validazione Chiave Pubblica</h4>
+                        <p>Prima di usare la chiave pubblica ricevuta:</p>
+                        <ul>
+                            <li>✓ Verifica che il punto sia sulla curva</li>
+                            <li>✓ Verifica che non sia il punto all'infinito</li>
+                            <li>✓ Verifica che n × P = punto all'infinito</li>
+                        </ul>
+                        <p><strong>Perché:</strong> previene attacchi con chiavi pubbliche invalide!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONFRONTO ==================== -->
+        <div class="concept-section compare" id="compare">
+            <h2>📊 ECDH vs Diffie-Hellman Classico</h2>
+            <p class="subtitle">Confronto diretto: vantaggi e svantaggi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Caratteristica</th>
+                            <th>DH Classico</th>
+                            <th>ECDH</th>
+                        </tr>
+                        <tr>
+                            <td>Dimensione chiave (128 bit sicurezza)</td>
+                            <td>3072 bit</td>
+                            <td class="good">256 bit</td>
+                        </tr>
+                        <tr>
+                            <td>Velocità calcolo</td>
+                            <td>Media</td>
+                            <td class="good">Veloce</td>
+                        </tr>
+                        <tr>
+                            <td>Banda richiesta</td>
+                            <td>Alta</td>
+                            <td class="good">Bassa</td>
+                        </tr>
+                        <tr>
+                            <td>Memoria</td>
+                            <td>Alta</td>
+                            <td class="good">Bassa</td>
+                        </tr>
+                        <tr>
+                            <td>Dispositivi mobili</td>
+                            <td>Pesante</td>
+                            <td class="good">Ottimale</td>
+                        </tr>
+                        <tr>
+                            <td>Maturità</td>
+                            <td class="good">Molto maturo</td>
+                            <td>Maturo</td>
+                        </tr>
+                        <tr>
+                            <td>Standardizzazione</td>
+                            <td class="good">Molto standardizzato</td>
+                            <td class="good">Standardizzato</td>
+                        </tr>
+                    </table>
+
+                    <div class="success-box">
+                        <h4>✅ Quando Usare ECDH</h4>
+                        <ul>
+                            <li>✓ Nuovi progetti</li>
+                            <li>✓ Dispositivi con risorse limitate</li>
+                            <li>✓ Applicazioni mobile</li>
+                            <li>✓ IoT</li>
+                            <li>✓ Quando serve efficienza</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔍 Confronto Dettagliato</h4>
+                        <p><strong>DH Classico:</strong></p>
+                        <ul>
+                            <li>Basato su esponenziazione modulare</li>
+                            <li>g^a mod p, g^b mod p</li>
+                            <li>Chiavi lunghe (2048-4096 bit)</li>
+                            <li>Calcoli più lenti</li>
+                        </ul>
+                        <p><strong>ECDH:</strong></p>
+                        <ul>
+                            <li>Basato su moltiplicazione scalare</li>
+                            <li>a × G, b × G</li>
+                            <li>Chiavi corte (256-521 bit)</li>
+                            <li>Calcoli più veloci</li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+Esempio dimensioni:
+
+DH classico (3072 bit):
+Chiave pubblica: 384 byte
+Chiave privata: 384 byte
+Totale: 768 byte
+
+ECDH P-256 (256 bit):
+Chiave pubblica: 65 byte (compresso) o 33 byte
+Chiave privata: 32 byte
+Totale: 97 byte (o 65 byte)
+
+Risparmio: ~88%!
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Quando Usare DH Classico</h4>
+                        <ul>
+                            <li>✓ Sistemi legacy che già lo usano</li>
+                            <li>✓ Quando ECDH non è supportato</li>
+                            <li>✓ Requisiti di compliance specifici</li>
+                        </ul>
+                        <p><strong>Nota:</strong> TLS 1.3 richiede ECDH, quindi DH classico è deprecato!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== LAB INTERATTIVO ==================== -->
+        <div class="concept-section lab" id="lab">
+            <h2>🎮 Lab Interattivo: ECDH Completo</h2>
+            <p class="subtitle">Simula scambio chiavi tra Alice e Bob</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎯 Istruzioni</h4>
+                        <ol>
+                            <li>Scegli una curva (P-256 raccomandata)</li>
+                            <li>Genera chiavi private per Alice e Bob</li>
+                            <li>Calcola chiavi pubbliche</li>
+                            <li>Simula scambio</li>
+                            <li>Verifica che la chiave condivisa sia identica!</li>
+                        </ol>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Curva Ellittica:</label>
+                        <div class="input-row">
+                            <select id="curve-select">
+                                <option value="P-256">P-256 (256 bit, sicurezza 128 bit)</option>
+                                <option value="P-384">P-384 (384 bit, sicurezza 192 bit)</option>
+                                <option value="P-521">P-521 (521 bit, sicurezza 256 bit)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Chiave Privata Alice (a):</label>
+                        <div class="input-row">
+                            <input type="text" id="alice-private" value="" placeholder="Lascia vuoto per generare casuale" class="input-medium">
+                            <button class="game-btn" onclick="generateAliceKey()">🎲 Genera Casuale</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Chiave Privata Bob (b):</label>
+                        <div class="input-row">
+                            <input type="text" id="bob-private" value="" placeholder="Lascia vuoto per generare casuale" class="input-medium">
+                            <button class="game-btn" onclick="generateBobKey()">🎲 Genera Casuale</button>
+                        </div>
+                    </div>
+
+                    <button class="game-btn success" onclick="calculateECDH()">🔐 Calcola ECDH</button>
+                    <button class="game-btn" onclick="resetLab()">🔄 Reset</button>
+                </div>
+
+                <div class="flex-col">
+                    <div class="lab-diagram">
+                        <div class="lab-person alice">
+                            <h5>👤 Alice</h5>
+                            <div>
+                                <strong>Chiave Privata (a):</strong>
+                                <div class="lab-value private" id="alice-private-display">-</div>
+                            </div>
+                            <div>
+                                <strong>Chiave Pubblica (A = a × G):</strong>
+                                <div class="lab-value public" id="alice-public-display">-</div>
+                            </div>
+                            <div>
+                                <strong>Chiave Condivisa (S = a × B):</strong>
+                                <div class="lab-value shared" id="alice-shared-display">-</div>
+                            </div>
+                        </div>
+
+                        <div class="lab-person bob">
+                            <h5>👤 Bob</h5>
+                            <div>
+                                <strong>Chiave Privata (b):</strong>
+                                <div class="lab-value private" id="bob-private-display">-</div>
+                            </div>
+                            <div>
+                                <strong>Chiave Pubblica (B = b × G):</strong>
+                                <div class="lab-value public" id="bob-public-display">-</div>
+                            </div>
+                            <div>
+                                <strong>Chiave Condivisa (S = b × A):</strong>
+                                <div class="lab-value shared" id="bob-shared-display">-</div>
+                            </div>
+                        </div>
+
+                        <div class="lab-person eve">
+                            <h5>👁️ Eve (Attaccante)</h5>
+                            <div>
+                                <strong>Vede:</strong>
+                                <div class="lab-value public" id="eve-sees">-</div>
+                            </div>
+                            <div>
+                                <strong>Può calcolare S?</strong>
+                                <div class="lab-value private" id="eve-calc" style="color: #f87171;">❌ NO (ECDLP è difficile!)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-display" id="lab-result">
+                        <p>Clicca "Calcola ECDH" per vedere il risultato...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NEL MONDO REALE ==================== -->
+        <div class="concept-section real" id="real">
+            <h2>🌍 ECDH nel Mondo Reale</h2>
+            <p class="subtitle">Dove viene usato ECDH oggi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>🔒 TLS/HTTPS</h4>
+                        <p>TLS 1.3 usa ECDH per scambio chiavi:</p>
+                        <div class="formula">
+Client → Server: "Supporto ECDH P-256"
+Server → Client: Chiave pubblica ECDH
+Client: Calcola chiave condivisa
+→ Usata per cifrare comunicazione
+                        </div>
+                        <p><strong>Vantaggio:</strong> handshake più veloce, meno banda!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📱 Signal / WhatsApp</h4>
+                        <p>X3DH (Extended Triple Diffie-Hellman):</p>
+                        <ul>
+                            <li>Basato su ECDH</li>
+                            <li>Perfect Forward Secrecy</li>
+                            <li>Chiavi effimere</li>
+                            <li>Curva: Curve25519</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>₿ Bitcoin / Ethereum</h4>
+                        <p>ECDH usato per:</p>
+                        <ul>
+                            <li><strong>Firme digitali:</strong> ECDSA (basato su ECDH)</li>
+                            <li><strong>Bitcoin:</strong> secp256k1</li>
+                            <li><strong>Ethereum:</strong> secp256k1</li>
+                            <li><strong>Wallet:</strong> generazione chiavi</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>💻 Implementazione - Python</h4>
+                        <div class="formula">
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.backends import default_backend
+
+# Alice genera chiave
+alice_private = ec.generate_private_key(
+    ec.SECP256R1(), default_backend()
+)
+alice_public = alice_private.public_key()
+
+# Bob genera chiave
+bob_private = ec.generate_private_key(
+    ec.SECP256R1(), default_backend()
+)
+bob_public = bob_private.public_key()
+
+# Scambio chiavi
+shared_key_alice = alice_private.exchange(
+    ec.ECDH(), bob_public
+)
+shared_key_bob = bob_private.exchange(
+    ec.ECDH(), alice_public
+)
+
+# shared_key_alice == shared_key_bob ✓
+                        </div>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌐 Node.js - WebCrypto API</h4>
+                        <div class="formula">
+// Genera chiave ECDH
+const keyPair = await crypto.subtle.generateKey(
+    {
+        name: "ECDH",
+        namedCurve: "P-256"
+    },
+    true,
+    ["deriveKey"]
+);
+
+// Deriva chiave condivisa
+const sharedKey = await crypto.subtle.deriveKey(
+    {
+        name: "ECDH",
+        public: otherPartyPublicKey
+    },
+    myPrivateKey,
+    { name: "AES-GCM", length: 256 },
+    true,
+    ["encrypt", "decrypt"]
+);
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Best Practices</h4>
+                        <ul>
+                            <li>✓ Usa curve standard (P-256, P-384, P-521)</li>
+                            <li>✓ Valida chiavi pubbliche ricevute</li>
+                            <li>✓ Usa chiavi effimere (non riutilizzare)</li>
+                            <li>✓ Deriva chiave simmetrica da chiave condivisa (HKDF)</li>
+                            <li>✓ Non loggare chiavi private</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Curve da Evitare</h4>
+                        <ul>
+                            <li>✗ Curve custom (non testate)</li>
+                            <li>✗ Curve con parametri sospetti</li>
+                            <li>✗ Curve deboli (< 256 bit)</li>
+                        </ul>
+                        <p><strong>Raccomandazione:</strong> usa solo curve NIST o Curve25519!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>ECDH:</strong> Diffie-Hellman su curve ellittiche</li>
+                    <li><strong>Vantaggio:</strong> chiavi 8× più corte (256 vs 2048 bit)</li>
+                    <li><strong>Curve ellittiche:</strong> punti su equazione y² = x³ + ax + b</li>
+                    <li><strong>ECDLP:</strong> problema difficile (trovare k da k × P)</li>
+                    <li><strong>Processo:</strong> Alice e Bob scambiano chiavi pubbliche, calcolano chiave condivisa</li>
+                    <li><strong>Uso:</strong> TLS 1.3, Signal, Bitcoin, mobile, IoT</li>
+                    <li><strong>Regola:</strong> preferisci ECDH a DH classico per nuovi progetti!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== SIMULAZIONE ECDH ====================
+        // Nota: questa è una simulazione semplificata
+        // In produzione usa librerie crittografiche reali!
+        
+        function generateRandomKey(bits) {
+            // Genera numero casuale per chiave privata
+            const max = Math.pow(2, bits) - 1;
+            return Math.floor(Math.random() * max) + 1;
+        }
+
+        function formatKey(key, bits) {
+            // Formatta chiave come esadecimale
+            const hexLength = Math.ceil(bits / 4);
+            return '0x' + key.toString(16).padStart(hexLength, '0');
+        }
+
+        function simulatePointMultiplication(privateKey, generatorPoint) {
+            // Simula moltiplicazione scalare k × G
+            // In realtà sarebbe calcolo su curva ellittica
+            // Per demo, usiamo hash semplificato
+            const hash = CryptoJS.SHA256(privateKey.toString()).toString();
+            return '0x' + hash.substring(0, 64);
+        }
+
+        function simulateSharedSecret(privateKey, publicKey) {
+            // Simula calcolo chiave condivisa
+            // In realtà: privateKey × publicKey
+            const combined = privateKey.toString() + publicKey;
+            const hash = CryptoJS.SHA256(combined).toString();
+            return '0x' + hash.substring(0, 64);
+        }
+
+        function getCurveBits(curve) {
+            switch(curve) {
+                case 'P-256': return 256;
+                case 'P-384': return 384;
+                case 'P-521': return 521;
+                default: return 256;
+            }
+        }
+
+        function generateAliceKey() {
+            const curve = document.getElementById('curve-select').value;
+            const bits = getCurveBits(curve);
+            const key = generateRandomKey(bits);
+            document.getElementById('alice-private').value = formatKey(key, bits);
+        }
+
+        function generateBobKey() {
+            const curve = document.getElementById('curve-select').value;
+            const bits = getCurveBits(curve);
+            const key = generateRandomKey(bits);
+            document.getElementById('bob-private').value = formatKey(key, bits);
+        }
+
+        function calculateECDH() {
+            const curve = document.getElementById('curve-select').value;
+            const bits = getCurveBits(curve);
+            
+            let alicePrivateInput = document.getElementById('alice-private').value.trim();
+            let bobPrivateInput = document.getElementById('bob-private').value.trim();
+            
+            // Genera chiavi se vuote
+            if (!alicePrivateInput) {
+                generateAliceKey();
+                alicePrivateInput = document.getElementById('alice-private').value;
+            }
+            if (!bobPrivateInput) {
+                generateBobKey();
+                bobPrivateInput = document.getElementById('bob-private').value;
+            }
+            
+            // Parse chiavi private
+            const alicePrivate = parseInt(alicePrivateInput.replace('0x', ''), 16);
+            const bobPrivate = parseInt(bobPrivateInput.replace('0x', ''), 16);
+            
+            if (isNaN(alicePrivate) || isNaN(bobPrivate)) {
+                document.getElementById('lab-result').innerHTML = 
+                    '<p style="color: #f87171;">Chiavi private non valide</p>';
+                return;
+            }
+            
+            // Simula calcoli ECDH
+            const generatorPoint = '0x' + '0479BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8';
+            
+            const alicePublic = simulatePointMultiplication(alicePrivate, generatorPoint);
+            const bobPublic = simulatePointMultiplication(bobPrivate, generatorPoint);
+            
+            const aliceShared = simulateSharedSecret(alicePrivate, bobPublic);
+            const bobShared = simulateSharedSecret(bobPrivate, alicePublic);
+            
+            // Aggiorna display
+            document.getElementById('alice-private-display').textContent = formatKey(alicePrivate, bits);
+            document.getElementById('alice-public-display').textContent = alicePublic.substring(0, 66) + '...';
+            document.getElementById('alice-shared-display').textContent = aliceShared.substring(0, 66) + '...';
+            
+            document.getElementById('bob-private-display').textContent = formatKey(bobPrivate, bits);
+            document.getElementById('bob-public-display').textContent = bobPublic.substring(0, 66) + '...';
+            document.getElementById('bob-shared-display').textContent = bobShared.substring(0, 66) + '...';
+            
+            document.getElementById('eve-sees').textContent = 
+                `A = ${alicePublic.substring(0, 20)}..., B = ${bobPublic.substring(0, 20)}...`;
+            
+            // Verifica che chiavi condivise siano identiche
+            const match = aliceShared === bobShared;
+            
+            let resultHtml = '';
+            if (match) {
+                resultHtml = '<div class="success-box"><h4>✅ Successo!</h4>';
+                resultHtml += '<p>Alice e Bob hanno calcolato la stessa chiave condivisa!</p>';
+                resultHtml += `<p><strong>Chiave condivisa:</strong> ${aliceShared.substring(0, 66)}...</p>`;
+                resultHtml += '<p>Eve non può calcolare questa chiave senza conoscere a o b!</p></div>';
+            } else {
+                resultHtml = '<div class="warning-box"><h4>⚠️ Errore</h4>';
+                resultHtml += '<p>Le chiavi condivise non corrispondono. Questo non dovrebbe accadere!</p></div>';
+            }
+            
+            document.getElementById('lab-result').innerHTML = resultHtml;
+        }
+
+        function resetLab() {
+            document.getElementById('alice-private').value = '';
+            document.getElementById('bob-private').value = '';
+            document.getElementById('alice-private-display').textContent = '-';
+            document.getElementById('alice-public-display').textContent = '-';
+            document.getElementById('alice-shared-display').textContent = '-';
+            document.getElementById('bob-private-display').textContent = '-';
+            document.getElementById('bob-public-display').textContent = '-';
+            document.getElementById('bob-shared-display').textContent = '-';
+            document.getElementById('eve-sees').textContent = '-';
+            document.getElementById('lab-result').innerHTML = '<p>Clicca "Calcola ECDH" per vedere il risultato...</p>';
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inizializza
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</body>
+</html>
+

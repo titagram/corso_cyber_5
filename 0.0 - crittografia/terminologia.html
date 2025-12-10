@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminologia Crittografica</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid #3b82f6;
+        }
+
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            color: #3b82f6;
+        }
+
+        /* Term cards */
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .term-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s;
+        }
+
+        .term-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .term-card h3 {
+            margin: 0 0 12px 0;
+            color: #3b82f6;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .term-card .term-code {
+            font-family: 'Courier New', monospace;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .term-card .term-explanation {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .term-card .term-example {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .term-card .term-category {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-top: 10px;
+            color: #3b82f6;
+        }
+
+        /* Search */
+        .search-box {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        /* Category filter */
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <a href="0-intro.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna all'introduzione
+        </a>
+
+        <h1 class="title">📚 Terminologia Crittografica</h1>
+        <div class="subtitle">Dizionario completo: tutti i termini tecnici spiegati in modo semplice</div>
+
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="🔍 Cerca un termine..." onkeyup="filterTerms()">
+        </div>
+
+        <div class="category-filter">
+            <button class="category-btn active" onclick="filterByCategory('all')">Tutti</button>
+            <button class="category-btn" onclick="filterByCategory('math')">Matematica</button>
+            <button class="category-btn" onclick="filterByCategory('algorithms')">Algoritmi</button>
+            <button class="category-btn" onclick="filterByCategory('protocols')">Protocolli</button>
+            <button class="category-btn" onclick="filterByCategory('operations')">Operazioni</button>
+            <button class="category-btn" onclick="filterByCategory('security')">Sicurezza</button>
+        </div>
+
+        <div class="concept-section">
+            <h2>📖 Glossario Completo</h2>
+            <div class="term-grid" id="terms-container">
+                <!-- Terms will be added by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const terms = [
+            {
+                term: "≡ (Congruenza)",
+                code: "a ≡ b (mod n)",
+                category: "math",
+                explanation: "Due numeri sono 'congruenti modulo n' se hanno lo stesso resto quando divisi per n. Si legge 'a è congruo a b modulo n'.",
+                example: "7 ≡ 2 (mod 5) perché 7 mod 5 = 2 e 2 mod 5 = 2",
+                details: "La congruenza è fondamentale in aritmetica modulare, usata in RSA, Diffie-Hellman e molti altri algoritmi crittografici."
+            },
+            {
+                term: "× (Moltiplicazione)",
+                code: "a × b",
+                category: "math",
+                explanation: "Il simbolo '×' indica sempre moltiplicazione in matematica. In crittografia, spesso si usa anche '·' o semplicemente 'ab'.",
+                example: "φ(n) = n × (1 - 1/p₁) × (1 - 1/p₂)",
+                details: "In formule matematiche, '×' è sempre moltiplicazione, mai altro significato."
+            },
+            {
+                term: "φ(n) - Funzione di Eulero",
+                code: "φ(n) = n × (1 - 1/p₁) × (1 - 1/p₂) × ... × (1 - 1/pₖ)",
+                category: "math",
+                explanation: "Conta quanti numeri tra 1 e n-1 sono coprimi con n (cioè hanno GCD = 1 con n). Fondamentale per RSA.",
+                example: "φ(12) = 12 × (1-1/2) × (1-1/3) = 12 × 1/2 × 2/3 = 4",
+                details: "Se n = p × q (con p e q primi), allora φ(n) = (p-1)(q-1). Questa è la formula usata in RSA per calcolare la chiave privata."
+            },
+            {
+                term: "TLS (Transport Layer Security)",
+                code: "TLS 1.3",
+                category: "protocols",
+                explanation: "Protocollo che cifra le comunicazioni su internet. È quello che rende 'HTTPS' sicuro (la 'S' sta per Secure).",
+                example: "Quando visiti un sito con https://, stai usando TLS per proteggere i tuoi dati",
+                details: "TLS 1.3 è la versione moderna (2018). Usa ECDH per scambio chiavi, AES-GCM per cifratura, e SHA-256 per autenticazione."
+            },
+            {
+                term: "S-Box (Substitution Box)",
+                code: "S-box",
+                category: "operations",
+                explanation: "Una tabella che sostituisce ogni byte con un altro byte. In AES, la S-box è fissa e pubblica, ma è non-lineare (difficile da invertire).",
+                example: "In AES, byte 0x00 → S-box → 0x63. Ogni byte viene sostituito con un valore dalla tabella.",
+                details: "La S-box fornisce 'confusione': rende difficile dedurre la chiave anche conoscendo input e output. È biunivoca: ogni input ha un output unico."
+            },
+            {
+                term: "GF(2⁸) - Campo di Galois",
+                code: "GF(2⁸)",
+                category: "math",
+                explanation: "Un 'campo matematico' con 256 elementi (2⁸ = 256). In AES, ogni byte è trattato come un elemento di GF(2⁸).",
+                example: "In GF(2⁸), le operazioni (somma, moltiplicazione) funzionano in modo speciale, usando aritmetica modulo un polinomio.",
+                details: "GF(2⁸) permette di fare operazioni matematiche sui byte in modo che ogni operazione abbia sempre un risultato valido (un byte). Usato in MixColumns di AES."
+            },
+            {
+                "term": "Campo (Field)",
+                "code": "Field",
+                "category": "math",
+                "explanation": "Una struttura matematica in cui puoi sommare, sottrarre, moltiplicare e dividere (tranne per zero) e ogni operazione è sempre ben definita.",
+                "example": "I numeri reali ℝ e i numeri razionali ℚ sono campi: ogni numero ha un inverso moltiplicativo diverso da zero.",
+                "details": "Un campo è un insieme con due operazioni (somma e prodotto) che soddisfano proprietà precise: associatività, commutatività, distributività, esistenza di 0 e 1, inversi additivi e moltiplicativi. Nei campi finiti (es. Galois Field GF(p)), tutte le operazioni avvengono modulo un numero primo."
+            },
+            {
+                "term": "Anello (Ring)",
+                "code": "Ring",
+                "category": "math",
+                "explanation": "Una struttura matematica che permette somma e moltiplicazione, ma non garantisce l’esistenza dell’inverso moltiplicativo.",
+                "example": "Gli interi ℤ formano un anello: puoi sommare, sottrarre e moltiplicare, ma non puoi sempre dividere (es. 2 non divide 3 in ℤ).",
+                "details": "Un anello ha un'operazione di somma (con identità e inversi) e un'operazione di moltiplicazione chiusa e distributiva sulla somma. Non richiede che ogni elemento abbia un inverso rispetto alla moltiplicazione. Se il prodotto è commutativo, si parla di anello commutativo; se ha identità moltiplicativa, si parla di anello unitario."
+            },
+            {
+                "term": "Gruppo",
+                "code": "Group",
+                "category": "math",
+                "explanation": "Una struttura con una sola operazione (es. somma) che ha inversi e un'identità e soddisfa alcune proprietà di base.",
+                "example": "Gli interi con l’operazione somma (ℤ, +) formano un gruppo: 0 è l’identità, e ogni numero ha un inverso (es. l’inverso di 3 è −3).",
+                "details": "Un gruppo richiede quattro proprietà: chiusura, associatività, identità e inverso. Se l’operazione è commutativa, si parla di gruppo abeliano. I gruppi sono i 'mattoni' con cui si costruiscono anelli e campi."
+            },
+            {
+                "term": "Corpo Finito / Campo Finito",
+                "code": "GF(pⁿ)",
+                "category": "math",
+                "explanation": "Un campo con un numero finito di elementi. Usato mas­sic­cia­men­te in crittografia, coding theory e AES.",
+                "example": "GF(2⁸) contiene esattamente 256 elementi. Le operazioni si fanno modulo un polinomio irriducibile di grado 8.",
+                "details": "Un campo finito esiste solo se il numero di elementi è pⁿ, dove p è un numero primo e n un intero positivo. Ogni GF(pⁿ) ha una struttura algebrica costruita su polinomi modulo un polinomio irriducibile. Fornisce sempre un inverso per ogni elemento non nullo, caratteristica cruciale per la crittografia simmetrica e asimmetrica."
+            }
+
+            {
+                term: "ECB Mode (Electronic Codebook)",
+                code: "AES-ECB",
+                category: "algorithms",
+                explanation: "Modalità di cifratura dove ogni blocco viene cifrato indipendentemente. È INSICURO perché blocchi identici producono ciphertext identici.",
+                example: "Se cifri 'HELLO HELLO' con ECB, i blocchi 'HELL' producono lo stesso ciphertext → pattern visibili!",
+                details: "Il famoso 'ECB Penguin': un'immagine cifrata con ECB mostra ancora il pinguino perché zone uniformi producono pattern. MAI usare ECB in produzione!"
+            },
+            {
+                term: "Preimage",
+                code: "preimage attack",
+                category: "security",
+                explanation: "Trovare un input che produce un hash specifico. Se un hash è 'preimage-resistant', è computazionalmente impossibile trovare l'input originale.",
+                example: "Dato hash SHA-256 'abc123...', trovare un input che produce questo hash richiede ~2^256 tentativi (impossibile!).",
+                details: "Per SHA-256, un attacco preimage richiede ~2^256 operazioni. È una delle tre proprietà di sicurezza degli hash crittografici."
+            },
+            {
+                term: "IV (Initialization Vector)",
+                code: "IV",
+                category: "operations",
+                explanation: "Un numero casuale usato all'inizio della cifratura per rendere ogni cifratura unica, anche con lo stesso messaggio e chiave.",
+                example: "In CBC mode, ogni messaggio usa un IV diverso. Se cifri 'Ciao' due volte con stessa chiave ma IV diversi, ottieni ciphertext diversi.",
+                details: "L'IV NON è segreto (può essere pubblico), ma DEVE essere unico per ogni messaggio. Se riutilizzi IV con stessa chiave, comprometti la sicurezza."
+            },
+            {
+                term: "Nonce (Number used ONCE)",
+                code: "nonce",
+                category: "operations",
+                explanation: "Un numero usato UNA SOLA VOLTA. Simile all'IV, ma più generale. Usato in GCM, CTR, e altri protocolli.",
+                example: "In AES-GCM, ogni messaggio ha un nonce unico. Se riutilizzi lo stesso nonce con stessa chiave, la sicurezza si rompe.",
+                details: "Nonce = 'Number used ONCE'. Deve essere unico, ma non necessariamente casuale (può essere un contatore). Mai riutilizzare!"
+            },
+            {
+                term: "AEAD (Authenticated Encryption with Associated Data)",
+                code: "AEAD",
+                category: "algorithms",
+                explanation: "Cifratura che fornisce sia confidenzialità (cifra) che autenticazione (verifica integrità) in un'unica operazione.",
+                example: "AES-GCM è AEAD: cifra il messaggio E produce un tag di autenticazione che verifica che il messaggio non sia stato modificato.",
+                details: "AEAD è meglio di cifratura + MAC separati perché è più veloce e meno soggetto a errori. GCM, ChaCha20-Poly1305 sono AEAD."
+            },
+            {
+                term: "GCM (Galois/Counter Mode)",
+                code: "AES-GCM",
+                category: "algorithms",
+                explanation: "Modalità di cifratura AES che fornisce sia cifratura che autenticazione (AEAD). È la modalità raccomandata oggi.",
+                example: "TLS 1.3 usa AES-GCM. Ogni messaggio ha un nonce unico e produce ciphertext + tag di autenticazione.",
+                details: "GCM è veloce, parallelizzabile, e sicuro. Standard in TLS 1.3. Usa sempre GCM quando possibile invece di CBC o CTR."
+            },
+            {
+                term: "CBC (Cipher Block Chaining)",
+                code: "AES-CBC",
+                category: "algorithms",
+                explanation: "Modalità dove ogni blocco è cifrato usando il ciphertext del blocco precedente. Richiede IV casuale e MAC separato.",
+                example: "Blocco 1 cifrato con chiave. Blocco 2 cifrato con chiave XOR ciphertext blocco 1. E così via.",
+                details: "CBC è più vecchio di GCM. Richiede padding e un MAC separato (HMAC-SHA256) per autenticazione. Usa solo se GCM non disponibile."
+            },
+            {
+                term: "CTR (Counter Mode)",
+                code: "AES-CTR",
+                category: "algorithms",
+                explanation: "Trasforma AES in uno stream cipher. Non richiede padding. Ogni blocco usa un contatore diverso.",
+                example: "Cifra un contatore (0, 1, 2, 3...) con AES, poi fa XOR con il plaintext. Risultato: stream cipher.",
+                details: "CTR è veloce e non richiede padding, ma serve un MAC separato per autenticazione. Meno usato di GCM oggi."
+            },
+            {
+                term: "HMAC (Hash-based Message Authentication Code)",
+                code: "HMAC-SHA256",
+                category: "security",
+                explanation: "Un codice di autenticazione che usa una funzione hash (es. SHA-256) per verificare che un messaggio non sia stato modificato.",
+                example: "HMAC-SHA256(messaggio, chiave) produce un tag. Se il messaggio cambia, il tag cambia → rileva modifiche.",
+                details: "HMAC è usato quando la cifratura non include autenticazione (es. CBC, CTR). Sempre verifica il tag prima di decifrare!"
+            },
+            {
+                term: "PKCS#7 Padding",
+                code: "PKCS#7",
+                category: "operations",
+                explanation: "Metodo per riempire un messaggio fino a multiplo della dimensione del blocco (es. 16 byte per AES).",
+                example: "Messaggio di 10 byte → aggiungi 6 byte con valore 6. Messaggio di 16 byte → aggiungi 16 byte con valore 16.",
+                details: "Il padding dice quanti byte sono stati aggiunti. Se mancano N byte, aggiungi N byte tutti con valore N. Usato in CBC, non in GCM/CTR."
+            },
+            {
+                term: "ECDH (Elliptic Curve Diffie-Hellman)",
+                code: "ECDH",
+                category: "algorithms",
+                explanation: "Versione di Diffie-Hellman che usa curve ellittiche invece di esponenziazione modulare. Stessa sicurezza con chiavi più corte.",
+                example: "Alice e Bob scambiano chiavi pubbliche su una curva ellittica. Calcolano una chiave condivisa senza mai comunicarla direttamente.",
+                details: "ECDH P-256 (256 bit) offre sicurezza equivalente a DH classico 2048 bit. Usato in TLS 1.3, Signal, Bitcoin."
+            },
+            {
+                term: "ECDLP (Elliptic Curve Discrete Logarithm Problem)",
+                code: "ECDLP",
+                category: "math",
+                explanation: "Il problema matematico su cui si basa ECDH: dati P e Q = k × P, trovare k è computazionalmente difficile.",
+                example: "Se conosci il punto P e il punto Q = 5 × P, trovare che k=5 richiede ~2^128 operazioni (impossibile!).",
+                details: "ECDLP è più difficile del DLP classico → chiavi più corte. Per P-256, servono ~2^128 operazioni per risolvere ECDLP."
+            },
+            {
+                term: "RSA (Rivest-Shamir-Adleman)",
+                code: "RSA",
+                category: "algorithms",
+                explanation: "Algoritmo di crittografia asimmetrica basato sulla difficoltà di fattorizzare numeri grandi in due primi.",
+                example: "Chiave pubblica: (n, e). Chiave privata: (n, d). Cifra: c = m^e mod n. Decifra: m = c^d mod n.",
+                details: "RSA 2048 bit è sicuro oggi. Basato su: fattorizzare n = p × q è difficile. Usato per firme digitali e scambio chiavi."
+            },
+            {
+                term: "SHA-256 (Secure Hash Algorithm 256)",
+                code: "SHA-256",
+                category: "algorithms",
+                explanation: "Funzione hash che produce sempre un output di 256 bit (32 byte), indipendentemente dalla dimensione dell'input.",
+                example: "SHA-256('Ciao') = a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e (sempre 64 caratteri hex).",
+                details: "SHA-256 è deterministico, veloce, e irreversibile. Usato per integrità file, firme digitali, Git commits, Bitcoin mining."
+            },
+            {
+                term: "bcrypt",
+                code: "bcrypt",
+                category: "algorithms",
+                explanation: "Algoritmo di hashing lento progettato per password. Basato su Blowfish, con cost factor configurabile.",
+                example: "bcrypt('password123', cost=10) richiede ~100ms. SHA-256('password123') richiede ~0.0001ms. Per password serve lento!",
+                details: "Formato: $2a$cost$salt$hash. Cost factor controlla quante iterazioni (2^cost). Ogni password ha salt unico. Usato per hashare password."
+            },
+            {
+                term: "Argon2",
+                code: "Argon2",
+                category: "algorithms",
+                explanation: "Algoritmo di hashing per password, vincitore della Password Hashing Competition 2015. Memory-hard (resiste a GPU).",
+                example: "Argon2id è la variante raccomandata. Richiede memoria RAM, rendendo attacchi GPU meno efficaci.",
+                details: "OWASP 2024 raccomanda Argon2 come prima scelta per password. Più moderno di bcrypt, resistente anche ad ASIC."
+            },
+            {
+                term: "Salt",
+                code: "salt",
+                category: "security",
+                explanation: "Un valore casuale aggiunto alla password prima dell'hashing. Rende ogni hash unico, anche per password identiche.",
+                example: "Password 'ciao' + salt1 → hash1. Password 'ciao' + salt2 → hash2 (diverso!). Impedisce rainbow tables.",
+                details: "Il salt NON è segreto (salvato nel database). Deve essere unico per ogni password. Lunghezza minima: 128 bit (16 byte)."
+            },
+            {
+                term: "Rainbow Table",
+                code: "rainbow table",
+                category: "security",
+                explanation: "Tabella pre-calcolata di hash di password comuni. Se non c'è salt, permette di trovare password velocemente.",
+                example: "Rainbow table contiene: 'password' → hash, '123456' → hash, ecc. Se hash password = hash in tabella → password trovata!",
+                details: "Il salt rende rainbow tables inutili: ogni password ha salt diverso, quindi serve tabella diversa per ogni salt (impossibile!)."
+            },
+            {
+                term: "Birthday Attack",
+                code: "birthday attack",
+                category: "security",
+                explanation: "Attacco che sfrutta il paradosso del compleanno: trovare collisioni (due input con stesso hash) è più facile di trovare preimage.",
+                example: "Per SHA-256, trovare preimage richiede ~2^256 operazioni, ma trovare collisioni richiede solo ~2^128 (birthday paradox).",
+                details: "Per hash di n bit, collisioni richiedono ~2^(n/2) operazioni. Ecco perché SHA-256 ha 256 bit: collisioni richiedono ancora 2^128 (impossibile)."
+            },
+            {
+                term: "Collision",
+                code: "collision",
+                category: "security",
+                explanation: "Due input diversi che producono lo stesso hash. Una buona funzione hash dovrebbe rendere le collisioni computazionalmente impossibili.",
+                example: "MD5 è rotto: è possibile trovare due file diversi con stesso hash MD5 in secondi. SHA-256: collisioni richiedono 2^128 operazioni.",
+                details: "MD5 e SHA-1 sono rotti perché collisioni sono trovate facilmente. SHA-256, SHA-3, BLAKE2 sono sicuri (nessuna collisione trovata)."
+            },
+            {
+                term: "Merkle-Damgård",
+                code: "Merkle-Damgård",
+                category: "algorithms",
+                explanation: "Struttura usata da SHA-256: divide l'input in blocchi, processa ogni blocco con una funzione di compressione, concatenando i risultati.",
+                example: "Input → Padding → Blocchi 512 bit → Compression Function → Hash finale. SHA-256 e SHA-1 usano questa struttura.",
+                details: "Vulnerabile a length extension attack. SHA-3 usa Keccak (sponge), non Merkle-Damgård, quindi non ha questo problema."
+            },
+            {
+                term: "Keccak / Sponge",
+                code: "SHA-3",
+                category: "algorithms",
+                explanation: "Struttura diversa da Merkle-Damgård usata da SHA-3. 'Sponge' perché assorbe input e 'spreme' output.",
+                example: "SHA-3 assorbe input in uno 'sponge', poi produce output di dimensione fissa. Design completamente diverso da SHA-2.",
+                details: "SHA-3 è resistente a length extension attack e ha design moderno. Backup se SHA-2 fosse compromesso."
+            },
+            {
+                term: "XOR (eXclusive OR)",
+                code: "a ⊕ b",
+                category: "operations",
+                explanation: "Operazione bit a bit: 0⊕0=0, 0⊕1=1, 1⊕0=1, 1⊕1=0. L'unica operazione logica reversibile.",
+                example: "1011 ⊕ 1100 = 0111. Se fai XOR due volte con stesso valore, ottieni l'originale: (a ⊕ b) ⊕ b = a.",
+                details: "XOR è usato in AddRoundKey (AES), stream ciphers, e molti altri algoritmi. È reversibile: perfetto per crittografia."
+            },
+            {
+                term: "GCD (Greatest Common Divisor)",
+                code: "GCD(a, b)",
+                category: "math",
+                explanation: "Il più grande numero che divide entrambi a e b. Se GCD(a,b) = 1, i numeri sono 'coprimi'.",
+                example: "GCD(48, 18) = 6 perché 6 divide sia 48 che 18, e nessun numero più grande li divide entrambi.",
+                details: "Calcolato velocemente con algoritmo di Euclide. Fondamentale per verificare se due numeri sono coprimi (necessario per inverso modulare)."
+            },
+            {
+                term: "Modulo",
+                code: "a mod n",
+                category: "math",
+                explanation: "Il resto della divisione di a per n. Pensa all'orologio: 17 mod 12 = 5 (se sono le 17:00, l'orologio a 12 ore segna le 5:00).",
+                example: "17 mod 12 = 5 perché 17 = 1 × 12 + 5. Il resto è 5.",
+                details: "Fondamentale in crittografia: RSA, Diffie-Hellman, ECDH usano tutti aritmetica modulare. 'Avvolge' i numeri in un range finito."
+            },
+            {
+                term: "Inverso Modulare",
+                code: "a⁻¹ mod n",
+                category: "math",
+                explanation: "Il numero x tale che a × x ≡ 1 (mod n). Esiste solo se GCD(a, n) = 1 (a e n sono coprimi).",
+                example: "L'inverso di 3 mod 11 è 4 perché 3 × 4 = 12 ≡ 1 (mod 11). In RSA, la chiave privata d è l'inverso di e mod φ(n).",
+                details: "Calcolato con algoritmo esteso di Euclide o (se n è primo) con Fermat: a⁻¹ ≡ a^(n-2) mod n."
+            },
+            {
+                term: "Piccolo Teorema di Fermat",
+                code: "a^(p-1) ≡ 1 (mod p)",
+                category: "math",
+                explanation: "Se p è primo e GCD(a, p) = 1, allora a elevato a (p-1) è congruo a 1 modulo p.",
+                example: "2^6 mod 7 = 64 mod 7 = 1. Perché 7 è primo e GCD(2, 7) = 1.",
+                details: "Usato per test di primalità e calcolo di inversi modulari. Versione generalizzata (Eulero): a^φ(n) ≡ 1 (mod n) se GCD(a,n)=1."
+            },
+            {
+                term: "Residuo Quadratico",
+                code: "x² ≡ a (mod p)",
+                category: "math",
+                explanation: "Un numero a è residuo quadratico mod p se esiste un x tale che x² ≡ a (mod p). Cioè, a ha una 'radice quadrata' mod p.",
+                example: "4 è residuo quadratico mod 13 perché 2² = 4 mod 13. 5 NON è residuo quadratico mod 13 (nessun x soddisfa x² ≡ 5 mod 13).",
+                details: "Per p primo dispari, esattamente (p-1)/2 numeri sono residui quadratici. Usato in alcuni cifrari e test di primalità."
+            },
+            {
+                term: "Simbolo di Legendre",
+                code: "(a/p)",
+                category: "math",
+                explanation: "Indica se a è residuo quadratico mod p: (a/p) = 1 se a è RQ, (a/p) = -1 se non è RQ, (a/p) = 0 se p divide a.",
+                example: "(2/7) = 1 perché 3² = 9 ≡ 2 (mod 7). (3/7) = -1 perché nessun x soddisfa x² ≡ 3 (mod 7).",
+                details: "Calcolato con criterio di Eulero: (a/p) ≡ a^((p-1)/2) mod p. Usato in test di primalità e alcuni cifrari."
+            },
+            {
+                term: "CRT (Chinese Remainder Theorem)",
+                code: "CRT",
+                category: "math",
+                explanation: "Teorema che permette di risolvere sistemi di congruenze. In RSA, usato per velocizzare la decifratura (4× più veloce!).",
+                example: "x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7) → x = 23 (soluzione unica mod 105).",
+                details: "In RSA, invece di calcolare m = c^d mod n, calcoli m₁ = c^d mod p e m₂ = c^d mod q, poi combini con CRT. Molto più veloce!"
+            },
+            {
+                term: "SubBytes",
+                code: "SubBytes",
+                category: "operations",
+                explanation: "Prima operazione di un round AES: ogni byte viene sostituito con un altro byte usando la S-box.",
+                example: "Byte 0x00 → S-box → 0x63. Byte 0x01 → S-box → 0x7c. Ogni byte ha una sostituzione fissa.",
+                details: "Fornisce 'confusione': rende difficile dedurre la chiave. La S-box è non-lineare e biunivoca."
+            },
+            {
+                term: "ShiftRows",
+                code: "ShiftRows",
+                category: "operations",
+                explanation: "Seconda operazione AES: ogni riga della matrice 4×4 viene spostata ciclicamente a sinistra (riga 0: 0 pos, riga 1: 1 pos, riga 2: 2 pos, riga 3: 3 pos).",
+                example: "Riga [a, b, c, d] diventa [b, c, d, a] dopo shift di 1. Mescola byte tra colonne diverse.",
+                details: "Fornisce 'diffusione': un byte che era in colonna 0 può finire in colonna 1, 2, o 3."
+            },
+            {
+                term: "MixColumns",
+                code: "MixColumns",
+                category: "operations",
+                explanation: "Terza operazione AES: ogni colonna viene moltiplicata per una matrice fissa in GF(2⁸). Un byte influenza tutti e 4 i byte della colonna.",
+                example: "Colonna [a, b, c, d] → [a', b', c', d'] dove ogni nuovo byte dipende da tutti e 4 i byte originali.",
+                details: "Fornisce 'diffusione massima'. L'ultimo round NON ha MixColumns (per rendere decifratura simmetrica)."
+            },
+            {
+                term: "AddRoundKey",
+                code: "AddRoundKey",
+                category: "operations",
+                explanation: "Quarta operazione AES: ogni byte viene combinato con il byte corrispondente della chiave di round usando XOR.",
+                example: "Byte stato: 10110101, Byte chiave: 11001100 → Risultato: 01111001 (XOR bit a bit).",
+                details: "È l'unica operazione che usa la chiave! XOR è reversibile: (state ⊕ key) ⊕ key = state. Funziona sia per cifrare che decifrare."
+            },
+            {
+                term: "PFS (Perfect Forward Secrecy)",
+                code: "PFS",
+                category: "security",
+                explanation: "Proprietà per cui, anche se la chiave principale viene compromessa, le comunicazioni passate rimangono sicure.",
+                example: "Signal usa PFS: ogni messaggio ha chiave effimera. Se la chiave principale è compromessa, i messaggi passati sono ancora sicuri.",
+                details: "Ottenuto usando chiavi effimere (temporanee) per ogni sessione. Se la chiave principale è compromessa, solo le comunicazioni future sono a rischio."
+            },
+            {
+                term: "MITM (Man-In-The-Middle)",
+                code: "MITM",
+                category: "security",
+                explanation: "Attacco dove un attaccante si interpone tra due parti che comunicano, intercettando e possibilmente modificando i messaggi.",
+                example: "Alice pensa di comunicare con Bob, ma in realtà comunica con Eve che fa da intermediario. Eve vede tutti i messaggi.",
+                details: "Prevenuto con autenticazione (certificati SSL/TLS, firme digitali). PKI (Public Key Infrastructure) verifica l'identità delle parti."
+            },
+            {
+                term: "PKI (Public Key Infrastructure)",
+                code: "PKI",
+                category: "protocols",
+                explanation: "Sistema di certificati digitali che verifica l'identità delle parti. I certificati sono firmati da Certificate Authority (CA).",
+                example: "Quando visiti https://google.com, il browser verifica il certificato SSL firmato da una CA. Se valido, la connessione è autenticata.",
+                details: "PKI risolve il problema MITM: i certificati provano che stai comunicando con la parte giusta, non con un attaccante."
+            }
+        ];
+
+        function renderTerms(filteredTerms = terms) {
+            const container = document.getElementById('terms-container');
+            container.innerHTML = '';
+
+            if (filteredTerms.length === 0) {
+                container.innerHTML = '<p style="color: #94a3b8; text-align: center; padding: 40px;">Nessun termine trovato. Prova una ricerca diversa.</p>';
+                return;
+            }
+
+            filteredTerms.forEach(term => {
+                const card = document.createElement('div');
+                card.className = 'term-card';
+                card.setAttribute('data-category', term.category);
+
+                const categoryNames = {
+                    'math': 'Matematica',
+                    'algorithms': 'Algoritmi',
+                    'protocols': 'Protocolli',
+                    'operations': 'Operazioni',
+                    'security': 'Sicurezza'
+                };
+
+                card.innerHTML = `
+                    <h3>
+                        ${term.term}
+                        ${term.code ? `<span class="term-code">${term.code}</span>` : ''}
+                    </h3>
+                    <div class="term-explanation">${term.explanation}</div>
+                    ${term.example ? `<div class="term-example"><strong>Esempio:</strong> ${term.example}</div>` : ''}
+                    ${term.details ? `<div class="term-explanation" style="margin-top: 10px; font-size: 0.9em; color: #64748b;">${term.details}</div>` : ''}
+                    <span class="term-category">${categoryNames[term.category] || term.category}</span>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function filterTerms() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const activeCategory = document.querySelector('.category-btn.active')?.textContent.trim().toLowerCase();
+
+            let filtered = terms;
+
+            // Filter by category
+            if (activeCategory && activeCategory !== 'tutti') {
+                const categoryMap = {
+                    'matematica': 'math',
+                    'algoritmi': 'algorithms',
+                    'protocolli': 'protocols',
+                    'operazioni': 'operations',
+                    'sicurezza': 'security'
+                };
+                const category = categoryMap[activeCategory] || activeCategory;
+                filtered = filtered.filter(t => t.category === category);
+            }
+
+            // Filter by search
+            if (search) {
+                filtered = filtered.filter(t =>
+                    t.term.toLowerCase().includes(search) ||
+                    (t.code && t.code.toLowerCase().includes(search)) ||
+                    t.explanation.toLowerCase().includes(search) ||
+                    (t.example && t.example.toLowerCase().includes(search))
+                );
+            }
+
+            renderTerms(filtered);
+        }
+
+        function filterByCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            filterTerms();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTerms();
+        });
+    </script>
+</body>
+
+</html>

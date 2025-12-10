@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SHA - Secure Hash Algorithm</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.intro { border-color: #3b82f6; }
+        .concept-section.intro h2 { color: #3b82f6; }
+        
+        .concept-section.properties { border-color: #4ade80; }
+        .concept-section.properties h2 { color: #4ade80; }
+        
+        .concept-section.structure { border-color: #fbbf24; }
+        .concept-section.structure h2 { color: #fbbf24; }
+        
+        .concept-section.avalanche { border-color: #a78bfa; }
+        .concept-section.avalanche h2 { color: #a78bfa; }
+        
+        .concept-section.broken { border-color: #f87171; }
+        .concept-section.broken h2 { color: #f87171; }
+        
+        .concept-section.birthday { border-color: #f472b6; }
+        .concept-section.birthday h2 { color: #f472b6; }
+        
+        .concept-section.real { border-color: #06b6d4; }
+        .concept-section.real h2 { color: #06b6d4; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input, .input-row textarea {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+        }
+        
+        .input-row input:focus, .input-row textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-small {
+            width: 100px;
+        }
+        
+        .input-medium {
+            width: 200px;
+        }
+        
+        .input-large {
+            width: 100%;
+            min-height: 100px;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #4ade80;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .result-value.large {
+            font-size: 1.3em;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Hash comparison */
+        .hash-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .hash-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .hash-row.identical {
+            background: rgba(248, 113, 113, 0.2);
+            border-left: 4px solid #f87171;
+        }
+        
+        .hash-row.different {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 4px solid #4ade80;
+        }
+        
+        .hash-label {
+            min-width: 150px;
+            font-weight: bold;
+        }
+        
+        .hash-value {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+
+        /* Bit visualization */
+        .bit-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .bit-row {
+            display: flex;
+            gap: 2px;
+            flex-wrap: wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        
+        .bit-cell {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .bit-cell.one {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .bit-cell.zero {
+            background: rgba(255,255,255,0.1);
+            color: #64748b;
+        }
+        
+        .bit-cell.changed {
+            background: #f87171;
+            animation: pulse 0.5s;
+        }
+        
+        .bit-cell.unchanged {
+            opacity: 0.5;
+        }
+
+        /* Merkle-Damgård visualization */
+        .md-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .md-block {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            border-left: 4px solid #fbbf24;
+        }
+        
+        .md-block h5 {
+            margin: 0;
+            min-width: 100px;
+            color: #fbbf24;
+        }
+        
+        .md-block-content {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .md-arrow {
+            text-align: center;
+            color: #64748b;
+            font-size: 1.5em;
+            margin: -5px 0;
+        }
+
+        /* Compression function visualization */
+        .compression-box {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        
+        .compression-input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .compression-input h5 {
+            margin: 0 0 10px 0;
+            color: #3b82f6;
+        }
+        
+        .compression-function {
+            font-size: 2em;
+            color: #fbbf24;
+        }
+        
+        .compression-output {
+            flex: 1;
+            padding: 15px;
+            background: rgba(74, 222, 128, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .compression-output h5 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Hash length visualization */
+        .hash-length-demo {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .hash-example {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .hash-example h5 {
+            margin: 0 0 10px 0;
+            color: #94a3b8;
+        }
+        
+        .hash-example .input-text {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+        
+        .hash-example .hash-output {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            word-break: break-all;
+            color: #4ade80;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="8.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">🔐 SHA - Secure Hash Algorithm</h1>
+        <div class="subtitle">Funzioni hash crittografiche: impronte digitali dei dati</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#intro">Cos'è un Hash</a>
+            <a href="#properties">Proprietà di Sicurezza</a>
+            <a href="#structure">Struttura SHA-256</a>
+            <a href="#avalanche">🎮 Effetto Valanga</a>
+            <a href="#broken">Algoritmi Broken</a>
+            <a href="#birthday">Birthday Attack</a>
+            <a href="#real">Nel Mondo Reale</a>
+        </div>
+
+        <!-- ==================== INTRODUZIONE ==================== -->
+        <div class="concept-section intro" id="intro">
+            <h2>🔍 Cos'è una Funzione Hash?</h2>
+            <p class="subtitle">Una "impronta digitale" che identifica univocamente i dati</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered">
+                        <strong>Hash:</strong> Dati (qualsiasi dimensione) → Impronta (dimensione fissa)
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Analogia: Impronta digitale</h4>
+                        <p>Come l'impronta digitale identifica una persona, l'hash identifica un file o un messaggio.</p>
+                        <ul>
+                            <li><strong>Deterministico:</strong> stesso input → stesso hash</li>
+                            <li><strong>Velocissimo:</strong> calcolo istantaneo</li>
+                            <li><strong>Dimensione fissa:</strong> SHA-256 produce sempre 256 bit (32 byte)</li>
+                            <li><strong>One-way:</strong> impossibile "invertire" l'hash</li>
+                        </ul>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Prova tu: calcola SHA-256</label>
+                        <div class="input-row">
+                            <textarea id="hash-input" class="input-large" placeholder="Scrivi qualsiasi testo...">Ciao Mondo!</textarea>
+                        </div>
+                        <button class="game-btn success" onclick="calculateHash()">🔐 Calcola Hash</button>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Risultato SHA-256:</h4>
+                        <div class="result-value large" id="hash-output">
+                            Clicca "Calcola Hash" per vedere il risultato...
+                        </div>
+                    </div>
+
+                    <div class="hash-length-demo">
+                        <div class="hash-example">
+                            <h5>Input piccolo</h5>
+                            <div class="input-text">"Ciao"</div>
+                            <div class="hash-output">256 bit (32 byte)</div>
+                        </div>
+                        <div class="hash-example">
+                            <h5>Input enorme</h5>
+                            <div class="input-text">File da 1 GB</div>
+                            <div class="hash-output">256 bit (32 byte)</div>
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Perché dimensione fissa?</h4>
+                        <p>L'hash è una <strong>riduzione</strong> dell'informazione:</p>
+                        <ul>
+                            <li>File da 1 GB → hash di 32 byte</li>
+                            <li>Molti input diversi possono produrre lo stesso hash (collisione)</li>
+                            <li>Ma trovare una collisione è <strong>computazionalmente impossibile</strong> con SHA-256</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>🌍 Usi pratici degli hash</h4>
+                <ul>
+                    <li><strong>Verifica integrità:</strong> download file, confronta hash con quello pubblicato</li>
+                    <li><strong>Git commits:</strong> ogni commit identificato da SHA-1 (Git sta migrando a SHA-256)</li>
+                    <li><strong>Firme digitali:</strong> firma l'hash del documento, non il documento intero</li>
+                    <li><strong>Password hashing:</strong> (ma serve hash lento, non SHA veloce!)</li>
+                    <li><strong>Blockchain:</strong> Bitcoin usa SHA-256 per mining e Merkle trees</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== PROPRIETÀ DI SICUREZZA ==================== -->
+        <div class="concept-section properties" id="properties">
+            <h2>🛡️ Le Tre Proprietà di Sicurezza</h2>
+            <p class="subtitle">Cosa rende un hash "crittograficamente sicuro"?</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="round-box" style="border-color: #3b82f6;">
+                        <h4 style="color: #3b82f6;">1️⃣ Resistenza alla Preimage</h4>
+                        <p><strong>Problema:</strong> Dato hash H, trovare un input M tale che hash(M) = H</p>
+                        <p><strong>Difficoltà:</strong> Computazionalmente impossibile</p>
+                        <div class="formula">
+Esempio:
+Hash noto: 5d41402abc4b2a76b9719d911017c592
+Trovare input? → Devo provare 2^256 possibilità!
+                        </div>
+                    </div>
+
+                    <div class="round-box" style="border-color: #a78bfa;">
+                        <h4 style="color: #a78bfa;">2️⃣ Resistenza alla Seconda Preimage</h4>
+                        <p><strong>Problema:</strong> Dato M₁, trovare M₂ ≠ M₁ tale che hash(M₁) = hash(M₂)</p>
+                        <p><strong>Difficoltà:</strong> Computazionalmente impossibile</p>
+                        <div class="formula">
+Esempio:
+M₁ = "Ciao Mondo!"
+Trovare M₂ diverso con stesso hash? → Impossibile!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="round-box" style="border-color: #f472b6;">
+                        <h4 style="color: #f472b6;">3️⃣ Resistenza alle Collisioni</h4>
+                        <p><strong>Problema:</strong> Trovare qualsiasi coppia M₁, M₂ con hash(M₁) = hash(M₂)</p>
+                        <p><strong>Difficoltà:</strong> Più facile delle altre (birthday paradox)</p>
+                        <div class="formula">
+Per SHA-256:
+Complessità: ~2^128 operazioni
+(metà della lunghezza dell'hash)
+
+Ancora computazionalmente impossibile!
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Perché queste proprietà?</h4>
+                        <p>Se un hash NON ha queste proprietà:</p>
+                        <ul>
+                            <li>Preimage debole → posso "inventare" dati con hash desiderato</li>
+                            <li>Seconda preimage debole → posso sostituire un documento con un altro</li>
+                            <li>Collisioni facili → posso creare due documenti con stesso hash</li>
+                        </ul>
+                        <p>Tutti questi problemi compromettono la sicurezza!</p>
+                    </div>
+
+                    <div class="hash-comparison" id="preimage-demo">
+                        <div class="hash-row">
+                            <div class="hash-label">Input originale:</div>
+                            <div class="hash-value">"Ciao Mondo!"</div>
+                        </div>
+                        <div class="hash-row">
+                            <div class="hash-label">Hash SHA-256:</div>
+                            <div class="hash-value" id="preimage-hash">-</div>
+                        </div>
+                        <div class="hash-row">
+                            <div class="hash-label">Trovare input che produce questo hash?</div>
+                            <div class="hash-value" style="color: #f87171;">Impossibile! (2^256 possibilità)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== STRUTTURA SHA-256 ==================== -->
+        <div class="concept-section structure" id="structure">
+            <h2>🏗️ Come Funziona SHA-256 Internamente</h2>
+            <p class="subtitle">La struttura Merkle-Damgård: blocchi concatenati</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📦 Padding: Preparare l'input</h4>
+                        <p>SHA-256 lavora su blocchi di 512 bit. Se l'input non è multiplo di 512:</p>
+                        <ol>
+                            <li>Aggiungi un bit "1"</li>
+                            <li>Aggiungi zeri fino a 64 bit dalla fine</li>
+                            <li>Ultimi 64 bit: lunghezza originale in bit</li>
+                        </ol>
+                    </div>
+
+                    <div class="formula">
+Esempio: "Ciao" (4 byte = 32 bit)
+
+1. Aggiungi "1": 32 bit + 1 bit = 33 bit
+2. Aggiungi zeri: ... fino a 512 - 64 = 448 bit
+3. Ultimi 64 bit: 32 (lunghezza originale)
+
+Risultato: blocco da 512 bit pronto!
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔄 Compression Function: Il Cuore di SHA-256</h4>
+                        <p>Ogni blocco viene processato da una funzione di compressione:</p>
+                        <div class="compression-box">
+                            <div class="compression-input">
+                                <h5>Blocco 512 bit</h5>
+                                <div style="font-size: 0.8em;">+ Hash precedente<br>(256 bit)</div>
+                            </div>
+                            <div class="compression-function">→</div>
+                            <div class="compression-output">
+                                <h5>Nuovo Hash<br>256 bit</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md-flow">
+                <div class="md-block">
+                    <h5>1. Padding</h5>
+                    <div class="md-block-content">Input → Padding → Blocchi da 512 bit</div>
+                </div>
+                <div class="md-arrow">↓</div>
+                <div class="md-block">
+                    <h5>2. Hash iniziale</h5>
+                    <div class="md-block-content">H₀ = valori costanti predefiniti (8 valori da 32 bit)</div>
+                </div>
+                <div class="md-arrow">↓</div>
+                <div class="md-block">
+                    <h5>3. Per ogni blocco</h5>
+                    <div class="md-block-content">
+                        Hᵢ = CompressionFunction(Bloccoᵢ, Hᵢ₋₁)<br>
+                        <small style="color: #94a3b8;">Ogni blocco modifica l'hash progressivamente</small>
+                    </div>
+                </div>
+                <div class="md-arrow">↓</div>
+                <div class="md-block">
+                    <h5>4. Hash finale</h5>
+                    <div class="md-block-content">Hₙ = Hash finale SHA-256 (256 bit)</div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>💡 Perché questa struttura?</h4>
+                <ul>
+                    <li><strong>Scalabile:</strong> può processare file di qualsiasi dimensione</li>
+                    <li><strong>Incrementale:</strong> ogni blocco modifica l'hash progressivamente</li>
+                    <li><strong>Sicuro:</strong> cambiare anche un solo bit cambia completamente l'hash finale</li>
+                    <li><strong>Velocissimo:</strong> operazioni semplici (XOR, AND, OR, shift, rotazioni)</li>
+                </ul>
+            </div>
+
+            <div class="result-display" id="sha-structure-demo">
+                <h4>🎮 Simula SHA-256 (semplificato):</h4>
+                <div class="input-row" style="margin: 15px 0;">
+                    <span>Input:</span>
+                    <input type="text" id="sha-input" value="Ciao" class="input-medium">
+                    <button class="game-btn" onclick="simulateSHA()">▶️ Simula</button>
+                </div>
+                <div id="sha-steps"></div>
+            </div>
+        </div>
+
+        <!-- ==================== EFFETTO VALANGA ==================== -->
+        <div class="concept-section avalanche" id="avalanche">
+            <h2>🌊 Lab: Effetto Valanga</h2>
+            <p class="subtitle">Cambiare anche un solo bit cambia completamente l'hash</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎯 L'Effetto Valanga</h4>
+                        <p>Una buona funzione hash deve avere questa proprietà:</p>
+                        <p><strong>Cambiare 1 bit dell'input → ~50% dei bit dell'output cambiano</strong></p>
+                        <p>Come una valanga: un piccolo cambiamento causa un effetto enorme!</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo originale:</label>
+                        <div class="input-row">
+                            <input type="text" id="avalanche-input1" value="Ciao Mondo!" class="input-large">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Testo modificato (cambia 1 carattere):</label>
+                        <div class="input-row">
+                            <input type="text" id="avalanche-input2" value="Ciao mondo!" class="input-large">
+                        </div>
+                    </div>
+
+                    <button class="game-btn success" onclick="showAvalanche()">🌊 Mostra Effetto Valanga</button>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Confronto Hash:</h4>
+                        <div id="avalanche-result">
+                            <p>Clicca "Mostra Effetto Valanga" per vedere la differenza...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-display" id="avalanche-bits" style="margin-top: 20px;">
+                <h4>Confronto Bit per Bit:</h4>
+                <p style="color: #94a3b8;">Esegui il confronto per vedere quanti bit cambiano...</p>
+            </div>
+        </div>
+
+        <!-- ==================== ALGORITMI BROKEN ==================== -->
+        <div class="concept-section broken" id="broken">
+            <h2>☠️ MD5 e SHA-1: Perché Sono Rotti</h2>
+            <p class="subtitle">Storia di algoritmi che erano sicuri, ma non lo sono più</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>❌ MD5 (Message Digest 5) - BROKEN dal 2004</h4>
+                        <p><strong>Problema:</strong> Collisioni trovate nel 2004</p>
+                        <p><strong>Impatto:</strong> Posso creare due file diversi con lo stesso hash MD5 in secondi</p>
+                        <div class="formula">
+Esempio reale:
+File1.pdf → MD5: abc123...
+File2.pdf → MD5: abc123... (stesso hash!)
+
+File2 può contenere malware, ma ha lo stesso hash!
+                        </div>
+                        <p><strong>Uso accettabile:</strong> Solo per checksum non-security (cache keys, deduplicazione)</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>❌ SHA-1 - BROKEN dal 2017</h4>
+                        <p><strong>Problema:</strong> Collisioni pratiche trovate (SHAttered attack, Google)</p>
+                        <p><strong>Costo:</strong> ~$110,000 in cloud computing per trovare una collisione</p>
+                        <p><strong>Impatto:</strong> Certificati SSL, Git commits vulnerabili</p>
+                        <p><strong>Stato:</strong> Deprecato da Chrome, Firefox, Git sta migrando a SHA-256</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📊 Timeline della rottura</h4>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Anno</th>
+                                <th>Evento</th>
+                                <th>Impatto</th>
+                            </tr>
+                            <tr class="bad">
+                                <td>2004</td>
+                                <td>MD5 collisioni</td>
+                                <td>MD5 rotto</td>
+                            </tr>
+                            <tr>
+                                <td>2005</td>
+                                <td>SHA-1 collisioni teoriche</td>
+                                <td>Allarme</td>
+                            </tr>
+                            <tr class="bad">
+                                <td>2017</td>
+                                <td>SHA-1 collisioni pratiche</td>
+                                <td>SHA-1 rotto</td>
+                            </tr>
+                            <tr class="good">
+                                <td>Oggi</td>
+                                <td>SHA-256, SHA-3</td>
+                                <td>Sicuri</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>🔍 Demo: Collisioni MD5</h4>
+                        <p style="font-size: 0.9em; color: #94a3b8;">MD5 è così debole che esistono coppie di messaggi diversi con lo stesso hash:</p>
+                        <div class="hash-comparison">
+                            <div class="hash-row identical">
+                                <div class="hash-label">Messaggio 1:</div>
+                                <div class="hash-value">"Hello"</div>
+                            </div>
+                            <div class="hash-row identical">
+                                <div class="hash-label">Messaggio 2:</div>
+                                <div class="hash-value">"World" (diverso!)</div>
+                            </div>
+                            <div class="hash-row identical">
+                                <div class="hash-label">MD5 (identico):</div>
+                                <div class="hash-value" style="color: #f87171;">Collisione trovata!</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.85em; color: #94a3b8; margin-top: 10px;">Con SHA-256 questo è impossibile (almeno con tecnologia attuale).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ Algoritmi Sicuri Oggi</h4>
+                <ul>
+                    <li><strong>SHA-256, SHA-384, SHA-512:</strong> famiglia SHA-2, standard attuale</li>
+                    <li><strong>SHA-3:</strong> design completamente diverso, resistente anche se SHA-2 fosse compromesso</li>
+                    <li><strong>BLAKE2/BLAKE3:</strong> più veloci, sicuri, moderni</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== BIRTHDAY ATTACK ==================== -->
+        <div class="concept-section birthday" id="birthday">
+            <h2>🎂 Birthday Attack: Il Paradosso del Compleanno</h2>
+            <p class="subtitle">Perché trovare collisioni è più facile di quanto pensi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎯 Il Paradosso del Compleanno</h4>
+                        <p>Quante persone servono perché due abbiano lo stesso compleanno?</p>
+                        <p>Intuizione: ~365 persone</p>
+                        <p><strong>Realtà: solo ~23 persone!</strong></p>
+                        <p>Perché? Non cerchi una persona specifica, ma qualsiasi coppia!</p>
+                    </div>
+
+                    <div class="formula">
+Per hash:
+- Preimage: trovare input per hash specifico → 2^256 tentativi
+- Collisione: trovare DUE input con stesso hash → ~2^128 tentativi
+
+Per SHA-256:
+Complessità collisione = √(2^256) = 2^128 operazioni
+                        </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔢 Calcolo della Probabilità</h4>
+                        <p>Con n hash calcolati, probabilità di almeno una collisione:</p>
+                        <div class="formula">
+P(collisione) ≈ 1 - e^(-n²/(2×m))
+
+dove m = spazio hash (2^256 per SHA-256)
+
+Con n = 2^128 → P ≈ 50%
+                        </div>
+                        <p>Quindi servono ~2^128 hash per avere 50% probabilità di collisione.</p>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>🎮 Simula Birthday Attack</h4>
+                        <div class="input-row" style="margin: 15px 0;">
+                            <span>Numero di hash da generare:</span>
+                            <input type="number" id="birthday-n" value="1000" min="1" max="100000" class="input-small">
+                            <button class="game-btn" onclick="simulateBirthday()">🎲 Simula</button>
+                        </div>
+                        <div id="birthday-result">
+                            <p>Clicca "Simula" per vedere la probabilità di collisione...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Implicazioni per la Sicurezza</h4>
+                <p>Per SHA-256:</p>
+                <ul>
+                    <li><strong>Preimage attack:</strong> ~2^256 operazioni (impossibile)</li>
+                    <li><strong>Collision attack:</strong> ~2^128 operazioni (ancora impossibile, ma più facile)</li>
+                </ul>
+                <p>Ecco perché SHA-384 e SHA-512 esistono: spazio hash più grande = collisioni ancora più difficili!</p>
+            </div>
+        </div>
+
+        <!-- ==================== NEL MONDO REALE ==================== -->
+        <div class="concept-section real" id="real">
+            <h2>🌍 SHA nel Mondo Reale</h2>
+            <p class="subtitle">Dove e come viene usato nella pratica</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>🔒 Verifica Integrità File</h4>
+                        <p>Quando scarichi software:</p>
+                        <ol>
+                            <li>Il sito pubblica: <code>ubuntu.iso SHA256: abc123...</code></li>
+                            <li>Scarichi il file</li>
+                            <li>Calcoli: <code>sha256sum ubuntu.iso</code></li>
+                            <li>Confronti: se corrisponde → file integro!</li>
+                        </ol>
+                        <p>Se anche 1 bit è corrotto, l'hash è completamente diverso.</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📝 Git Commits</h4>
+                        <p>Ogni commit Git è identificato da un hash:</p>
+                        <div class="formula">
+commit abc123def456...
+tree def789...
+author ...
+message "Fix bug"
+
+Hash = SHA-1(tutti questi dati)
+                        </div>
+                        <p>Git sta migrando a SHA-256 per sicurezza.</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>✍️ Firme Digitali</h4>
+                        <p>RSA/ECDSA firma l'hash, non il documento intero:</p>
+                        <div class="formula">
+1. hash = SHA-256(documento)
+2. firma = RSA-Sign(chiave_privata, hash)
+3. Invia: documento + firma
+
+Verifica:
+1. hash' = SHA-256(documento_ricevuto)
+2. RSA-Verify(chiave_pubblica, firma, hash')
+                        </div>
+                        <p>Molto più veloce che firmare il documento intero!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>⛏️ Bitcoin Mining</h4>
+                        <p>Bitcoin usa SHA-256 per:</p>
+                        <ul>
+                            <li><strong>Mining:</strong> trovare nonce tale che SHA-256(block) < target</li>
+                            <li><strong>Merkle Tree:</strong> struttura dati per verificare transazioni</li>
+                            <li><strong>Address generation:</strong> derivare indirizzi da chiavi pubbliche</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>⚠️ SHA NON è per Password!</h4>
+                <p>SHA-256 è <strong>velocissimo</strong> (~8 miliardi hash/secondo su GPU).</p>
+                <p>Per le password serve un hash <strong>lento</strong>:</p>
+                <ul>
+                    <li>SHA-256: ~8 miliardi hash/sec → password craccata in secondi</li>
+                    <li>Argon2: ~10,000 hash/sec → password craccata in anni</li>
+                </ul>
+                <p>Usa SHA-256 per integrità, firme, fingerprint. Usa Argon2/bcrypt per password!</p>
+            </div>
+
+            <div class="success-box">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>Hash:</strong> impronta digitale a dimensione fissa</li>
+                    <li><strong>Proprietà:</strong> preimage resistance, seconda preimage, collision resistance</li>
+                    <li><strong>SHA-256:</strong> struttura Merkle-Damgård, blocchi da 512 bit</li>
+                    <li><strong>Effetto valanga:</strong> 1 bit cambia → ~50% output cambia</li>
+                    <li><strong>MD5/SHA-1:</strong> rotti, non usare per sicurezza</li>
+                    <li><strong>Birthday attack:</strong> collisioni più facili di preimage (~2^128 vs 2^256)</li>
+                    <li><strong>Uso:</strong> integrità, firme, Git, blockchain - NON per password!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SHA-256 implementation (simplified for demo)
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function hexToBinary(hex) {
+            return hex.split('').map(h => {
+                const bin = parseInt(h, 16).toString(2).padStart(4, '0');
+                return bin.split('').map(b => parseInt(b));
+            }).flat();
+        }
+
+        function countDifferentBits(bits1, bits2) {
+            let count = 0;
+            const minLen = Math.min(bits1.length, bits2.length);
+            for (let i = 0; i < minLen; i++) {
+                if (bits1[i] !== bits2[i]) count++;
+            }
+            return count;
+        }
+
+        // ==================== HASH CALCULATION ====================
+        
+        async function calculateHash() {
+            const input = document.getElementById('hash-input').value;
+            if (!input) {
+                document.getElementById('hash-output').textContent = 'Inserisci del testo...';
+                return;
+            }
+            
+            const hash = await sha256(input);
+            document.getElementById('hash-output').textContent = hash;
+            
+            // Update preimage demo
+            document.getElementById('preimage-hash').textContent = hash;
+        }
+
+        // ==================== SHA STRUCTURE SIMULATION ====================
+        
+        async function simulateSHA() {
+            const input = document.getElementById('sha-input').value;
+            if (!input) {
+                document.getElementById('sha-steps').innerHTML = '<p style="color: #f87171;">Inserisci un input</p>';
+                return;
+            }
+            
+            const hash = await sha256(input);
+            const inputBytes = new TextEncoder().encode(input);
+            const inputBits = inputBytes.length * 8;
+            const blocks = Math.ceil((inputBits + 1 + 64) / 512);
+            
+            let html = '<div class="md-flow">';
+            html += `<div class="md-block">
+                <h5>Input</h5>
+                <div class="md-block-content">"${input}" (${inputBytes.length} byte = ${inputBits} bit)</div>
+            </div>`;
+            html += '<div class="md-arrow">↓</div>';
+            html += `<div class="md-block">
+                <h5>Padding</h5>
+                <div class="md-block-content">Aggiungi bit "1" + zeri + lunghezza → ${blocks} blocco/i da 512 bit</div>
+            </div>`;
+            html += '<div class="md-arrow">↓</div>';
+            html += `<div class="md-block">
+                <h5>Hash iniziale</h5>
+                <div class="md-block-content">H₀ = valori costanti (6a09e667, bb67ae85, 3c6ef372, ...)</div>
+            </div>`;
+            html += '<div class="md-arrow">↓</div>';
+            html += `<div class="md-block">
+                <h5>Compression Function</h5>
+                <div class="md-block-content">Per ogni blocco: Hᵢ = f(Bloccoᵢ, Hᵢ₋₁)</div>
+            </div>`;
+            html += '<div class="md-arrow">↓</div>';
+            html += `<div class="md-block">
+                <h5>Hash finale</h5>
+                <div class="md-block-content" style="color: #4ade80; font-weight: bold;">${hash}</div>
+            </div>`;
+            html += '</div>';
+            
+            document.getElementById('sha-steps').innerHTML = html;
+        }
+
+        // ==================== AVALANCHE EFFECT ====================
+        
+        async function showAvalanche() {
+            const input1 = document.getElementById('avalanche-input1').value;
+            const input2 = document.getElementById('avalanche-input2').value;
+            
+            if (!input1 || !input2) {
+                document.getElementById('avalanche-result').innerHTML = 
+                    '<p style="color: #f87171;">Inserisci entrambi i testi</p>';
+                return;
+            }
+            
+            const hash1 = await sha256(input1);
+            const hash2 = await sha256(input2);
+            
+            const bits1 = hexToBinary(hash1);
+            const bits2 = hexToBinary(hash2);
+            const differentBits = countDifferentBits(bits1, bits2);
+            const percentage = ((differentBits / bits1.length) * 100).toFixed(1);
+            
+            let html = '<div class="hash-comparison">';
+            html += `<div class="hash-row ${input1 === input2 ? 'identical' : 'different'}">
+                <div class="hash-label">Input 1:</div>
+                <div class="hash-value">"${input1}"</div>
+            </div>`;
+            html += `<div class="hash-row">
+                <div class="hash-label">Hash SHA-256:</div>
+                <div class="hash-value">${hash1}</div>
+            </div>`;
+            html += `<div class="hash-row ${input1 === input2 ? 'identical' : 'different'}">
+                <div class="hash-label">Input 2:</div>
+                <div class="hash-value">"${input2}"</div>
+            </div>`;
+            html += `<div class="hash-row">
+                <div class="hash-label">Hash SHA-256:</div>
+                <div class="hash-value">${hash2}</div>
+            </div>`;
+            
+            if (input1 === input2) {
+                html += `<div class="hash-row identical">
+                    <div class="hash-label">Risultato:</div>
+                    <div class="hash-value" style="color: #4ade80;">Hash identici ✓ (stesso input)</div>
+                </div>`;
+            } else {
+                html += `<div class="hash-row different">
+                    <div class="hash-label">Risultato:</div>
+                    <div class="hash-value" style="color: #f87171;">Hash completamente diversi!</div>
+                </div>`;
+                html += `<div class="hash-row">
+                    <div class="hash-label">Bit diversi:</div>
+                    <div class="hash-value">${differentBits} su ${bits1.length} (${percentage}%)</div>
+                </div>`;
+            }
+            
+            html += '</div>';
+            
+            document.getElementById('avalanche-result').innerHTML = html;
+            
+            // Bit comparison
+            if (input1 !== input2) {
+                let bitHtml = '<div class="bit-comparison">';
+                bitHtml += '<p><strong>Hash 1 (primi 64 bit):</strong></p>';
+                bitHtml += '<div class="bit-row">';
+                for (let i = 0; i < Math.min(64, bits1.length); i++) {
+                    const changed = bits1[i] !== bits2[i];
+                    bitHtml += `<div class="bit-cell ${bits1[i] === 1 ? 'one' : 'zero'} ${changed ? 'changed' : ''}">${bits1[i]}</div>`;
+                }
+                bitHtml += '</div>';
+                bitHtml += '<p style="margin-top: 15px;"><strong>Hash 2 (primi 64 bit):</strong></p>';
+                bitHtml += '<div class="bit-row">';
+                for (let i = 0; i < Math.min(64, bits2.length); i++) {
+                    const changed = bits1[i] !== bits2[i];
+                    bitHtml += `<div class="bit-cell ${bits2[i] === 1 ? 'one' : 'zero'} ${changed ? 'changed' : ''}">${bits2[i]}</div>`;
+                }
+                bitHtml += '</div>';
+                bitHtml += `<p style="margin-top: 15px; color: #f87171;">Rosso = bit cambiato (${differentBits} bit diversi su ${bits1.length} = ${percentage}%)</p>`;
+                bitHtml += '</div>';
+                
+                document.getElementById('avalanche-bits').innerHTML = bitHtml;
+            } else {
+                document.getElementById('avalanche-bits').innerHTML = 
+                    '<p style="color: #94a3b8;">Gli input sono identici, quindi gli hash sono identici.</p>';
+            }
+        }
+
+        // ==================== BIRTHDAY ATTACK ====================
+        
+        function simulateBirthday() {
+            const n = parseInt(document.getElementById('birthday-n').value) || 1000;
+            
+            // Validazione: servono almeno 2 hash per avere una collisione
+            if (n < 2) {
+                document.getElementById('birthday-result').innerHTML = 
+                    '<p style="color: #f87171;">⚠️ Servono almeno 2 hash per avere una collisione!</p>' +
+                    '<p style="color: #94a3b8;">Con 1 solo hash non può esserci collisione (serve almeno una coppia).</p>';
+                return;
+            }
+            
+            const m = Math.pow(2, 256); // Spazio hash SHA-256
+            
+            // Approssimazione: P(collisione) ≈ 1 - e^(-n²/(2m))
+            const probability = 1 - Math.exp(-(n * n) / (2 * m));
+            const percentage = (probability * 100);
+            
+            // Per SHA-256, servono ~2^128 hash per 50% probabilità
+            const targetN = Math.pow(2, 128);
+            
+            let html = `<p><strong>Numero di hash generati:</strong> ${n.toLocaleString()}</p>`;
+            html += `<p><strong>Spazio hash SHA-256:</strong> 2^256 ≈ ${m.toExponential(2)}</p>`;
+            
+            // Mostra probabilità con formato appropriato
+            if (percentage < 0.0001) {
+                html += `<p><strong>Probabilità di collisione:</strong> < ${percentage.toExponential(2)}% (praticamente zero)</p>`;
+            } else if (percentage < 1) {
+                html += `<p><strong>Probabilità di collisione:</strong> ${percentage.toFixed(6)}%</p>`;
+            } else {
+                html += `<p><strong>Probabilità di collisione:</strong> ${percentage.toFixed(2)}%</p>`;
+            }
+            
+            html += `<p style="margin-top: 15px; color: #94a3b8;">Per avere ~50% probabilità servono ~2^128 ≈ ${targetN.toExponential(2)} hash</p>`;
+            
+            // Calcola rapporto con target e ordini di grandezza
+            const ratio = n / targetN;
+            const ordersOfMagnitude = Math.log10(ratio);
+            
+            // Messaggio dinamico in base alla probabilità e al rapporto con target
+            let statusMessage = '';
+            let statusColor = '';
+            
+            if (percentage < 0.0001) {
+                // Probabilità praticamente zero
+                if (ratio < 1e-20) {
+                    statusMessage = `⚠️ Con ${n.toLocaleString()} hash, la probabilità è praticamente zero!`;
+                    statusColor = '#f87171';
+                } else if (ratio < 1e-10) {
+                    statusMessage = `⚠️ Con ${n.toLocaleString()} hash, la probabilità è ancora estremamente bassa (${percentage.toExponential(2)}%)`;
+                    statusColor = '#f87171';
+                } else if (ratio < 1e-5) {
+                    statusMessage = `Con ${n.toLocaleString()} hash, la probabilità è ancora molto bassa (${percentage.toExponential(2)}%)`;
+                    statusColor = '#fbbf24';
+                } else {
+                    statusMessage = `Con ${n.toLocaleString()} hash, la probabilità è bassa ma misurabile (${percentage.toFixed(6)}%)`;
+                    statusColor = '#fbbf24';
+                }
+            } else if (percentage < 1) {
+                statusMessage = `Con ${n.toLocaleString()} hash, la probabilità è ${percentage.toFixed(4)}%`;
+                statusColor = '#3b82f6';
+            } else if (percentage < 50) {
+                statusMessage = `Con ${n.toLocaleString()} hash, la probabilità è ${percentage.toFixed(2)}% (ancora sotto il 50%)`;
+                statusColor = '#3b82f6';
+            } else {
+                statusMessage = `✅ Con ${n.toLocaleString()} hash, la probabilità è ${percentage.toFixed(2)}% (sopra il 50%!)`;
+                statusColor = '#4ade80';
+            }
+            
+            html += `<p style="color: ${statusColor}; margin-top: 10px;">${statusMessage}</p>`;
+            
+            // Mostra confronto con target in modo più chiaro
+            if (ratio < 1e-20) {
+                html += `<p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">Sei a ${ratio.toExponential(2)} del target (mancano ~${Math.abs(ordersOfMagnitude).toFixed(1)} ordini di grandezza!)</p>`;
+            } else if (ratio < 1e-10) {
+                html += `<p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">Sei a ${ratio.toExponential(2)} del target (mancano ~${Math.abs(ordersOfMagnitude).toFixed(1)} ordini di grandezza)</p>`;
+            } else if (ratio < 0.001) {
+                html += `<p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">Sei a ${(ratio * 100).toFixed(6)}% del target necessario per il 50% di probabilità</p>`;
+            } else if (ratio < 1) {
+                html += `<p style="color: #94a3b8; font-size: 0.9em; margin-top: 10px;">Sei a ${(ratio * 100).toFixed(2)}% del target necessario per il 50% di probabilità</p>`;
+            } else if (ratio < 10) {
+                html += `<p style="color: #3b82f6; font-size: 0.9em; margin-top: 10px;">Hai ${ratio.toFixed(2)}× il target necessario per il 50% di probabilità!</p>`;
+            } else {
+                html += `<p style="color: #4ade80; font-size: 0.9em; margin-top: 10px;">Hai ${ratio.toExponential(2)}× il target necessario per il 50% di probabilità!</p>`;
+            }
+            
+            // Aggiungi contesto sulla scala
+            if (n < 1e6) {
+                html += `<p style="color: #94a3b8; font-size: 0.85em; margin-top: 10px;">💡 Prova con valori più grandi per vedere come aumenta la probabilità. Ricorda: servono ~2^128 hash per il 50%!</p>`;
+            } else if (ratio < 1e-10) {
+                html += `<p style="color: #f87171; font-size: 0.85em; margin-top: 10px;">⚠️ Anche con ${n.toLocaleString()} hash, sei ancora ${Math.pow(10, Math.abs(ordersOfMagnitude)).toFixed(0)}× più piccolo del target!</p>`;
+            }
+            
+            document.getElementById('birthday-result').innerHTML = html;
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('hash-input').addEventListener('input', calculateHash);
+            document.getElementById('avalanche-input1').addEventListener('input', () => {
+                if (document.getElementById('avalanche-input2').value) {
+                    showAvalanche();
+                }
+            });
+            document.getElementById('avalanche-input2').addEventListener('input', () => {
+                if (document.getElementById('avalanche-input1').value) {
+                    showAvalanche();
+                }
+            });
+            
+            // Initialize
+            calculateHash();
+        });
+    </script>
+</body>
+</html>
+

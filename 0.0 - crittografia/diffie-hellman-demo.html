@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Diffie-Hellman - Il problema del logaritmo discreto</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.log-normal { border-color: #4ade80; }
+        .concept-section.log-normal h2 { color: #4ade80; }
+        
+        .concept-section.log-discrete { border-color: #f87171; }
+        .concept-section.log-discrete h2 { color: #f87171; }
+        
+        .concept-section.dh-explain { border-color: #3b82f6; }
+        .concept-section.dh-explain h2 { color: #3b82f6; }
+        
+        .concept-section.dh-interactive { border-color: #fbbf24; }
+        .concept-section.dh-interactive h2 { color: #fbbf24; }
+        
+        .concept-section.dh-attack { border-color: #a78bfa; }
+        .concept-section.dh-attack h2 { color: #a78bfa; }
+        
+        .concept-section.dh-real { border-color: #f472b6; }
+        .concept-section.dh-real h2 { color: #f472b6; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input {
+            width: 100px;
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            text-align: center;
+        }
+        
+        .input-row input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-row span {
+            font-size: 1.2em;
+            color: #94a3b8;
+        }
+        
+        .input-row .operator {
+            font-size: 1.4em;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4em;
+            color: #4ade80;
+        }
+        
+        .result-value.large {
+            font-size: 2em;
+        }
+        
+        .result-value.danger {
+            color: #f87171;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.3em;
+        }
+
+        /* Grafico logaritmo */
+        .graph-container {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .graph-canvas {
+            width: 100%;
+            height: 300px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        /* Confronto tabelle */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .easy {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        .comparison-table .hard {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+
+        /* DH Visualization */
+        .dh-diagram {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            gap: 15px;
+            align-items: start;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .dh-person {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .dh-person.alice {
+            border: 2px solid #f472b6;
+        }
+        
+        .dh-person.alice h3 {
+            color: #f472b6;
+        }
+        
+        .dh-person.bob {
+            border: 2px solid #3b82f6;
+        }
+        
+        .dh-person.bob h3 {
+            color: #3b82f6;
+        }
+        
+        .dh-person.eve {
+            border: 2px solid #f87171;
+            background: rgba(248, 113, 113, 0.1);
+        }
+        
+        .dh-person.eve h3 {
+            color: #f87171;
+        }
+        
+        .dh-person h3 {
+            margin: 0 0 15px 0;
+        }
+        
+        .dh-value {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .dh-value.secret {
+            border: 2px dashed #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+        
+        .dh-value.public {
+            border: 2px solid #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+        
+        .dh-value.shared {
+            border: 2px solid #a78bfa;
+            background: rgba(167, 139, 250, 0.2);
+        }
+        
+        .dh-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        
+        .dh-arrow .arrow-line {
+            font-size: 2em;
+            color: #4ade80;
+        }
+
+        /* Color mixing demo */
+        .color-demo {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .color-step {
+            text-align: center;
+        }
+        
+        .color-step .label {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        
+        .color-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto;
+            border: 3px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+        
+        .color-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 2em;
+            color: #64748b;
+        }
+
+        /* Brute force visualization */
+        .bruteforce-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 4px;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .bf-cell {
+            padding: 8px 4px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .bf-cell.found {
+            background: #4ade80;
+            color: black;
+            font-weight: bold;
+            animation: pulse 0.5s;
+        }
+        
+        .bf-cell.checking {
+            background: #fbbf24;
+            color: black;
+        }
+
+        /* Steps visualization */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .step-box {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        .step-box.step-1 { border-color: #3b82f6; }
+        .step-box.step-2 { border-color: #f472b6; }
+        .step-box.step-3 { border-color: #4ade80; }
+        .step-box.step-4 { border-color: #fbbf24; }
+        .step-box.step-5 { border-color: #a78bfa; }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-1 .step-number { background: #3b82f6; }
+        .step-2 .step-number { background: #f472b6; }
+        .step-3 .step-number { background: #4ade80; color: black; }
+        .step-4 .step-number { background: #fbbf24; color: black; }
+        .step-5 .step-number { background: #a78bfa; }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content h4 {
+            margin: 0 0 8px 0;
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+        
+        .reality-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .reality-box li {
+            margin: 8px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.danger {
+            background: #f87171;
+        }
+        
+        .game-btn.danger:hover {
+            background: #ef4444;
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .timeline-event {
+            position: relative;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 900px) {
+            .dh-diagram {
+                grid-template-columns: 1fr;
+            }
+            .dh-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="2.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">🔑 Diffie-Hellman Key Exchange</h1>
+        <div class="subtitle">Come scambiarsi una chiave segreta su un canale pubblico - Il problema del logaritmo discreto</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#log-normal">Logaritmo Normale</a>
+            <a href="#log-discrete">Logaritmo Discreto</a>
+            <a href="#why-hard">Perché è Difficile</a>
+            <a href="#dh-explain">Come Funziona DH</a>
+            <a href="#dh-interactive">🎮 Lab Interattivo</a>
+            <a href="#eve-attack">Attacco di Eve</a>
+            <a href="#real-world">Nel Mondo Reale</a>
+        </div>
+
+        <!-- ==================== LOGARITMO NORMALE ==================== -->
+        <div class="concept-section log-normal" id="log-normal">
+            <h2>📐 Il Logaritmo "Normale"</h2>
+            <p class="subtitle">Prima di tutto, ricordiamo cos'è un logaritmo nel mondo dei numeri reali</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered">
+                        Se <strong>b<sup>x</sup> = y</strong>, allora <strong>log<sub>b</sub>(y) = x</strong>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Il logaritmo risponde alla domanda:</h4>
+                        <p>"A quale esponente devo elevare la base <strong>b</strong> per ottenere <strong>y</strong>?"</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Prova tu: calcola il logaritmo</label>
+                        <div class="input-row">
+                            <span>log</span>
+                            <input type="number" id="log-base" value="2" min="2" style="width: 60px;">
+                            <span>(</span>
+                            <input type="number" id="log-value" value="8" min="1">
+                            <span>) =</span>
+                            <span class="result-value" id="log-result">3</span>
+                        </div>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>Verifica:</h4>
+                        <p id="log-verify" style="font-size: 1.2em;">2<sup>3</sup> = 8 ✓</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>✨ Nel mondo reale, il logaritmo è FACILE</h4>
+                        <p>Hai una calcolatrice? Basta premere un tasto:</p>
+                        <div class="formula">
+log₂(1048576) = ?
+
+Risposta istantanea: <strong style="color: #4ade80;">20</strong>
+(perché 2²⁰ = 1048576)</div>
+                        <p>Esistono formule e algoritmi efficienti per calcolare logaritmi con numeri reali.</p>
+                    </div>
+
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Operazione</th>
+                            <th>Difficoltà</th>
+                        </tr>
+                        <tr class="easy">
+                            <td>2¹⁰ = ?</td>
+                            <td>FACILE → 1024</td>
+                        </tr>
+                        <tr class="easy">
+                            <td>log₂(1024) = ?</td>
+                            <td>FACILE → 10</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== LOGARITMO DISCRETO ==================== -->
+        <div class="concept-section log-discrete" id="log-discrete">
+            <h2>🔐 Il Logaritmo Discreto</h2>
+            <p class="subtitle">Aggiungiamo "mod p" e tutto cambia drasticamente...</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered" style="border: 2px solid #f87171;">
+                        Se <strong>g<sup>x</sup> ≡ h (mod p)</strong>, trovare <strong>x</strong> è il 
+                        <span style="color: #f87171;">Problema del Logaritmo Discreto (DLP)</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Esponenziazione modulare (FACILE - direzione "avanti"):</label>
+                        <div class="input-row">
+                            <input type="number" id="exp-base" value="5" min="2" style="width: 60px;">
+                            <span class="operator">^</span>
+                            <input type="number" id="exp-exp" value="3" min="1" style="width: 60px;">
+                            <span>mod</span>
+                            <input type="number" id="exp-mod" value="23" min="2" style="width: 70px;">
+                            <span>=</span>
+                            <span class="result-value" id="exp-result">10</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Logaritmo discreto (DIFFICILE - direzione "indietro"):</label>
+                        <div class="input-row">
+                            <span>log</span>
+                            <input type="number" id="dlog-base" value="5" min="2" style="width: 60px;">
+                            <span>(</span>
+                            <input type="number" id="dlog-value" value="10" min="1" style="width: 60px;">
+                            <span>) mod</span>
+                            <input type="number" id="dlog-mod" value="23" min="2" style="width: 70px;">
+                            <span>= ?</span>
+                        </div>
+                        <button class="game-btn" onclick="bruteForceDLog()" style="margin-top: 10px;">🔍 Trova con Brute Force</button>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>Risultato della ricerca:</h4>
+                        <p class="result-value" id="dlog-result">-</p>
+                        <p id="dlog-steps" style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;"></p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🤔 Ma perché il "mod" complica tutto?</h4>
+                        <p>Nel mondo reale, i numeri crescono in modo prevedibile:</p>
+                        <div class="formula">
+2¹ = 2
+2² = 4
+2³ = 8
+2⁴ = 16
+... cresce sempre, posso "interpolare"</div>
+                        <p>Nel mondo modulare, i valori "saltano" in modo apparentemente casuale:</p>
+                        <div class="formula" id="mod-sequence">
+5¹ mod 23 = 5
+5² mod 23 = 2
+5³ mod 23 = 10
+5⁴ mod 23 = 4
+5⁵ mod 23 = 20
+... sembra casuale!</div>
+                    </div>
+
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Operazione</th>
+                            <th>Difficoltà</th>
+                        </tr>
+                        <tr class="easy">
+                            <td>5³ mod 23 = ?</td>
+                            <td>FACILE → 10</td>
+                        </tr>
+                        <tr class="hard">
+                            <td>5<sup>?</sup> ≡ 10 (mod 23)</td>
+                            <td>DIFFICILE → devi provare!</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PERCHÉ È DIFFICILE ==================== -->
+        <div class="concept-section log-discrete" id="why-hard">
+            <h2>🧠 Perché il Logaritmo Discreto è Difficile?</h2>
+            <p class="subtitle">L'operazione "mod" distrugge ogni pattern prevedibile</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📊 Visualizza la "perdita di struttura"</h4>
+                        <p>Genera la sequenza g^x mod p per vari valori di x:</p>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-row">
+                            <span>g =</span>
+                            <input type="number" id="seq-g" value="5" min="2" style="width: 60px;">
+                            <span>p =</span>
+                            <input type="number" id="seq-p" value="23" min="3" style="width: 70px;">
+                            <button class="game-btn" onclick="generateSequence()">Genera sequenza</button>
+                        </div>
+                    </div>
+
+                    <div class="bruteforce-grid" id="sequence-grid"></div>
+
+                    <div class="result-display">
+                        <p id="sequence-analysis"></p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎲 Sembra casuale, ma non lo è!</h4>
+                        <p>La sequenza è <strong>deterministica</strong> (stessi input = stesso output), ma:</p>
+                        <ul>
+                            <li>Non c'è formula chiusa per "saltare avanti"</li>
+                            <li>Non puoi interpolare tra valori noti</li>
+                            <li>L'unico modo per trovare x è <strong>provare</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚡ La differenza di complessità</h4>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Operazione</th>
+                                <th>Complessità</th>
+                                <th>Con p di 2048 bit</th>
+                            </tr>
+                            <tr class="easy">
+                                <td>g^x mod p</td>
+                                <td>O(log x) - velocissima</td>
+                                <td>~millisecondi</td>
+                            </tr>
+                            <tr class="hard">
+                                <td>log_g(h) mod p</td>
+                                <td>O(√p) migliore noto*</td>
+                                <td>~miliardi di anni</td>
+                            </tr>
+                        </table>
+                        <p style="font-size: 0.85em; margin-top: 10px;">*Algoritmi come Baby-step Giant-step, Pollard's rho</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>💡 Questa asimmetria è la BASE della crittografia!</h4>
+                <p>Abbiamo una "trapdoor function" (funzione trabocchetto):</p>
+                <ul>
+                    <li><strong>Facile in una direzione:</strong> calcolare g^x mod p</li>
+                    <li><strong>Difficile nell'altra:</strong> trovare x dato g^x mod p</li>
+                </ul>
+                <p>Chi conosce x (il segreto) può fare calcoli che altri non possono invertire!</p>
+            </div>
+        </div>
+
+        <!-- ==================== COME FUNZIONA DH ==================== -->
+        <div class="concept-section dh-explain" id="dh-explain">
+            <h2>🤝 Come Funziona Diffie-Hellman</h2>
+            <p class="subtitle">Due persone che non si sono mai incontrate possono creare un segreto condiviso</p>
+
+            <div class="step-container">
+                <div class="step-box step-1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Setup pubblico</h4>
+                        <p>Alice e Bob si accordano su due numeri <strong>pubblici</strong> (possono vederli tutti):</p>
+                        <ul>
+                            <li><strong>p</strong> = un numero primo grande</li>
+                            <li><strong>g</strong> = un generatore del gruppo (base)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-box step-2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Segreti privati</h4>
+                        <p>Ognuno sceglie un numero <strong>segreto</strong> che non rivela a nessuno:</p>
+                        <ul>
+                            <li>Alice sceglie: <strong>a</strong> (segreto di Alice)</li>
+                            <li>Bob sceglie: <strong>b</strong> (segreto di Bob)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-box step-3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Calcolo valori pubblici</h4>
+                        <p>Ognuno calcola un valore <strong>pubblico</strong> dal proprio segreto:</p>
+                        <ul>
+                            <li>Alice calcola: <strong>A = g<sup>a</sup> mod p</strong> e lo invia a Bob</li>
+                            <li>Bob calcola: <strong>B = g<sup>b</sup> mod p</strong> e lo invia ad Alice</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-box step-4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Scambio pubblico</h4>
+                        <p>A e B viaggiano su un canale <strong>pubblico</strong> (possono vederli tutti, inclusa Eve!)</p>
+                    </div>
+                </div>
+
+                <div class="step-box step-5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Calcolo segreto condiviso</h4>
+                        <p>Ognuno calcola il segreto usando il valore pubblico dell'altro:</p>
+                        <ul>
+                            <li>Alice calcola: <strong>s = B<sup>a</sup> mod p = (g<sup>b</sup>)<sup>a</sup> = g<sup>ab</sup></strong></li>
+                            <li>Bob calcola: <strong>s = A<sup>b</sup> mod p = (g<sup>a</sup>)<sup>b</sup> = g<sup>ab</sup></strong></li>
+                        </ul>
+                        <p style="color: #4ade80; font-weight: bold;">→ Stesso risultato! s = g<sup>ab</sup> mod p</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analogia dei colori -->
+            <div class="explanation-card">
+                <h4>🎨 Analogia con i colori (intuitiva ma non perfetta)</h4>
+                <p>Immagina che mescolare i colori sia facile, ma separarli sia impossibile:</p>
+                
+                <div class="color-demo">
+                    <div class="color-step">
+                        <div class="label">Colore pubblico</div>
+                        <div class="color-box" style="background: #fbbf24;">Giallo</div>
+                    </div>
+                    <div class="color-arrow">+</div>
+                    <div class="color-step">
+                        <div class="label">Segreto Alice</div>
+                        <div class="color-box" style="background: #f472b6;">Rosa</div>
+                    </div>
+                    <div class="color-arrow">=</div>
+                    <div class="color-step">
+                        <div class="label">Pubblico Alice</div>
+                        <div class="color-box" style="background: #f97316;">Arancio</div>
+                    </div>
+                </div>
+                
+                <div class="color-demo">
+                    <div class="color-step">
+                        <div class="label">Colore pubblico</div>
+                        <div class="color-box" style="background: #fbbf24;">Giallo</div>
+                    </div>
+                    <div class="color-arrow">+</div>
+                    <div class="color-step">
+                        <div class="label">Segreto Bob</div>
+                        <div class="color-box" style="background: #3b82f6;">Blu</div>
+                    </div>
+                    <div class="color-arrow">=</div>
+                    <div class="color-step">
+                        <div class="label">Pubblico Bob</div>
+                        <div class="color-box" style="background: #22c55e;">Verde</div>
+                    </div>
+                </div>
+                
+                <div class="color-demo" style="margin-top: 20px; padding-top: 20px; border-top: 2px dashed rgba(255,255,255,0.2);">
+                    <div class="color-step">
+                        <div class="label">Alice: Arancio + Blu</div>
+                        <div class="color-box" style="background: #7c3aed;">Viola</div>
+                    </div>
+                    <div class="color-arrow">=</div>
+                    <div class="color-step">
+                        <div class="label">Bob: Verde + Rosa</div>
+                        <div class="color-box" style="background: #7c3aed;">Viola</div>
+                    </div>
+                    <div class="color-arrow" style="font-size: 1em;">✓ Stesso colore!</div>
+                </div>
+                
+                <p style="margin-top: 15px; font-size: 0.9em; color: #94a3b8;">Eve vede: Giallo, Arancio, Verde. Ma non può ottenere Rosa, Blu, né il Viola finale!</p>
+            </div>
+        </div>
+
+        <!-- ==================== LAB INTERATTIVO ==================== -->
+        <div class="concept-section dh-interactive" id="dh-interactive">
+            <h2>🎮 Laboratorio Interattivo Diffie-Hellman</h2>
+            <p class="subtitle">Simula uno scambio di chiavi completo - modifica i valori e osserva cosa succede</p>
+
+            <div class="flex-row" style="margin-bottom: 20px;">
+                <div class="flex-col">
+                    <div class="input-group">
+                        <label>Parametri pubblici (visibili a tutti):</label>
+                        <div class="input-row">
+                            <span>p (primo) =</span>
+                            <input type="number" id="dh-p" value="23" min="3">
+                            <span>g (generatore) =</span>
+                            <input type="number" id="dh-g" value="5" min="2">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-col">
+                    <button class="game-btn success" onclick="runDHExchange()">▶️ Esegui Scambio</button>
+                    <button class="game-btn" onclick="randomizeDH()">🎲 Randomizza</button>
+                </div>
+            </div>
+
+            <!-- DH Diagram -->
+            <div class="dh-diagram">
+                <!-- Alice -->
+                <div class="dh-person alice">
+                    <h3>👩 Alice</h3>
+                    <div class="input-group">
+                        <label>Segreto privato:</label>
+                        <input type="number" id="dh-a" value="6" min="1" style="width: 80px;">
+                    </div>
+                    <div class="dh-value secret">
+                        <small>🔒 Segreto</small><br>
+                        <strong>a = <span id="alice-a">6</span></strong>
+                    </div>
+                    <div class="dh-value public">
+                        <small>📢 Pubblico</small><br>
+                        <strong>A = g<sup>a</sup> mod p</strong><br>
+                        <span id="alice-A">-</span>
+                    </div>
+                    <div class="dh-value shared">
+                        <small>🤝 Chiave condivisa</small><br>
+                        <strong>s = B<sup>a</sup> mod p</strong><br>
+                        <span id="alice-s" style="font-size: 1.3em;">-</span>
+                    </div>
+                </div>
+
+                <!-- Arrow Alice -> Bob -->
+                <div class="dh-arrow">
+                    <span>A = <span id="arrow-A">?</span></span>
+                    <span class="arrow-line">→</span>
+                    <span class="arrow-line">←</span>
+                    <span>B = <span id="arrow-B">?</span></span>
+                </div>
+
+                <!-- Eve -->
+                <div class="dh-person eve">
+                    <h3>🕵️ Eve (attaccante)</h3>
+                    <div class="dh-value public">
+                        <small>👀 Vede tutto il pubblico</small><br>
+                        p = <span id="eve-p">23</span><br>
+                        g = <span id="eve-g">5</span><br>
+                        A = <span id="eve-A">?</span><br>
+                        B = <span id="eve-B">?</span>
+                    </div>
+                    <div class="dh-value" style="border-color: #f87171;">
+                        <small>❌ NON può calcolare</small><br>
+                        a = ?<br>
+                        b = ?<br>
+                        s = ?
+                    </div>
+                </div>
+
+                <!-- Arrow Bob -> Alice (already shown above) -->
+                <div class="dh-arrow">
+                    <span>Canale</span>
+                    <span>pubblico</span>
+                </div>
+
+                <!-- Bob -->
+                <div class="dh-person bob">
+                    <h3>👨 Bob</h3>
+                    <div class="input-group">
+                        <label>Segreto privato:</label>
+                        <input type="number" id="dh-b" value="15" min="1" style="width: 80px;">
+                    </div>
+                    <div class="dh-value secret">
+                        <small>🔒 Segreto</small><br>
+                        <strong>b = <span id="bob-b">15</span></strong>
+                    </div>
+                    <div class="dh-value public">
+                        <small>📢 Pubblico</small><br>
+                        <strong>B = g<sup>b</sup> mod p</strong><br>
+                        <span id="bob-B">-</span>
+                    </div>
+                    <div class="dh-value shared">
+                        <small>🤝 Chiave condivisa</small><br>
+                        <strong>s = A<sup>b</sup> mod p</strong><br>
+                        <span id="bob-s" style="font-size: 1.3em;">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification -->
+            <div class="result-display" id="dh-verification" style="text-align: center;">
+                <p>Clicca "Esegui Scambio" per vedere la magia! ✨</p>
+            </div>
+        </div>
+
+        <!-- ==================== ATTACCO DI EVE ==================== -->
+        <div class="concept-section dh-attack" id="eve-attack">
+            <h2>🕵️ Attacco di Eve: Può rompere DH?</h2>
+            <p class="subtitle">Proviamo a trovare il segreto con brute force... funziona solo con numeri piccoli!</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>👀 Cosa vede Eve?</h4>
+                        <p>Eve intercetta tutto il traffico pubblico:</p>
+                        <div class="formula" id="eve-knows">
+p = 23 (primo pubblico)
+g = 5 (generatore pubblico)
+A = ? (valore pubblico di Alice)
+B = ? (valore pubblico di Bob)
+
+Per trovare s deve:
+1. Trovare a tale che g^a ≡ A (mod p) → DLP!
+2. Oppure b tale che g^b ≡ B (mod p) → DLP!
+3. Poi calcolare s = B^a o s = A^b</div>
+                    </div>
+
+                    <button class="game-btn danger" onclick="eveAttack()">🔓 Eve tenta brute force!</button>
+                    
+                    <div class="result-display" id="eve-attack-result">
+                        <p>Clicca per vedere Eve tentare di rompere lo scambio...</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>⏱️ Perché nel mondo reale è impossibile?</h4>
+                        <p>Con i nostri numeri piccoli (p=23), Eve può provare tutti i valori.</p>
+                        <p>Ma in TLS reale:</p>
+                        <div class="formula">
+p ha circa 2048 bit
+= circa 617 cifre decimali
+= circa 10^617 possibilità
+
+Anche provando 10^12 valori/secondo:
+Tempo necessario ≈ 10^600 anni
+
+L'universo ha "solo" 10^10 anni...</div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>📊 Tempo di attacco vs dimensione di p</h4>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Bit di p</th>
+                                <th>Tempo brute force</th>
+                            </tr>
+                            <tr class="easy">
+                                <td>8 bit</td>
+                                <td>~microsecondo</td>
+                            </tr>
+                            <tr>
+                                <td>32 bit</td>
+                                <td>~secondi</td>
+                            </tr>
+                            <tr>
+                                <td>64 bit</td>
+                                <td>~anni</td>
+                            </tr>
+                            <tr class="hard">
+                                <td>2048 bit</td>
+                                <td>~impossibile</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NEL MONDO REALE ==================== -->
+        <div class="concept-section dh-real" id="real-world">
+            <h2>🌍 Diffie-Hellman nel Mondo Reale</h2>
+            <p class="subtitle">Dove viene usato e perché è fondamentale per Internet</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>🔒 TLS/HTTPS - Ogni volta che visiti un sito sicuro</h4>
+                        <p>Quando vedi il lucchetto nel browser:</p>
+                        <ol>
+                            <li>Il browser e il server eseguono (EC)DHE</li>
+                            <li>Derivano una chiave simmetrica condivisa</li>
+                            <li>Cifrano tutto il traffico con AES-GCM</li>
+                        </ol>
+                        <p><strong>ECDHE</strong> = Elliptic Curve Diffie-Hellman Ephemeral (versione moderna su curve ellittiche)</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📱 Signal, WhatsApp, iMessage</h4>
+                        <p>Usano varianti di DH per:</p>
+                        <ul>
+                            <li><strong>X3DH</strong>: Extended Triple Diffie-Hellman per setup iniziale</li>
+                            <li><strong>Double Ratchet</strong>: DH ripetuto per "Perfect Forward Secrecy"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>⚡ Perché "Ephemeral" (DHE/ECDHE)?</h4>
+                        <p>La "E" sta per <strong>Ephemeral</strong> = chiavi temporanee</p>
+                        <div class="formula">
+Ogni connessione TLS usa nuovi a e b casuali!
+
+Vantaggi:
+✓ Perfect Forward Secrecy (PFS)
+✓ Se la chiave privata del server viene
+  compromessa IN FUTURO, le sessioni
+  PASSATE restano protette
+✓ Ogni sessione ha chiavi diverse</div>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="timeline-event">
+                            <strong>1976</strong> - Whitfield Diffie e Martin Hellman pubblicano "New Directions in Cryptography"
+                        </div>
+                        <div class="timeline-event">
+                            <strong>1977</strong> - RSA viene inventato (usa un'idea simile ma diversa)
+                        </div>
+                        <div class="timeline-event">
+                            <strong>1997</strong> - DH diventa standard in SSL/TLS
+                        </div>
+                        <div class="timeline-event">
+                            <strong>2013</strong> - Dopo Snowden, ECDHE diventa obbligatorio per "A+" su SSL Labs
+                        </div>
+                        <div class="timeline-event">
+                            <strong>2018</strong> - TLS 1.3: solo ECDHE e DHE, niente RSA key exchange
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Attacco Man-in-the-Middle</h4>
+                <p>DH da solo <strong>non autentica</strong> le parti! Un attaccante potrebbe:</p>
+                <ol>
+                    <li>Intercettare A di Alice, sostituirlo con il proprio A'</li>
+                    <li>Intercettare B di Bob, sostituirlo con il proprio B'</li>
+                    <li>Avere due chiavi separate: una con Alice, una con Bob</li>
+                    <li>Leggere e modificare tutti i messaggi!</li>
+                </ol>
+                <p><strong>Soluzione:</strong> combinare DH con firme digitali (certificati) per autenticare le parti. È esattamente quello che fa TLS!</p>
+            </div>
+
+            <div class="success-box">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>Logaritmo discreto:</strong> facile in una direzione (g^x mod p), difficile nell'altra</li>
+                    <li><strong>Diffie-Hellman:</strong> usa questa asimmetria per creare un segreto condiviso</li>
+                    <li><strong>Sicurezza:</strong> basata sulla difficoltà computazionale del DLP</li>
+                    <li><strong>Uso reale:</strong> TLS, messaggistica sicura, VPN, SSH, e molto altro</li>
+                    <li><strong>Limitazione:</strong> non autentica, serve combinarlo con firme/certificati</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== UTILITY FUNCTIONS ====================
+        
+        function modPow(base, exp, mod) {
+            if (mod === 1) return 0;
+            let result = 1;
+            base = base % mod;
+            while (exp > 0) {
+                if (exp % 2 === 1) {
+                    result = (result * base) % mod;
+                }
+                exp = Math.floor(exp / 2);
+                base = (base * base) % mod;
+            }
+            return result;
+        }
+
+        function discreteLog(g, h, p) {
+            // Brute force - only for small numbers!
+            for (let x = 1; x < p; x++) {
+                if (modPow(g, x, p) === h) {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        function isPrime(n) {
+            if (n < 2) return false;
+            if (n === 2) return true;
+            if (n % 2 === 0) return false;
+            for (let i = 3; i <= Math.sqrt(n); i += 2) {
+                if (n % i === 0) return false;
+            }
+            return true;
+        }
+
+        // ==================== LOGARITMO NORMALE ====================
+        
+        function updateLog() {
+            const base = parseFloat(document.getElementById('log-base').value) || 2;
+            const value = parseFloat(document.getElementById('log-value').value) || 1;
+            
+            if (base <= 0 || base === 1 || value <= 0) {
+                document.getElementById('log-result').textContent = 'N/A';
+                return;
+            }
+            
+            const result = Math.log(value) / Math.log(base);
+            document.getElementById('log-result').textContent = 
+                Number.isInteger(result) ? result : result.toFixed(4);
+            
+            document.getElementById('log-verify').innerHTML = 
+                `${base}<sup>${result.toFixed(2)}</sup> = ${Math.pow(base, result).toFixed(2)} ${Math.abs(Math.pow(base, result) - value) < 0.01 ? '✓' : '≈ ' + value}`;
+        }
+
+        // ==================== ESPONENZIAZIONE MODULARE ====================
+        
+        function updateModExp() {
+            const base = parseInt(document.getElementById('exp-base').value) || 2;
+            const exp = parseInt(document.getElementById('exp-exp').value) || 1;
+            const mod = parseInt(document.getElementById('exp-mod').value) || 23;
+            
+            const result = modPow(base, exp, mod);
+            document.getElementById('exp-result').textContent = result;
+        }
+
+        // ==================== LOGARITMO DISCRETO BRUTE FORCE ====================
+        
+        function bruteForceDLog() {
+            const g = parseInt(document.getElementById('dlog-base').value) || 5;
+            const h = parseInt(document.getElementById('dlog-value').value) || 10;
+            const p = parseInt(document.getElementById('dlog-mod').value) || 23;
+            
+            const resultDiv = document.getElementById('dlog-result');
+            const stepsDiv = document.getElementById('dlog-steps');
+            
+            resultDiv.textContent = 'Cercando...';
+            resultDiv.className = 'result-value';
+            stepsDiv.textContent = '';
+            
+            let steps = [];
+            let found = null;
+            
+            for (let x = 1; x < p; x++) {
+                const val = modPow(g, x, p);
+                steps.push(`${g}^${x} mod ${p} = ${val}`);
+                if (val === h && found === null) {
+                    found = x;
+                    break;
+                }
+            }
+            
+            if (found !== null) {
+                resultDiv.textContent = found;
+                resultDiv.className = 'result-value';
+                stepsDiv.innerHTML = `Trovato dopo ${found} tentativi!<br><small>${steps.slice(-3).join(' → ')}</small>`;
+            } else {
+                resultDiv.textContent = 'Non trovato';
+                resultDiv.className = 'result-value danger';
+                stepsDiv.textContent = `Provati tutti i valori da 1 a ${p-1}`;
+            }
+        }
+
+        // ==================== SEQUENZA MODULARE ====================
+        
+        function generateSequence() {
+            const g = parseInt(document.getElementById('seq-g').value) || 5;
+            const p = parseInt(document.getElementById('seq-p').value) || 23;
+            
+            const grid = document.getElementById('sequence-grid');
+            grid.innerHTML = '';
+            
+            const values = [];
+            const seen = new Set();
+            let cycleLength = 0;
+            
+            for (let x = 1; x < Math.min(p, 50); x++) {
+                const val = modPow(g, x, p);
+                values.push({ x, val });
+                
+                if (!seen.has(val)) {
+                    seen.add(val);
+                } else if (cycleLength === 0) {
+                    cycleLength = x;
+                }
+                
+                const cell = document.createElement('div');
+                cell.className = 'bf-cell';
+                cell.innerHTML = `<small>x=${x}</small><br><strong>${val}</strong>`;
+                grid.appendChild(cell);
+            }
+            
+            // Analysis
+            const analysis = document.getElementById('sequence-analysis');
+            analysis.innerHTML = `
+                <strong>Analisi:</strong> ${seen.size} valori distinti generati.
+                ${seen.size === p - 1 ? '<span style="color: #4ade80;">g è un generatore primitivo! ✓</span>' : ''}
+                <br>I valori sembrano "saltare" senza pattern ovvio - questa è la forza del DLP!
+            `;
+        }
+
+        // ==================== DIFFIE-HELLMAN EXCHANGE ====================
+        
+        function runDHExchange() {
+            const p = parseInt(document.getElementById('dh-p').value) || 23;
+            const g = parseInt(document.getElementById('dh-g').value) || 5;
+            const a = parseInt(document.getElementById('dh-a').value) || 6;
+            const b = parseInt(document.getElementById('dh-b').value) || 15;
+            
+            // Calculate public values
+            const A = modPow(g, a, p);
+            const B = modPow(g, b, p);
+            
+            // Calculate shared secrets
+            const sAlice = modPow(B, a, p);
+            const sBob = modPow(A, b, p);
+            
+            // Update Alice
+            document.getElementById('alice-a').textContent = a;
+            document.getElementById('alice-A').innerHTML = `${g}<sup>${a}</sup> mod ${p} = <strong>${A}</strong>`;
+            document.getElementById('alice-s').textContent = sAlice;
+            
+            // Update Bob
+            document.getElementById('bob-b').textContent = b;
+            document.getElementById('bob-B').innerHTML = `${g}<sup>${b}</sup> mod ${p} = <strong>${B}</strong>`;
+            document.getElementById('bob-s').textContent = sBob;
+            
+            // Update arrows
+            document.getElementById('arrow-A').textContent = A;
+            document.getElementById('arrow-B').textContent = B;
+            
+            // Update Eve's view
+            document.getElementById('eve-p').textContent = p;
+            document.getElementById('eve-g').textContent = g;
+            document.getElementById('eve-A').textContent = A;
+            document.getElementById('eve-B').textContent = B;
+            
+            // Verification
+            const verifyDiv = document.getElementById('dh-verification');
+            if (sAlice === sBob) {
+                verifyDiv.innerHTML = `
+                    <h4 style="color: #4ade80;">✓ Successo! Chiave condivisa stabilita!</h4>
+                    <p style="font-size: 1.3em;">
+                        Alice: B<sup>a</sup> = ${B}<sup>${a}</sup> mod ${p} = <strong>${sAlice}</strong><br>
+                        Bob: A<sup>b</sup> = ${A}<sup>${b}</sup> mod ${p} = <strong>${sBob}</strong>
+                    </p>
+                    <p style="color: #4ade80;">g<sup>ab</sup> = g<sup>ba</sup> = ${sAlice} 🎉</p>
+                    <p style="color: #94a3b8; font-size: 0.9em;">Eve vede: p=${p}, g=${g}, A=${A}, B=${B} — ma non può calcolare ${sAlice}!</p>
+                `;
+            } else {
+                verifyDiv.innerHTML = `<p style="color: #f87171;">Errore nel calcolo!</p>`;
+            }
+            
+            // Update Eve knows section
+            document.getElementById('eve-knows').innerHTML = `
+p = ${p} (primo pubblico)
+g = ${g} (generatore pubblico)
+A = ${A} (valore pubblico di Alice)
+B = ${B} (valore pubblico di Bob)
+
+Per trovare s = ${sAlice}, Eve deve:
+1. Trovare a tale che ${g}^a ≡ ${A} (mod ${p}) → DLP!
+2. Oppure b tale che ${g}^b ≡ ${B} (mod ${p}) → DLP!
+3. Poi calcolare s = B^a = ${B}^a mod ${p}`;
+        }
+
+        function randomizeDH() {
+            // Small primes for demo
+            const primes = [23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+            const p = primes[Math.floor(Math.random() * primes.length)];
+            
+            // Find a generator (simplified - just pick a small number)
+            const g = 2 + Math.floor(Math.random() * 5);
+            
+            // Random secrets
+            const a = 2 + Math.floor(Math.random() * (p - 3));
+            const b = 2 + Math.floor(Math.random() * (p - 3));
+            
+            document.getElementById('dh-p').value = p;
+            document.getElementById('dh-g').value = g;
+            document.getElementById('dh-a').value = a;
+            document.getElementById('dh-b').value = b;
+            
+            runDHExchange();
+        }
+
+        // ==================== EVE'S ATTACK ====================
+        
+        function eveAttack() {
+            const p = parseInt(document.getElementById('dh-p').value) || 23;
+            const g = parseInt(document.getElementById('dh-g').value) || 5;
+            const A = modPow(g, parseInt(document.getElementById('dh-a').value), p);
+            const B = modPow(g, parseInt(document.getElementById('dh-b').value), p);
+            
+            const resultDiv = document.getElementById('eve-attack-result');
+            
+            resultDiv.innerHTML = `<p>🔍 Eve inizia brute force per trovare a da A=${A}...</p>`;
+            
+            let attempts = 0;
+            let foundA = null;
+            
+            const startTime = performance.now();
+            
+            for (let x = 1; x < p; x++) {
+                attempts++;
+                if (modPow(g, x, p) === A) {
+                    foundA = x;
+                    break;
+                }
+            }
+            
+            const endTime = performance.now();
+            const timeTaken = (endTime - startTime).toFixed(2);
+            
+            if (foundA !== null) {
+                const s = modPow(B, foundA, p);
+                resultDiv.innerHTML = `
+                    <h4 style="color: #f87171;">🔓 Eve ha trovato il segreto!</h4>
+                    <p>Dopo <strong>${attempts}</strong> tentativi (${timeTaken}ms):</p>
+                    <p>a = ${foundA} (perché ${g}<sup>${foundA}</sup> mod ${p} = ${A})</p>
+                    <p>Chiave segreta: s = B<sup>a</sup> = ${B}<sup>${foundA}</sup> mod ${p} = <strong style="color: #f87171;">${s}</strong></p>
+                    <p style="margin-top: 15px; padding: 10px; background: rgba(248,113,113,0.2); border-radius: 8px;">
+                        ⚠️ Con p=${p} (solo ${Math.ceil(Math.log2(p))} bit), Eve ci mette ${timeTaken}ms.<br>
+                        Con p di 2048 bit, ci vorrebbero miliardi di anni!
+                    </p>
+                `;
+            }
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logaritmo normale
+            document.getElementById('log-base').addEventListener('input', updateLog);
+            document.getElementById('log-value').addEventListener('input', updateLog);
+            
+            // Esponenziazione modulare
+            document.getElementById('exp-base').addEventListener('input', updateModExp);
+            document.getElementById('exp-exp').addEventListener('input', updateModExp);
+            document.getElementById('exp-mod').addEventListener('input', updateModExp);
+            
+            // DH inputs
+            ['dh-p', 'dh-g', 'dh-a', 'dh-b'].forEach(id => {
+                document.getElementById(id).addEventListener('input', runDHExchange);
+            });
+            
+            // Initialize
+            updateLog();
+            updateModExp();
+            generateSequence();
+            runDHExchange();
+        });
+    </script>
+</body>
+</html>
+

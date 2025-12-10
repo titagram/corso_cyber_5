@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aritmetica Modulare - Fondamenti matematici della crittografia</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni principali */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.modulo { border-color: #3b82f6; }
+        .concept-section.modulo h2 { color: #3b82f6; }
+        
+        .concept-section.gcd { border-color: #4ade80; }
+        .concept-section.gcd h2 { color: #4ade80; }
+        
+        .concept-section.fermat { border-color: #f472b6; }
+        .concept-section.fermat h2 { color: #f472b6; }
+        
+        .concept-section.inverse { border-color: #fbbf24; }
+        .concept-section.inverse h2 { color: #fbbf24; }
+        
+        .concept-section.quadratic { border-color: #a78bfa; }
+        .concept-section.quadratic h2 { color: #a78bfa; }
+        
+        .concept-section.crt { border-color: #f87171; }
+        .concept-section.crt h2 { color: #f87171; }
+
+        /* Grid layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            text-align: center;
+        }
+        
+        .input-row input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-row span {
+            font-size: 1.3em;
+            color: #64748b;
+        }
+        
+        .input-wide {
+            width: 150px !important;
+        }
+
+        /* Result displays */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4em;
+            color: #4ade80;
+        }
+        
+        .result-value.large {
+            font-size: 2em;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+
+        /* Orologio per modulo */
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .clock {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            border: 4px solid #3b82f6;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.4);
+        }
+        
+        .clock-number {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .clock-number.highlight {
+            background: #3b82f6;
+            color: white;
+            transform: scale(1.3);
+        }
+        
+        .clock-number.path {
+            background: rgba(59, 130, 246, 0.3);
+        }
+        
+        .clock-hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            width: 4px;
+            background: #f87171;
+            transform-origin: bottom center;
+            border-radius: 2px;
+            transition: transform 0.5s ease-out;
+        }
+        
+        .clock-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            background: #f87171;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Algoritmo di Euclide - steps */
+        .algorithm-steps {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .step-num {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #3b82f6;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.85em;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step.final {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid #4ade80;
+        }
+        
+        .step.final .step-num {
+            background: #4ade80;
+            color: black;
+        }
+
+        /* Tabelle */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .data-table th {
+            background: rgba(255,255,255,0.1);
+            font-size: 0.9em;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .data-table .highlight {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .data-table .coprime {
+            color: #4ade80;
+        }
+        
+        .data-table .not-coprime {
+            color: #f87171;
+        }
+
+        /* Grid numeri */
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 5px;
+            margin: 15px 0;
+        }
+        
+        .number-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .number-cell.coprime {
+            background: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+        
+        .number-cell.not-coprime {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+        
+        .number-cell.quadratic-residue {
+            background: rgba(167, 139, 250, 0.4);
+            color: #a78bfa;
+        }
+        
+        .number-cell.selected {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .reality-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .reality-box li {
+            margin: 8px 0;
+        }
+
+        /* Crypto game */
+        .crypto-game {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(59, 130, 246, 0.1));
+            border: 2px solid;
+            border-image: linear-gradient(135deg, #4ade80, #3b82f6) 1;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .crypto-game h3 {
+            color: #4ade80;
+            margin: 0 0 15px 0;
+        }
+        
+        .game-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+        
+        .game-output {
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        /* Legendre symbol visualization */
+        .legendre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .legendre-cell {
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .legendre-cell.residue {
+            background: rgba(74, 222, 128, 0.3);
+            border: 2px solid #4ade80;
+        }
+        
+        .legendre-cell.non-residue {
+            background: rgba(248, 113, 113, 0.2);
+            border: 2px solid #f87171;
+        }
+        
+        .legendre-cell .value {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .legendre-cell .symbol {
+            font-size: 0.8em;
+            margin-top: 4px;
+            color: #94a3b8;
+        }
+
+        /* CRT visualization */
+        .crt-system {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .crt-equation {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .crt-equation input {
+            width: 60px;
+            padding: 8px;
+            font-size: 1em;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            text-align: center;
+        }
+
+        /* Explanation cards */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Warning/Info boxes */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Animazione */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Tooltip */
+        .tooltip-trigger {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            white-space: normal;
+            width: 280px;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            border: 1px solid #3b82f6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .tooltip-trigger:hover .tooltip {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.95);
+        }
+        
+        .tooltip strong {
+            color: #fbbf24;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .clock {
+                width: 200px;
+                height: 200px;
+            }
+            .flex-col {
+                min-width: 100%;
+            }
+            .tooltip {
+                width: 240px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="2.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">🔢 Aritmetica Modulare</h1>
+        <div class="subtitle">Il fondamento matematico di RSA, Diffie-Hellman e crittografia a curve ellittiche</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#modulo">Modulo</a>
+            <a href="#gcd">GCD & Euclide</a>
+            <a href="#coprimi">Coprimi</a>
+            <a href="#fermat">Fermat</a>
+            <a href="#inverso">Inverso Modulare</a>
+            <a href="#residui">Residui Quadratici</a>
+            <a href="#legendre">Legendre</a>
+            <a href="#crt">Teorema Cinese</a>
+            <a href="#rsa-game">🎮 RSA Game</a>
+        </div>
+
+        <!-- ==================== MODULO ==================== -->
+        <div class="concept-section modulo" id="modulo">
+            <h2>⏰ Operazione Modulo</h2>
+            <p class="subtitle">L'aritmetica "ad orologio" - il resto della divisione intera</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="input-group">
+                        <label>Calcola: a <span class="tooltip-trigger">mod<span class="tooltip"><strong>Operazione Modulo</strong><br>a mod n è il resto della divisione di a per n.<br><br><strong>Esempio:</strong><br>17 mod 12 = 5 perché:<br>17 = 1 × 12 + 5<br>Il resto è 5.<br><br><strong>Pensa all'orologio:</strong><br>Se sono le 17:00, un orologio a 12 ore segna le 5:00!<br>L'operazione modulo "avvolge" i numeri.</span></span> n</label>
+                        <div class="input-row">
+                            <input type="number" id="mod-a" value="17" min="0" title="Valore a per calcolare a mod n">
+                            <span class="tooltip-trigger">mod<span class="tooltip"><strong>Operazione Modulo</strong><br>a mod n è il resto della divisione di a per n.<br><br><strong>Esempio:</strong><br>17 mod 12 = 5 perché:<br>17 = 1 × 12 + 5<br>Il resto è 5.<br><br><strong>Pensa all'orologio:</strong><br>Se sono le 17:00, un orologio a 12 ore segna le 5:00!<br>L'operazione modulo "avvolge" i numeri.</span></span></span>
+                            <input type="number" id="mod-n" value="12" min="1" max="24" title="Valore n (modulo)">
+                            <span>=</span>
+                            <span class="result-value" id="mod-result">5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="formula">
+                        <strong>Definizione:</strong> a mod n = r, dove a = q × n + r (0 ≤ r < n)<br>
+                        <span id="mod-formula-detail">17 = 1 × 12 + 5, quindi 17 mod 12 = 5</span>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🕐 Pensa all'orologio!</h4>
+                        <p>Se sono le 17:00, che ora segna un orologio a 12 ore? <strong>Le 5!</strong></p>
+                        <p>L'operazione modulo "avvolge" i numeri: quando arrivi a n, riparti da 0.</p>
+                        <p>Prova a cambiare i valori e guarda come si muove la lancetta dell'orologio →</p>
+                    </div>
+                </div>
+                
+                <div class="flex-col">
+                    <div class="clock-container">
+                        <div class="clock" id="modulo-clock">
+                            <div class="clock-hand" id="clock-hand"></div>
+                            <div class="clock-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>🌍 Nel mondo reale</h4>
+                <ul>
+                    <li><strong>Orologi:</strong> 15:00 mod 12 = 3 (formato 12 ore)</li>
+                    <li><strong>Giorni della settimana:</strong> (Lunedì + 10 giorni) mod 7 = Giovedì</li>
+                    <li><strong>Checksum:</strong> ISBN, carte di credito usano modulo per verifica</li>
+                    <li><strong>Hash tables:</strong> index = hash(key) mod tableSize</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== GCD & EUCLIDE ==================== -->
+        <div class="concept-section gcd" id="gcd">
+            <h2>🔗 GCD e Algoritmo di Euclide</h2>
+            <p class="subtitle">Trovare il massimo comune divisore - fondamentale per l'inverso modulare</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="input-group">
+                        <label>
+                            Calcola <span class="tooltip-trigger">GCD<span class="tooltip"><strong>GCD (Greatest Common Divisor)</strong><br>Il Massimo Comun Divisore di due numeri è il più grande numero che divide entrambi.<br><br><strong>Esempio:</strong><br>GCD(48, 18) = 6 perché:<br>• 6 divide 48 (48 = 6 × 8)<br>• 6 divide 18 (18 = 6 × 3)<br>• Nessun numero più grande di 6 divide entrambi<br><br><strong>In italiano:</strong> MCD (Massimo Comun Divisore)</span></span>(a, b):
+                        </label>
+                        <div class="input-row">
+                            <span>GCD(</span>
+                            <input type="number" id="gcd-a" value="48" min="1" title="Primo numero per calcolare GCD">
+                            <span>,</span>
+                            <input type="number" id="gcd-b" value="18" min="1" title="Secondo numero per calcolare GCD">
+                            <span>) =</span>
+                            <span class="result-value" id="gcd-result">6</span>
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>📐 Algoritmo di Euclide</h4>
+                        <p>Invece di fattorizzare (lento!), usiamo la proprietà:</p>
+                        <p class="formula">GCD(a, b) = GCD(b, a mod b)</p>
+                        <p>Ripetiamo finché il secondo numero diventa 0. Il GCD è l'ultimo valore non-zero.</p>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>📝 Passaggi dell'algoritmo:</h4>
+                        <div class="algorithm-steps" id="euclid-steps"></div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>⚡ Perché è importante in crittografia?</h4>
+                        <ul>
+                            <li>Verifica se due numeri sono <strong>coprimi</strong> (GCD = 1)</li>
+                            <li>Calcola l'<strong>inverso modulare</strong> (algoritmo esteso)</li>
+                            <li>Verifica la validità delle chiavi RSA</li>
+                            <li>È <strong>velocissimo</strong>: O(log min(a,b))</li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+                        <strong>Algoritmo Esteso di Euclide:</strong><br>
+                        Trova x, y tali che: ax + by = GCD(a, b)<br>
+                        <span id="extended-result">48×(-1) + 18×(3) = 6 ✓</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>🌍 Applicazione: Verifica chiave RSA</h4>
+                <p>In RSA, l'esponente pubblico <strong>e</strong> deve essere coprimo con φ(n).</p>
+                <p>GCD(e, φ(n)) = 1 → possiamo calcolare la chiave privata d!</p>
+            </div>
+        </div>
+
+        <!-- ==================== COPRIMI ==================== -->
+        <div class="concept-section gcd" id="coprimi">
+            <h2>🤝 Numeri Coprimi e Funzione φ di Eulero</h2>
+            <p class="subtitle">Due numeri sono coprimi se il loro GCD è 1 - la base della crittografia RSA</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="input-group">
+                        <label>Trova tutti i coprimi di n (numeri < n con GCD = 1):</label>
+                        <div class="input-row">
+                            <span>n =</span>
+                            <input type="number" id="coprime-n" value="12" min="2" max="50">
+                            <span>→ <span class="tooltip-trigger">φ(n)<span class="tooltip"><strong>Funzione φ di Eulero</strong><br>φ(n) conta quanti numeri tra 1 e n-1 sono coprimi con n (cioè hanno GCD = 1 con n).<br><br><strong>Esempio:</strong><br>φ(12) = 4 perché i numeri coprimi con 12 sono: {1, 5, 7, 11}<br><br><strong>Importante in RSA:</strong><br>Se n = p × q (con p e q primi), allora φ(n) = (p-1)(q-1)</span></span> =</span>
+                            <span class="result-value" id="euler-phi">4</span>
+                        </div>
+                    </div>
+
+                    <div class="number-grid" id="coprime-grid"></div>
+
+                    <div class="formula">
+                        <strong>Funzione φ di Eulero:</strong> conta quanti numeri < n sono coprimi con n<br>
+                        <span id="coprime-list">Coprimi di 12: {1, 5, 7, 11} → φ(12) = 4</span>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📊 Formule utili per φ(n)</h4>
+                        <ul>
+                            <li>Se p è primo: <strong>φ(p) = p - 1</strong></li>
+                            <li>Se n = p × q (primi): <strong>φ(n) = (p-1)(q-1)</strong></li>
+                            <li>Se n = p^k: <strong>φ(n) = p^(k-1)(p-1)</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="explanation-card" style="margin-top: 15px; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6;">
+                        <h4 style="color: #3b82f6;">🔢 Formula Generale di Eulero</h4>
+                        <p>Se n ha fattorizzazione in primi: n = p₁ᵏ¹ × p₂ᵏ² × ... × pₖᵏᵏ</p>
+                        <div class="formula" style="text-align: center; font-size: 1.2em; padding: 20px;">
+                            <strong>φ(n) = n × (1 − 1/p₁) × (1 − 1/p₂) × ... × (1 − 1/pₖ)</strong>
+                        </div>
+                        <p style="margin-top: 10px;"><strong>Esempio:</strong> n = 12 = 2² × 3¹</p>
+                        <ul>
+                            <li>φ(12) = 12 × (1 - 1/2) × (1 - 1/3)</li>
+                            <li>φ(12) = 12 × (1/2) × (2/3)</li>
+                            <li>φ(12) = 12 × (2/6) = 12 × (1/3) = <strong>4</strong> ✓</li>
+                        </ul>
+                        <p style="margin-top: 10px; color: #94a3b8; font-size: 0.9em;">
+                            💡 <strong>Perché questa formula?</strong> Conta i numeri che NON condividono fattori primi con n. 
+                            Per ogni primo pᵢ, escludiamo 1/pᵢ dei numeri, quindi moltiplichiamo per (1 - 1/pᵢ).
+                        </p>
+                    </div>
+
+                    <div class="data-table" style="max-height: 200px; overflow-y: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>n</th><th>φ(n)</th><th>Coprimi</th></tr>
+                            </thead>
+                            <tbody id="phi-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>🔐 In RSA</h4>
+                <p>Scelti due primi p e q, calcoliamo n = p × q e φ(n) = (p-1)(q-1).</p>
+                <p>L'esponente pubblico <strong>e</strong> deve essere coprimo con φ(n).</p>
+                <p>Esempio: p=3, q=11 → n=33, φ(33) = 2×10 = <strong>20</strong></p>
+            </div>
+        </div>
+
+        <!-- ==================== FERMAT ==================== -->
+        <div class="concept-section fermat" id="fermat">
+            <h2>🎩 Piccolo Teorema di Fermat</h2>
+            <p class="subtitle">Un teorema elegante che semplifica i calcoli di esponenziazione modulare</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula" style="font-size: 1.3em; text-align: center; padding: 25px;">
+                        Se p è primo e GCD(a, p) = 1:<br>
+                        <strong style="color: #f472b6;">
+                            a<sup>p-1</sup> <span class="tooltip-trigger">≡<span class="tooltip"><strong>Congruenza (≡)</strong><br>Due numeri sono "congruenti mod p" se hanno lo stesso resto quando divisi per p.<br>Esempio: 7 ≡ 2 (mod 5) perché 7 mod 5 = 2 e 2 mod 5 = 2.<br>Si legge: "7 è congruo a 2 modulo 5".</span></span> 1 (mod p)
+                        </strong>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Verifica il teorema:</label>
+                        <div class="input-row">
+                            <input type="number" id="fermat-a" value="2" min="1">
+                            <span><sup id="fermat-exp">6</sup> mod</span>
+                            <input type="number" id="fermat-p" value="7" min="2">
+                            <span>=</span>
+                            <span class="result-value" id="fermat-result">1</span>
+                        </div>
+                    </div>
+
+                    <div class="result-display" id="fermat-verification">
+                        <p>2<sup>6</sup> = 64</p>
+                        <p>64 mod 7 = 64 - 9×7 = 64 - 63 = <strong style="color: #4ade80;">1 ✓</strong></p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>💡 A cosa serve?</h4>
+                        <ol>
+                            <li><strong>Test di primalità:</strong> se a<sup>n-1</sup> ≢ 1 (mod n), allora n NON è primo</li>
+                            <li><strong>Semplifica calcoli:</strong> a<sup>grande</sup> mod p si riduce usando a<sup>p-1</sup> ≡ 1</li>
+                            <li><strong>Calcolo inversi:</strong> a<sup>-1</sup> ≡ a<sup>p-2</sup> (mod p)</li>
+                        </ol>
+                    </div>
+
+                    <div class="formula">
+                        <strong>Versione generalizzata (Eulero):</strong><br>
+                        Se GCD(a, n) = 1: <strong>a<sup>φ(n)</sup> ≡ 1 (mod n)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crypto-game">
+                <h3>🎮 Gioco: Test di Primalità di Fermat</h3>
+                <p>Inserisci un numero e verifichiamo se "sembra" primo usando il test di Fermat.</p>
+                
+                <div class="input-row" style="margin: 15px 0;">
+                    <span>n =</span>
+                    <input type="number" id="primality-n" value="17" min="2" class="input-wide">
+                    <button class="game-btn" onclick="testPrimality()">🔍 Testa Primalità</button>
+                </div>
+
+                <div class="game-output" id="primality-output">
+                    <p>Clicca "Testa Primalità" per vedere i risultati...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== INVERSO MODULARE ==================== -->
+        <div class="concept-section inverse" id="inverso">
+            <h2>↩️ Inverso Modulare</h2>
+            <p class="subtitle">Trovare "1/a" nel mondo modulare - essenziale per RSA</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula" style="font-size: 1.2em; text-align: center; padding: 20px;">
+                        L'inverso di <strong>a</strong> modulo <strong>n</strong> è il numero <strong>x</strong> tale che:<br>
+                        <strong style="color: #fbbf24;">
+                            a × x <span class="tooltip-trigger">≡<span class="tooltip"><strong>Congruenza (≡)</strong><br>Due numeri sono "congruenti mod n" se hanno lo stesso resto quando divisi per n.<br>Esempio: 7 ≡ 2 (mod 5) perché 7 mod 5 = 2 e 2 mod 5 = 2.<br>Si legge: "7 è congruo a 2 modulo 5".</span></span> 1 (mod n)
+                        </strong>
+                        <div style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                            <span class="tooltip-trigger">💡 Cosa significa?<span class="tooltip"><strong>Spiegazione semplice:</strong><br>L'inverso modulare di a è un numero x tale che, quando moltiplichi a × x e prendi il resto della divisione per n, ottieni esattamente 1.<br><br><strong>Esempio:</strong><br>L'inverso di 3 mod 11 è 4 perché:<br>3 × 4 = 12, e 12 mod 11 = 1 ✓<br>Quindi 4 è "1/3" nel mondo modulare!</span></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Trova l'inverso modulare:</label>
+                        <div class="input-row">
+                            <input type="number" id="inv-a" value="3" min="1">
+                            <span>× ? ≡ 1 (mod</span>
+                            <input type="number" id="inv-n" value="11" min="2">
+                            <span>)</span>
+                        </div>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>Risultato:</h4>
+                        <p class="result-value large" id="inverse-result">4</p>
+                        <p id="inverse-check" style="margin-top: 10px;">Verifica: 3 × 4 = 12 ≡ 1 (mod 11) ✓</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>⚠️ Quando esiste l'inverso?</h4>
+                        <p>L'inverso di <strong>a mod n</strong> esiste <strong>solo se GCD(a, n) = 1</strong></p>
+                        <p>Cioè: a e n devono essere coprimi!</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔧 Come calcolarlo?</h4>
+                        <ol>
+                            <li><strong>Algoritmo esteso di Euclide:</strong> trova x tale che ax + ny = 1</li>
+                            <li><strong>Fermat (se n primo):</strong> a<sup>-1</sup> ≡ a<sup>n-2</sup> (mod n)</li>
+                            <li><strong>Brute force (lento):</strong> prova tutti i numeri da 1 a n-1</li>
+                        </ol>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>Tabella degli inversi mod <span id="inv-table-n">11</span>:</h4>
+                        <div id="inverse-table" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>🔐 In RSA: Calcolo della chiave privata</h4>
+                <p>Data la chiave pubblica <strong>e</strong>, troviamo <strong>d</strong> (chiave privata) come:</p>
+                <p class="formula" style="text-align: center;">d ≡ e<sup>-1</sup> (mod φ(n))</p>
+                <p>Esempio: e=7, φ(n)=20 → d=3 perché 7×3 = 21 ≡ 1 (mod 20)</p>
+            </div>
+        </div>
+
+        <!-- ==================== RESIDUI QUADRATICI ==================== -->
+        <div class="concept-section quadratic" id="residui">
+            <h2>√ Residui Quadratici</h2>
+            <p class="subtitle">Quali numeri hanno una "radice quadrata" nel mondo modulare?</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula">
+                        <strong>a</strong> è un residuo quadratico mod p se esiste <strong>x</strong> tale che:<br>
+                        <strong style="color: #a78bfa;">
+                            x² <span class="tooltip-trigger">≡<span class="tooltip"><strong>Congruenza (≡)</strong><br>Due numeri sono "congruenti mod p" se hanno lo stesso resto quando divisi per p.<br>Esempio: 7 ≡ 2 (mod 5) perché 7 mod 5 = 2 e 2 mod 5 = 2.<br>Si legge: "7 è congruo a 2 modulo 5".</span></span> a (mod p)
+                        </strong>
+                        <div style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                            <span class="tooltip-trigger">💡 Cosa significa?<span class="tooltip"><strong>Spiegazione semplice:</strong><br>a è un "quadrato" mod p se esiste un numero x tale che, quando lo quadri (x²) e poi prendi il resto della divisione per p, ottieni esattamente a.<br><br><strong>Esempio:</strong><br>Con p=13, il numero 4 è un residuo quadratico perché:<br>2² = 4, e 4 mod 13 = 4 ✓<br>Quindi x=2 è una "radice quadrata" di 4 mod 13.</span></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Trova i residui quadratici mod p:</label>
+                        <div class="input-row">
+                            <span>p =</span>
+                            <input type="number" id="qr-p" value="13" min="3" max="31">
+                        </div>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>Residui Quadratici mod <span id="qr-p-display">13</span>:</h4>
+                        <div class="number-grid" id="qr-grid"></div>
+                        <p id="qr-count" style="margin-top: 10px;"></p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📊 Tabella: x → x² mod p</h4>
+                        <div id="qr-table-container" style="max-height: 250px; overflow-y: auto;">
+                            <table class="data-table" id="qr-squares-table"></table>
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Proprietà interessanti</h4>
+                        <ul>
+                            <li>Per p primo dispari: esattamente <strong>(p-1)/2</strong> residui quadratici</li>
+                            <li>Il prodotto di due RQ è un RQ</li>
+                            <li>Il prodotto di due non-RQ è un RQ</li>
+                            <li>Il prodotto di un RQ e un non-RQ è un non-RQ</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="warning-box" style="margin-top: 15px;">
+                        <h4>⚠️ Importante: Non Confondere!</h4>
+                        <p><strong>Equazione singola:</strong> x² ≡ a (mod p)</p>
+                        <ul>
+                            <li>Ha al massimo <strong>2 soluzioni</strong> per x (se a è residuo quadratico)</li>
+                            <li>Esempio: x² ≡ 4 (mod 13) ha soluzioni x = 2 e x = 11</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Residui quadratici (insieme):</strong></p>
+                        <ul>
+                            <li>Sono tutti i possibili valori di <strong>a</strong> che hanno almeno una radice</li>
+                            <li>È un <strong>insieme</strong>, non una singola equazione</li>
+                            <li>Per p=13: ci sono (13-1)/2 = <strong>6 residui quadratici</strong> (insieme di valori di a)</li>
+                            <li>Ogni residuo quadratico ha 2 radici, ma l'insieme totale ha 6 elementi</li>
+                        </ul>
+                        <p style="margin-top: 10px; color: #94a3b8; font-size: 0.9em;">
+                            💡 <strong>Analogia:</strong> Pensa ai residui quadratici come a un "elenco di numeri che sono quadrati". 
+                            Ogni numero in questo elenco ha 2 "radici quadrate", ma l'elenco stesso contiene (p-1)/2 numeri.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SIMBOLO DI LEGENDRE ==================== -->
+        <div class="concept-section quadratic" id="legendre">
+            <h2>📐 Simbolo di Legendre</h2>
+            <p class="subtitle">Un modo elegante per sapere se un numero è un residuo quadratico</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula" style="font-size: 1.1em;">
+                        <strong>Simbolo di Legendre (a/p):</strong><br><br>
+                        • <strong style="color: #4ade80;">(a/p) = 1</strong> → a è residuo quadratico mod p<br>
+                        • <strong style="color: #f87171;">(a/p) = -1</strong> → a NON è residuo quadratico<br>
+                        • <strong>(a/p) = 0</strong> → p divide a
+                        <div style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                            <span class="tooltip-trigger">💡 Cosa significa (a/p)?<span class="tooltip"><strong>Spiegazione semplice:</strong><br>Il simbolo di Legendre (a/p) ci dice se il numero a è un "quadrato" modulo p.<br><br><strong>Valori possibili:</strong><br>• (a/p) = 1: a è un quadrato mod p (esiste x tale che x² ≡ a mod p)<br>• (a/p) = -1: a NON è un quadrato mod p (nessuna radice)<br>• (a/p) = 0: p divide a (caso speciale)<br><br><strong>Esempio:</strong> (2/7) = 1 perché 3² = 9 ≡ 2 (mod 7), quindi 2 è un quadrato mod 7.</span></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Calcola il simbolo di Legendre:</label>
+                        <div class="input-row">
+                            <span>(</span>
+                            <input type="number" id="legendre-a" value="2" min="1">
+                            <span>/</span>
+                            <input type="number" id="legendre-p" value="7" min="3">
+                            <span>) =</span>
+                            <span class="result-value" id="legendre-result">1</span>
+                        </div>
+                    </div>
+
+                    <div class="formula">
+                        <strong>Criterio di Eulero:</strong><br>
+                        (a/p) ≡ a<sup>(p-1)/2</sup> (mod p)
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Griglia di Legendre per p = <span id="legendre-p-display">7</span>:</h4>
+                        <div class="legendre-grid" id="legendre-grid"></div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Uso in crittografia</h4>
+                        <ul>
+                            <li><strong>Solovay-Strassen:</strong> test di primalità probabilistico</li>
+                            <li><strong>Cifrari basati su RQ:</strong> Goldwasser-Micali</li>
+                            <li><strong>Curve ellittiche:</strong> determina se un punto esiste</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TEOREMA CINESE DEL RESTO ==================== -->
+        <div class="concept-section crt" id="crt">
+            <h2>🏯 Teorema Cinese del Resto (CRT)</h2>
+            <p class="subtitle">Risolvere sistemi di congruenze - ottimizzazione fondamentale per RSA</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📜 Il problema storico</h4>
+                        <p>Un generale cinese vuole contare i soldati. Li mette in file da 3, 5 e 7:</p>
+                        <ul>
+                            <li>In file da 3: avanzano 2 soldati</li>
+                            <li>In file da 5: avanzano 3 soldati</li>
+                            <li>In file da 7: avanzano 2 soldati</li>
+                        </ul>
+                        <p><strong>Quanti soldati ha?</strong></p>
+                    </div>
+
+                    <div class="crt-system" id="crt-system">
+                        <div class="crt-equation">
+                            <span>x <span class="tooltip-trigger">≡<span class="tooltip"><strong>Congruenza (≡)</strong><br>Due numeri sono "congruenti mod n" se hanno lo stesso resto quando divisi per n.<br>Esempio: 7 ≡ 2 (mod 5) perché 7 mod 5 = 2 e 2 mod 5 = 2.<br>Si legge: "7 è congruo a 2 modulo 5".</span></span></span>
+                            <input type="number" id="crt-r1" value="2" min="0">
+                            <span>(mod</span>
+                            <input type="number" id="crt-m1" value="3" min="2">
+                            <span>)</span>
+                        </div>
+                        <div class="crt-equation">
+                            <span>x ≡</span>
+                            <input type="number" id="crt-r2" value="3" min="0">
+                            <span>(mod</span>
+                            <input type="number" id="crt-m2" value="5" min="2">
+                            <span>)</span>
+                        </div>
+                        <div class="crt-equation">
+                            <span>x ≡</span>
+                            <input type="number" id="crt-r3" value="2" min="0">
+                            <span>(mod</span>
+                            <input type="number" id="crt-m3" value="7" min="2">
+                            <span>)</span>
+                        </div>
+                    </div>
+
+                    <button class="game-btn" onclick="solveCRT()" style="margin-top: 15px;">🔮 Risolvi il sistema</button>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Soluzione:</h4>
+                        <p class="result-value large" id="crt-result">23</p>
+                        <p id="crt-details" style="margin-top: 10px;"></p>
+                    </div>
+
+                    <div class="formula">
+                        <strong>Condizione:</strong> i moduli devono essere coprimi a coppie!<br>
+                        GCD(3,5) = 1, GCD(3,7) = 1, GCD(5,7) = 1 ✓
+                    </div>
+
+                    <div class="algorithm-steps" id="crt-steps" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>⚡ CRT in RSA: Velocizzare la decifratura</h4>
+                <p>Invece di calcolare m = c<sup>d</sup> mod n direttamente, usiamo CRT:</p>
+                <ol>
+                    <li>Calcola m₁ = c<sup>d mod (p-1)</sup> mod p</li>
+                    <li>Calcola m₂ = c<sup>d mod (q-1)</sup> mod q</li>
+                    <li>Combina con CRT per ottenere m mod n</li>
+                </ol>
+                <p><strong>Risultato: 4× più veloce!</strong> Usiamo esponenti più piccoli.</p>
+            </div>
+        </div>
+
+        <!-- ==================== RSA GAME ==================== -->
+        <div class="crypto-game" id="rsa-game">
+            <h2 style="color: #4ade80; margin: 0 0 10px 0;">🎮 Gioco Interattivo: Mini-RSA</h2>
+            <p class="subtitle">Metti insieme tutti i concetti per creare un sistema RSA funzionante!</p>
+
+            <div class="flex-row" style="margin-top: 20px;">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>Passo 1: Scegli due numeri primi</h4>
+                        <div class="input-row">
+                            <span>p =</span>
+                            <input type="number" id="rsa-p" value="11" min="3" max="101">
+                            <span>q =</span>
+                            <input type="number" id="rsa-q" value="13" min="3" max="101">
+                        </div>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>Passo 2: Calcoli automatici</h4>
+                        <p>n = p × q = <span id="rsa-n" class="result-value">143</span></p>
+                        <p>φ(n) = (p-1)(q-1) = <span id="rsa-phi" class="result-value">120</span></p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>Passo 3: Scegli esponente pubblico e</h4>
+                        <p style="font-size: 0.9em; color: #94a3b8;">Deve essere coprimo con φ(n)</p>
+                        <div class="input-row">
+                            <span>e =</span>
+                            <input type="number" id="rsa-e" value="7" min="2">
+                            <span id="rsa-e-valid" style="margin-left: 10px;"></span>
+                        </div>
+                    </div>
+
+                    <div class="result-display">
+                        <h4>Passo 4: Chiave privata d</h4>
+                        <p>d = e<sup>-1</sup> mod φ(n) = <span id="rsa-d" class="result-value">103</span></p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display" style="border: 2px solid #4ade80;">
+                        <h4 style="color: #4ade80;">🔑 Le tue chiavi RSA</h4>
+                        <p><strong>Chiave Pubblica:</strong> (n=<span id="rsa-pub-n">143</span>, e=<span id="rsa-pub-e">7</span>)</p>
+                        <p><strong>Chiave Privata:</strong> (n=<span id="rsa-priv-n">143</span>, d=<span id="rsa-priv-d">103</span>)</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>Passo 5: Cifra un messaggio!</h4>
+                        <div class="input-row">
+                            <span>m =</span>
+                            <input type="number" id="rsa-m" value="42" min="0">
+                            <span>(deve essere < n)</span>
+                        </div>
+                        <p style="margin-top: 10px;">c = m<sup>e</sup> mod n</p>
+                        <p>c = <span id="rsa-m-val">42</span><sup><span id="rsa-e-val">7</span></sup> mod <span id="rsa-n-val">143</span> = <span id="rsa-c" class="result-value" style="font-size: 1.5em;">81</span></p>
+                    </div>
+
+                    <div class="result-display" style="border: 2px solid #fbbf24;">
+                        <h4 style="color: #fbbf24;">🔓 Decifra il messaggio</h4>
+                        <p>m' = c<sup>d</sup> mod n</p>
+                        <p>m' = <span id="rsa-c-val">81</span><sup><span id="rsa-d-val">103</span></sup> mod <span id="rsa-n-val2">143</span> = <span id="rsa-decrypted" class="result-value" style="font-size: 1.5em;">42</span></p>
+                        <p id="rsa-verify" style="margin-top: 10px; color: #4ade80;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning finale -->
+        <div class="warning-box">
+            <h4>⚠️ Attenzione: Questi sono esempi didattici!</h4>
+            <p>I numeri usati qui sono TROPPO PICCOLI per uso reale:</p>
+            <ul>
+                <li><strong>RSA reale:</strong> usa primi di 1024+ bit (numeri con 300+ cifre)</li>
+                <li><strong>Fattorizzare n piccoli:</strong> è banale, quindi nessuna sicurezza</li>
+                <li><strong>In produzione:</strong> usa librerie testate (OpenSSL, libsodium, ecc.)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // ==================== UTILITY FUNCTIONS ====================
+        
+        function gcd(a, b) {
+            a = Math.abs(a);
+            b = Math.abs(b);
+            while (b !== 0) {
+                [a, b] = [b, a % b];
+            }
+            return a;
+        }
+
+        function extendedGcd(a, b) {
+            if (b === 0) return { gcd: a, x: 1, y: 0 };
+            const result = extendedGcd(b, a % b);
+            return {
+                gcd: result.gcd,
+                x: result.y,
+                y: result.x - Math.floor(a / b) * result.y
+            };
+        }
+
+        function modInverse(a, n) {
+            const result = extendedGcd(a, n);
+            if (result.gcd !== 1) return null;
+            return ((result.x % n) + n) % n;
+        }
+
+        function modPow(base, exp, mod) {
+            let result = 1n;
+            base = BigInt(base) % BigInt(mod);
+            exp = BigInt(exp);
+            mod = BigInt(mod);
+            while (exp > 0n) {
+                if (exp % 2n === 1n) {
+                    result = (result * base) % mod;
+                }
+                exp = exp / 2n;
+                base = (base * base) % mod;
+            }
+            return Number(result);
+        }
+
+        function isPrime(n) {
+            if (n < 2) return false;
+            if (n === 2) return true;
+            if (n % 2 === 0) return false;
+            for (let i = 3; i <= Math.sqrt(n); i += 2) {
+                if (n % i === 0) return false;
+            }
+            return true;
+        }
+
+        function eulerPhi(n) {
+            let count = 0;
+            for (let i = 1; i < n; i++) {
+                if (gcd(i, n) === 1) count++;
+            }
+            return count;
+        }
+
+        function legendreSymbol(a, p) {
+            if (a % p === 0) return 0;
+            const result = modPow(a, (p - 1) / 2, p);
+            return result === 1 ? 1 : -1;
+        }
+
+        // ==================== MODULO ====================
+        
+        function updateModulo() {
+            const a = parseInt(document.getElementById('mod-a').value) || 0;
+            const n = parseInt(document.getElementById('mod-n').value) || 1;
+            
+            if (n <= 0) return;
+            
+            const result = ((a % n) + n) % n;
+            const q = Math.floor(a / n);
+            
+            document.getElementById('mod-result').textContent = result;
+            document.getElementById('mod-formula-detail').textContent = 
+                `${a} = ${q} × ${n} + ${result}, quindi ${a} mod ${n} = ${result}`;
+            
+            updateClock(result, n);
+        }
+
+        function updateClock(result, n) {
+            const clock = document.getElementById('modulo-clock');
+            clock.innerHTML = '<div class="clock-hand" id="clock-hand"></div><div class="clock-center"></div>';
+            
+            const displayN = Math.min(n, 24);
+            const radius = 100;
+            
+            for (let i = 0; i < displayN; i++) {
+                const angle = (i / displayN) * 2 * Math.PI - Math.PI / 2;
+                const x = 125 + radius * Math.cos(angle) - 15;
+                const y = 125 + radius * Math.sin(angle) - 15;
+                
+                const numDiv = document.createElement('div');
+                numDiv.className = 'clock-number' + (i === result % displayN ? ' highlight' : '');
+                numDiv.style.left = x + 'px';
+                numDiv.style.top = y + 'px';
+                numDiv.textContent = i;
+                clock.appendChild(numDiv);
+            }
+            
+            // Update hand - point to the highlighted number
+            // Temporarily hidden until alignment issue is resolved
+            const hand = document.getElementById('clock-hand');
+            if (hand) {
+                hand.style.display = 'none';
+            }
+        }
+
+        // ==================== GCD & EUCLIDE ====================
+        
+        function updateGCD() {
+            const a = parseInt(document.getElementById('gcd-a').value) || 1;
+            const b = parseInt(document.getElementById('gcd-b').value) || 1;
+            
+            const result = gcd(a, b);
+            document.getElementById('gcd-result').textContent = result;
+            
+            // Show steps
+            const stepsDiv = document.getElementById('euclid-steps');
+            stepsDiv.innerHTML = '';
+            
+            let x = a, y = b, step = 1;
+            while (y !== 0) {
+                const q = Math.floor(x / y);
+                const r = x % y;
+                
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step' + (r === 0 ? ' final' : '');
+                stepDiv.innerHTML = `
+                    <div class="step-num">${step}</div>
+                    <div class="step-content">
+                        ${x} = ${q} × ${y} + ${r}
+                        ${r === 0 ? `<br><strong>GCD = ${y}</strong>` : ''}
+                    </div>
+                `;
+                stepsDiv.appendChild(stepDiv);
+                
+                x = y;
+                y = r;
+                step++;
+            }
+            
+            // Extended GCD
+            const ext = extendedGcd(a, b);
+            document.getElementById('extended-result').textContent = 
+                `${a}×(${ext.x}) + ${b}×(${ext.y}) = ${ext.gcd} ✓`;
+        }
+
+        // ==================== COPRIMI ====================
+        
+        function updateCoprimes() {
+            const n = parseInt(document.getElementById('coprime-n').value) || 2;
+            
+            const grid = document.getElementById('coprime-grid');
+            grid.innerHTML = '';
+            
+            const coprimes = [];
+            for (let i = 1; i < n; i++) {
+                const cell = document.createElement('div');
+                const isCoprime = gcd(i, n) === 1;
+                cell.className = 'number-cell ' + (isCoprime ? 'coprime' : 'not-coprime');
+                cell.textContent = i;
+                grid.appendChild(cell);
+                if (isCoprime) coprimes.push(i);
+            }
+            
+            document.getElementById('euler-phi').textContent = coprimes.length;
+            document.getElementById('coprime-list').textContent = 
+                `Coprimi di ${n}: {${coprimes.join(', ')}} → φ(${n}) = ${coprimes.length}`;
+            
+            // Phi table
+            const tableBody = document.getElementById('phi-table');
+            tableBody.innerHTML = '';
+            for (let i = 2; i <= Math.min(n + 5, 20); i++) {
+                const phi = eulerPhi(i);
+                const cops = [];
+                for (let j = 1; j < i; j++) if (gcd(j, i) === 1) cops.push(j);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${i}</td>
+                    <td>${phi}</td>
+                    <td style="font-size: 0.8em;">{${cops.slice(0, 5).join(',')}${cops.length > 5 ? '...' : ''}}</td>
+                `;
+                tableBody.appendChild(row);
+            }
+        }
+
+        // ==================== FERMAT ====================
+        
+        function updateFermat() {
+            const a = parseInt(document.getElementById('fermat-a').value) || 2;
+            const p = parseInt(document.getElementById('fermat-p').value) || 7;
+            
+            document.getElementById('fermat-exp').textContent = p - 1;
+            
+            const result = modPow(a, p - 1, p);
+            document.getElementById('fermat-result').textContent = result;
+            
+            const fullPower = Math.pow(a, p - 1);
+            const isPrimeP = isPrime(p);
+            const isValid = gcd(a, p) === 1;
+            
+            let html = `<p>${a}<sup>${p-1}</sup> = ${fullPower < 1e10 ? fullPower : a + '^' + (p-1)}</p>`;
+            
+            if (isValid && isPrimeP) {
+                html += `<p>${fullPower < 1e10 ? fullPower : 'risultato'} mod ${p} = <strong style="color: #4ade80;">${result} ${result === 1 ? '✓ Teorema verificato!' : '(p non è primo?)'}</strong></p>`;
+            } else if (!isPrimeP) {
+                html += `<p style="color: #f87171;">⚠️ ${p} non è primo! Il teorema non si applica.</p>`;
+            } else {
+                html += `<p style="color: #f87171;">⚠️ GCD(${a}, ${p}) ≠ 1. Condizione non soddisfatta.</p>`;
+            }
+            
+            document.getElementById('fermat-verification').innerHTML = html;
+        }
+
+        function testPrimality() {
+            const n = parseInt(document.getElementById('primality-n').value) || 17;
+            const output = document.getElementById('primality-output');
+            
+            if (n < 2) {
+                output.innerHTML = '<p style="color: #f87171;">n deve essere ≥ 2</p>';
+                return;
+            }
+            
+            const actuallyPrime = isPrime(n);
+            let html = `<h4>Test di primalità per n = ${n}</h4>`;
+            
+            // Test con diverse basi
+            const bases = [2, 3, 5, 7, 11];
+            let passed = 0;
+            
+            html += '<table class="data-table"><tr><th>Base a</th><th>a^(n-1) mod n</th><th>Risultato</th></tr>';
+            
+            for (const a of bases) {
+                if (a >= n) continue;
+                const result = modPow(a, n - 1, n);
+                const pass = result === 1;
+                if (pass) passed++;
+                html += `<tr>
+                    <td>${a}</td>
+                    <td>${result}</td>
+                    <td style="color: ${pass ? '#4ade80' : '#f87171'};">${pass ? '✓ Pass' : '✗ Fail'}</td>
+                </tr>`;
+            }
+            
+            html += '</table>';
+            
+            if (passed === Math.min(bases.filter(b => b < n).length, bases.length)) {
+                html += `<p style="color: #4ade80;">✓ Il numero ${n} ha <strong>superato tutti i test</strong>. `;
+                html += actuallyPrime ? 'È effettivamente primo!' : '⚠️ Ma è un <strong>pseudoprimo</strong> (numero di Carmichael o simile)!</p>';
+            } else {
+                html += `<p style="color: #f87171;">✗ Il numero ${n} <strong>non è primo</strong> (fallito almeno un test)</p>`;
+            }
+            
+            html += `<p style="color: #94a3b8; font-size: 0.9em;">Verifica effettiva: ${n} ${actuallyPrime ? 'È' : 'NON è'} primo.</p>`;
+            
+            output.innerHTML = html;
+        }
+
+        // ==================== INVERSO MODULARE ====================
+        
+        function updateInverse() {
+            const a = parseInt(document.getElementById('inv-a').value) || 3;
+            const n = parseInt(document.getElementById('inv-n').value) || 11;
+            
+            const inv = modInverse(a, n);
+            
+            if (inv === null) {
+                document.getElementById('inverse-result').textContent = 'NON ESISTE';
+                document.getElementById('inverse-result').style.color = '#f87171';
+                document.getElementById('inverse-check').textContent = 
+                    `GCD(${a}, ${n}) = ${gcd(a, n)} ≠ 1 → inverso non esiste!`;
+            } else {
+                document.getElementById('inverse-result').textContent = inv;
+                document.getElementById('inverse-result').style.color = '#4ade80';
+                const check = (a * inv) % n;
+                document.getElementById('inverse-check').textContent = 
+                    `Verifica: ${a} × ${inv} = ${a * inv} ≡ ${check} (mod ${n}) ${check === 1 ? '✓' : '✗'}`;
+            }
+            
+            // Inverse table
+            document.getElementById('inv-table-n').textContent = n;
+            const tableDiv = document.getElementById('inverse-table');
+            tableDiv.innerHTML = '';
+            
+            for (let i = 1; i < Math.min(n, 20); i++) {
+                const inv = modInverse(i, n);
+                const cell = document.createElement('div');
+                cell.style.cssText = `
+                    padding: 8px 12px;
+                    background: ${inv !== null ? 'rgba(74, 222, 128, 0.2)' : 'rgba(248, 113, 113, 0.2)'};
+                    border-radius: 6px;
+                    font-family: monospace;
+                    font-size: 0.9em;
+                `;
+                cell.textContent = `${i}⁻¹=${inv !== null ? inv : '∅'}`;
+                tableDiv.appendChild(cell);
+            }
+        }
+
+        // ==================== RESIDUI QUADRATICI ====================
+        
+        function updateQuadraticResidues() {
+            const p = parseInt(document.getElementById('qr-p').value) || 13;
+            
+            if (!isPrime(p) || p < 3) {
+                document.getElementById('qr-grid').innerHTML = '<p style="color: #f87171;">p deve essere un primo dispari!</p>';
+                return;
+            }
+            
+            document.getElementById('qr-p-display').textContent = p;
+            
+            // Find all squares mod p
+            const squares = new Map();
+            for (let x = 1; x < p; x++) {
+                const sq = (x * x) % p;
+                if (!squares.has(sq)) squares.set(sq, []);
+                squares.get(sq).push(x);
+            }
+            
+            // Grid
+            const grid = document.getElementById('qr-grid');
+            grid.innerHTML = '';
+            
+            const residues = [];
+            for (let a = 1; a < p; a++) {
+                const cell = document.createElement('div');
+                const isResidue = squares.has(a);
+                cell.className = 'number-cell ' + (isResidue ? 'quadratic-residue' : '');
+                cell.textContent = a;
+                cell.title = isResidue ? `√${a} ≡ ±${squares.get(a).join(', ±')} (mod ${p})` : 'Non-residuo';
+                grid.appendChild(cell);
+                if (isResidue) residues.push(a);
+            }
+            
+            document.getElementById('qr-count').innerHTML = 
+                `Residui quadratici: <strong>{${residues.join(', ')}}</strong> (${residues.length} = (${p}-1)/2)`;
+            
+            // Squares table
+            const table = document.getElementById('qr-squares-table');
+            table.innerHTML = '<thead><tr><th>x</th><th>x² mod ' + p + '</th></tr></thead><tbody>';
+            for (let x = 1; x < p; x++) {
+                table.innerHTML += `<tr><td>${x}</td><td class="${squares.has((x*x)%p) ? 'highlight' : ''}">${(x * x) % p}</td></tr>`;
+            }
+            table.innerHTML += '</tbody>';
+        }
+
+        // ==================== LEGENDRE ====================
+        
+        function updateLegendre() {
+            const a = parseInt(document.getElementById('legendre-a').value) || 2;
+            const p = parseInt(document.getElementById('legendre-p').value) || 7;
+            
+            if (!isPrime(p) || p === 2) {
+                document.getElementById('legendre-result').textContent = 'p deve essere primo dispari';
+                return;
+            }
+            
+            const symbol = legendreSymbol(a, p);
+            document.getElementById('legendre-result').textContent = symbol;
+            document.getElementById('legendre-result').style.color = symbol === 1 ? '#4ade80' : (symbol === -1 ? '#f87171' : '#94a3b8');
+            
+            // Grid
+            document.getElementById('legendre-p-display').textContent = p;
+            const grid = document.getElementById('legendre-grid');
+            grid.innerHTML = '';
+            
+            for (let i = 1; i < p; i++) {
+                const sym = legendreSymbol(i, p);
+                const cell = document.createElement('div');
+                cell.className = 'legendre-cell ' + (sym === 1 ? 'residue' : 'non-residue');
+                cell.innerHTML = `
+                    <div class="value">${i}</div>
+                    <div class="symbol">(${i}/${p})=${sym}</div>
+                `;
+                grid.appendChild(cell);
+            }
+        }
+
+        // ==================== CRT ====================
+        
+        function solveCRT() {
+            const r1 = parseInt(document.getElementById('crt-r1').value) || 0;
+            const m1 = parseInt(document.getElementById('crt-m1').value) || 3;
+            const r2 = parseInt(document.getElementById('crt-r2').value) || 0;
+            const m2 = parseInt(document.getElementById('crt-m2').value) || 5;
+            const r3 = parseInt(document.getElementById('crt-r3').value) || 0;
+            const m3 = parseInt(document.getElementById('crt-m3').value) || 7;
+            
+            // Check coprimality
+            if (gcd(m1, m2) !== 1 || gcd(m1, m3) !== 1 || gcd(m2, m3) !== 1) {
+                document.getElementById('crt-result').textContent = 'ERRORE';
+                document.getElementById('crt-details').innerHTML = '<span style="color: #f87171;">I moduli devono essere coprimi a coppie!</span>';
+                return;
+            }
+            
+            const M = m1 * m2 * m3;
+            const M1 = M / m1, M2 = M / m2, M3 = M / m3;
+            const y1 = modInverse(M1, m1);
+            const y2 = modInverse(M2, m2);
+            const y3 = modInverse(M3, m3);
+            
+            const x = ((r1 * M1 * y1 + r2 * M2 * y2 + r3 * M3 * y3) % M + M) % M;
+            
+            document.getElementById('crt-result').textContent = x;
+            document.getElementById('crt-details').innerHTML = `
+                <p>Soluzione unica mod ${M}: x ≡ <strong>${x}</strong></p>
+                <p style="font-size: 0.9em; color: #94a3b8;">
+                    Verifica: ${x} mod ${m1} = ${x % m1} ${x % m1 === r1 % m1 ? '✓' : '✗'},
+                    ${x} mod ${m2} = ${x % m2} ${x % m2 === r2 % m2 ? '✓' : '✗'},
+                    ${x} mod ${m3} = ${x % m3} ${x % m3 === r3 % m3 ? '✓' : '✗'}
+                </p>
+            `;
+            
+            // Steps
+            const stepsDiv = document.getElementById('crt-steps');
+            stepsDiv.innerHTML = `
+                <div class="step"><div class="step-num">1</div><div class="step-content">M = ${m1} × ${m2} × ${m3} = ${M}</div></div>
+                <div class="step"><div class="step-num">2</div><div class="step-content">M₁ = ${M}/${m1} = ${M1}, M₂ = ${M}/${m2} = ${M2}, M₃ = ${M}/${m3} = ${M3}</div></div>
+                <div class="step"><div class="step-num">3</div><div class="step-content">y₁ = ${M1}⁻¹ mod ${m1} = ${y1}, y₂ = ${M2}⁻¹ mod ${m2} = ${y2}, y₃ = ${M3}⁻¹ mod ${m3} = ${y3}</div></div>
+                <div class="step final"><div class="step-num">4</div><div class="step-content">x = (${r1}×${M1}×${y1} + ${r2}×${M2}×${y2} + ${r3}×${M3}×${y3}) mod ${M} = <strong>${x}</strong></div></div>
+            `;
+        }
+
+        // ==================== RSA GAME ====================
+        
+        function updateRSA() {
+            const p = parseInt(document.getElementById('rsa-p').value) || 11;
+            const q = parseInt(document.getElementById('rsa-q').value) || 13;
+            const e = parseInt(document.getElementById('rsa-e').value) || 7;
+            const m = parseInt(document.getElementById('rsa-m').value) || 42;
+            
+            const n = p * q;
+            const phi = (p - 1) * (q - 1);
+            
+            document.getElementById('rsa-n').textContent = n;
+            document.getElementById('rsa-phi').textContent = phi;
+            
+            // Validate e
+            const eValid = gcd(e, phi) === 1 && e > 1 && e < phi;
+            document.getElementById('rsa-e-valid').innerHTML = eValid 
+                ? '<span style="color: #4ade80;">✓ Valido</span>' 
+                : '<span style="color: #f87171;">✗ GCD(e,φ) ≠ 1</span>';
+            
+            if (!eValid) return;
+            
+            // Calculate d
+            const d = modInverse(e, phi);
+            document.getElementById('rsa-d').textContent = d;
+            
+            // Display keys
+            document.getElementById('rsa-pub-n').textContent = n;
+            document.getElementById('rsa-pub-e').textContent = e;
+            document.getElementById('rsa-priv-n').textContent = n;
+            document.getElementById('rsa-priv-d').textContent = d;
+            
+            // Encrypt
+            document.getElementById('rsa-m-val').textContent = m;
+            document.getElementById('rsa-e-val').textContent = e;
+            document.getElementById('rsa-n-val').textContent = n;
+            
+            const c = modPow(m, e, n);
+            document.getElementById('rsa-c').textContent = c;
+            
+            // Decrypt
+            document.getElementById('rsa-c-val').textContent = c;
+            document.getElementById('rsa-d-val').textContent = d;
+            document.getElementById('rsa-n-val2').textContent = n;
+            
+            const decrypted = modPow(c, d, n);
+            document.getElementById('rsa-decrypted').textContent = decrypted;
+            
+            document.getElementById('rsa-verify').innerHTML = decrypted === m 
+                ? '✓ <strong>Messaggio recuperato correttamente!</strong>' 
+                : '✗ Errore nella decifratura';
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modulo
+            document.getElementById('mod-a').addEventListener('input', updateModulo);
+            document.getElementById('mod-n').addEventListener('input', updateModulo);
+            
+            // GCD
+            document.getElementById('gcd-a').addEventListener('input', updateGCD);
+            document.getElementById('gcd-b').addEventListener('input', updateGCD);
+            
+            // Coprimes
+            document.getElementById('coprime-n').addEventListener('input', updateCoprimes);
+            
+            // Fermat
+            document.getElementById('fermat-a').addEventListener('input', updateFermat);
+            document.getElementById('fermat-p').addEventListener('input', updateFermat);
+            
+            // Inverse
+            document.getElementById('inv-a').addEventListener('input', updateInverse);
+            document.getElementById('inv-n').addEventListener('input', updateInverse);
+            
+            // Quadratic residues
+            document.getElementById('qr-p').addEventListener('input', updateQuadraticResidues);
+            
+            // Legendre
+            document.getElementById('legendre-a').addEventListener('input', updateLegendre);
+            document.getElementById('legendre-p').addEventListener('input', updateLegendre);
+            
+            // CRT inputs
+            ['crt-r1', 'crt-m1', 'crt-r2', 'crt-m2', 'crt-r3', 'crt-m3'].forEach(id => {
+                document.getElementById(id).addEventListener('input', solveCRT);
+            });
+            
+            // RSA
+            ['rsa-p', 'rsa-q', 'rsa-e', 'rsa-m'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateRSA);
+            });
+            
+            // Initialize all
+            updateModulo();
+            updateGCD();
+            updateCoprimes();
+            updateFermat();
+            updateInverse();
+            updateQuadraticResidues();
+            updateLegendre();
+            solveCRT();
+            updateRSA();
+        });
+    </script>
+</body>
+</html>
+
+

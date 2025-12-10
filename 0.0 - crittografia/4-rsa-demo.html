@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>RSA - L'algoritmo che ha rivoluzionato la crittografia</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.problem { border-color: #f87171; }
+        .concept-section.problem h2 { color: #f87171; }
+        
+        .concept-section.idea { border-color: #fbbf24; }
+        .concept-section.idea h2 { color: #fbbf24; }
+        
+        .concept-section.math { border-color: #3b82f6; }
+        .concept-section.math h2 { color: #3b82f6; }
+        
+        .concept-section.keygen { border-color: #4ade80; }
+        .concept-section.keygen h2 { color: #4ade80; }
+        
+        .concept-section.encrypt { border-color: #a78bfa; }
+        .concept-section.encrypt h2 { color: #a78bfa; }
+        
+        .concept-section.why { border-color: #f472b6; }
+        .concept-section.why h2 { color: #f472b6; }
+        
+        .concept-section.signature { border-color: #06b6d4; }
+        .concept-section.signature h2 { color: #06b6d4; }
+        
+        .concept-section.attacks { border-color: #f87171; }
+        .concept-section.attacks h2 { color: #f87171; }
+        
+        .concept-section.real { border-color: #4ade80; }
+        .concept-section.real h2 { color: #4ade80; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input, .input-row select {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            text-align: center;
+        }
+        
+        .input-row input:focus, .input-row select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-row span {
+            font-size: 1.1em;
+            color: #94a3b8;
+        }
+        
+        .input-small {
+            width: 80px;
+        }
+        
+        .input-medium {
+            width: 120px;
+        }
+        
+        .input-large {
+            width: 200px;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4em;
+            color: #4ade80;
+        }
+        
+        .result-value.large {
+            font-size: 1.8em;
+        }
+        
+        .result-value.danger {
+            color: #f87171;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.3em;
+        }
+        
+        .formula.highlight {
+            border: 2px solid #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        /* Key display */
+        .key-display {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .key-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .key-box.public {
+            background: rgba(74, 222, 128, 0.1);
+            border: 2px solid #4ade80;
+        }
+        
+        .key-box.public h4 {
+            color: #4ade80;
+        }
+        
+        .key-box.private {
+            background: rgba(248, 113, 113, 0.1);
+            border: 2px solid #f87171;
+        }
+        
+        .key-box.private h4 {
+            color: #f87171;
+        }
+        
+        .key-box h4 {
+            margin: 0 0 15px 0;
+        }
+        
+        .key-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            margin: 8px 0;
+        }
+
+        /* Steps */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .step-box {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        .step-box.step-1 { border-color: #3b82f6; }
+        .step-box.step-2 { border-color: #a78bfa; }
+        .step-box.step-3 { border-color: #fbbf24; }
+        .step-box.step-4 { border-color: #f472b6; }
+        .step-box.step-5 { border-color: #4ade80; }
+        .step-box.step-6 { border-color: #06b6d4; }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+        
+        .step-1 .step-number { background: #3b82f6; }
+        .step-2 .step-number { background: #a78bfa; }
+        .step-3 .step-number { background: #fbbf24; color: black; }
+        .step-4 .step-number { background: #f472b6; }
+        .step-5 .step-number { background: #4ade80; color: black; }
+        .step-6 .step-number { background: #06b6d4; }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content h4 {
+            margin: 0 0 10px 0;
+        }
+        
+        .step-formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        /* Encryption flow */
+        .encryption-flow {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            gap: 15px;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .flow-box {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .flow-box.message {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid #3b82f6;
+        }
+        
+        .flow-box.cipher {
+            background: rgba(167, 139, 250, 0.2);
+            border: 2px solid #a78bfa;
+        }
+        
+        .flow-box.decrypted {
+            background: rgba(74, 222, 128, 0.2);
+            border: 2px solid #4ade80;
+        }
+        
+        .flow-box h5 {
+            margin: 0 0 10px 0;
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+        
+        .flow-box .value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .flow-arrow {
+            font-size: 1.5em;
+            color: #64748b;
+            text-align: center;
+        }
+        
+        .flow-arrow small {
+            display: block;
+            font-size: 0.6em;
+            margin-top: 5px;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .easy {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        .comparison-table .hard {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+
+        /* Prime selection */
+        .prime-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .prime-btn {
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s;
+        }
+        
+        .prime-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+        
+        .prime-btn.selected {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.danger {
+            background: #f87171;
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+
+        /* Signature demo */
+        .signature-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .sig-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .sig-step .icon {
+            font-size: 2em;
+        }
+        
+        .sig-step .content {
+            flex: 1;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Factorization demo */
+        .factor-demo {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .factor-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .factor-result {
+            padding: 15px 25px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .timeline-event {
+            position: relative;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+
+        @media (max-width: 900px) {
+            .encryption-flow {
+                grid-template-columns: 1fr;
+            }
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+            .key-display {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="7.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">🔐 RSA - Rivest, Shamir, Adleman</h1>
+        <div class="subtitle">L'algoritmo che ha reso possibile la crittografia a chiave pubblica nel 1977</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#problem">Il Problema</a>
+            <a href="#idea">L'Idea Geniale</a>
+            <a href="#math">I Mattoni Matematici</a>
+            <a href="#keygen">🎮 Genera Chiavi</a>
+            <a href="#encrypt">🎮 Cifra/Decifra</a>
+            <a href="#why">Perché Funziona</a>
+            <a href="#signature">Firma Digitale</a>
+            <a href="#attacks">Attacchi</a>
+            <a href="#real">Nel Mondo Reale</a>
+        </div>
+
+        <!-- ==================== IL PROBLEMA ==================== -->
+        <div class="concept-section problem" id="problem">
+            <h2>🤔 Il Problema: Come comunicare in segreto?</h2>
+            <p class="subtitle">Prima di RSA, esisteva solo la crittografia simmetrica con un grosso problema...</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>Il dilemma della chiave condivisa</h4>
+                        <p>Con la crittografia simmetrica (AES, ecc.):</p>
+                        <ul>
+                            <li>Alice e Bob devono avere la <strong>stessa chiave</strong></li>
+                            <li>Ma come si scambiano la chiave in modo sicuro?</li>
+                            <li>Se la chiave viaggia su un canale insicuro, Eve la intercetta!</li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+Scenario: Alice vuole inviare un messaggio segreto a Bob
+
+PROBLEMA:
+Alice ────[chiave segreta]────→ Bob
+              ↑
+           Eve vede!
+
+Se Eve intercetta la chiave, può leggere tutto!
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>Prima del 1976: soluzioni costose</h4>
+                        <ul>
+                            <li><strong>Corriere fidato</strong>: costoso e lento</li>
+                            <li><strong>Incontro di persona</strong>: impraticabile su larga scala</li>
+                            <li><strong>Canale sicuro pre-esistente</strong>: ma come lo crei?</li>
+                        </ul>
+                        <p style="margin-top: 15px;">Internet non poteva funzionare così! Serviva qualcosa di rivoluzionario...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== L'IDEA GENIALE ==================== -->
+        <div class="concept-section idea" id="idea">
+            <h2>💡 L'Idea Geniale: Due chiavi diverse!</h2>
+            <p class="subtitle">E se usassimo una chiave per cifrare e un'altra per decifrare?</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered" style="border: 2px solid #fbbf24;">
+                        <strong style="color: #fbbf24;">Chiave PUBBLICA</strong> → cifra<br>
+                        <strong style="color: #f87171;">Chiave PRIVATA</strong> → decifra<br><br>
+                        La pubblica <strong>non può</strong> decifrare!
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Il trucco</h4>
+                        <p>Bob crea due chiavi matematicamente collegate:</p>
+                        <ol>
+                            <li><strong>Pubblica:</strong> la dà a tutti (anche a Eve!)</li>
+                            <li><strong>Privata:</strong> la tiene segreta</li>
+                        </ol>
+                        <p>Alice cifra con la pubblica di Bob. Solo Bob può decifrare con la sua privata!</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="formula">
+SOLUZIONE RSA:
+
+1. Bob genera: (pubblica, privata)
+2. Bob pubblica la chiave pubblica (tutti la vedono)
+
+Alice ────[messaggio cifrato con pubblica]────→ Bob
+                     ↑
+                  Eve vede il messaggio cifrato
+                  MA non può decifrare senza la privata!
+
+3. Bob decifra con la sua chiave privata
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✓ Problema risolto!</h4>
+                        <p>Non serve scambiarsi segreti in anticipo. La chiave pubblica può viaggiare in chiaro!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>🔧 Ma come creare due chiavi così?</h4>
+                <p>Serve una <strong>funzione trapdoor</strong> (trabocchetto):</p>
+                <ul>
+                    <li><strong>Facile in una direzione:</strong> chiunque può cifrare</li>
+                    <li><strong>Difficile nell'altra:</strong> solo chi ha il "segreto" può decifrare</li>
+                </ul>
+                <p>RSA usa la <strong>difficoltà di fattorizzare numeri grandi</strong> come trabocchetto!</p>
+            </div>
+        </div>
+
+        <!-- ==================== I MATTONI MATEMATICI ==================== -->
+        <div class="concept-section math" id="math">
+            <h2>🧱 I Mattoni Matematici di RSA</h2>
+            <p class="subtitle">Quattro concetti dall'aritmetica modulare (vedi <a href="modular-demo.html" style="color: #3b82f6;">lab dedicato</a>)</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="step-container">
+                        <div class="step-box step-1">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Numeri Primi</h4>
+                                <p>Divisibili solo per 1 e se stessi: 2, 3, 5, 7, 11, 13...</p>
+                                <p>RSA usa <strong>due primi ENORMI</strong> (1024+ bit ciascuno)</p>
+                            </div>
+                        </div>
+
+                        <div class="step-box step-2">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Funzione φ di Eulero</h4>
+                                <p>φ(n) = quanti numeri < n sono coprimi con n</p>
+                                <p>Per n = p × q (due primi): <strong>φ(n) = (p-1)(q-1)</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="step-box step-3">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Esponenziazione Modulare</h4>
+                                <p>Calcolare m<sup>e</sup> mod n è <strong>veloce</strong></p>
+                                <p>Anche con numeri enormi (square-and-multiply)</p>
+                            </div>
+                        </div>
+
+                        <div class="step-box step-4">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Inverso Modulare</h4>
+                                <p>Trovare d tale che e × d ≡ 1 (mod φ(n))</p>
+                                <p>Possibile solo se GCD(e, φ(n)) = 1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>🔐 Il segreto di RSA: fattorizzare è DIFFICILE</h4>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Operazione</th>
+                                <th>Complessità</th>
+                            </tr>
+                            <tr class="easy">
+                                <td>p × q = n</td>
+                                <td>Istantaneo</td>
+                            </tr>
+                            <tr class="hard">
+                                <td>n → p, q ?</td>
+                                <td>Anni/Impossibile</td>
+                            </tr>
+                        </table>
+                        <p style="margin-top: 15px;">Chi conosce p e q può calcolare φ(n) e quindi d (chiave privata).</p>
+                        <p>Chi conosce solo n deve <strong>fattorizzare</strong> per trovare p e q!</p>
+                    </div>
+
+                    <div class="factor-demo">
+                        <div class="factor-input">
+                            <span>Fattorizza:</span>
+                            <input type="number" id="factor-n" value="91" class="input-medium">
+                            <button class="game-btn" onclick="factorize()">Fattorizza</button>
+                        </div>
+                        <div class="factor-result" id="factor-result">
+                            91 = 7 × 13
+                        </div>
+                    </div>
+
+                    <p style="color: #94a3b8; font-size: 0.9em;">Con numeri piccoli è facile. Prova con 221, 323, 437... Con numeri di 600+ cifre? Impossibile!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== GENERAZIONE CHIAVI ==================== -->
+        <div class="concept-section keygen" id="keygen">
+            <h2>🔑 Lab: Genera le tue chiavi RSA</h2>
+            <p class="subtitle">Segui i passaggi per creare una coppia di chiavi funzionante</p>
+
+            <div class="step-container">
+                <!-- Step 1: Scegli p e q -->
+                <div class="step-box step-1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Scegli due numeri primi p e q</h4>
+                        <p>Devono essere diversi e preferibilmente di dimensione simile</p>
+                        <div class="flex-row" style="margin-top: 15px;">
+                            <div>
+                                <label>p = </label>
+                                <select id="rsa-p" class="input-medium">
+                                    <option value="11">11</option>
+                                    <option value="13">13</option>
+                                    <option value="17" selected>17</option>
+                                    <option value="19">19</option>
+                                    <option value="23">23</option>
+                                    <option value="29">29</option>
+                                    <option value="31">31</option>
+                                    <option value="37">37</option>
+                                    <option value="41">41</option>
+                                    <option value="43">43</option>
+                                    <option value="47">47</option>
+                                    <option value="53">53</option>
+                                    <option value="59">59</option>
+                                    <option value="61">61</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>q = </label>
+                                <select id="rsa-q" class="input-medium">
+                                    <option value="11">11</option>
+                                    <option value="13" selected>13</option>
+                                    <option value="17">17</option>
+                                    <option value="19">19</option>
+                                    <option value="23">23</option>
+                                    <option value="29">29</option>
+                                    <option value="31">31</option>
+                                    <option value="37">37</option>
+                                    <option value="41">41</option>
+                                    <option value="43">43</option>
+                                    <option value="47">47</option>
+                                    <option value="53">53</option>
+                                    <option value="59">59</option>
+                                    <option value="61">61</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="step-formula" id="step1-result">p = 17, q = 13 ✓</div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Calcola n -->
+                <div class="step-box step-2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Calcola n = p × q</h4>
+                        <p>n è il <strong>modulo</strong> - parte della chiave pubblica E privata</p>
+                        <div class="step-formula" id="step2-result">n = 17 × 13 = <strong>221</strong></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Calcola φ(n) -->
+                <div class="step-box step-3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Calcola φ(n) = (p-1) × (q-1)</h4>
+                        <p>φ(n) è il "segreto" che serve per calcolare d - <strong>mai rivelarlo!</strong></p>
+                        <div class="step-formula" id="step3-result">φ(n) = (17-1) × (13-1) = 16 × 12 = <strong>192</strong></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Scegli e -->
+                <div class="step-box step-4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Scegli l'esponente pubblico e</h4>
+                        <p>Condizioni: 1 < e < φ(n) e GCD(e, φ(n)) = 1 (devono essere coprimi)</p>
+                        <div class="flex-row" style="margin-top: 15px; align-items: center;">
+                            <label>e = </label>
+                            <input type="number" id="rsa-e" value="7" class="input-small" min="2">
+                            <span id="e-valid" style="margin-left: 10px;"></span>
+                        </div>
+                        <div class="step-formula" id="step4-result">GCD(7, 192) = 1 ✓ → e = 7 è valido</div>
+                        <p style="font-size: 0.9em; color: #94a3b8; margin-top: 10px;">Valori comuni: 3, 17, 65537. In pratica si usa quasi sempre <strong>65537</strong>.</p>
+                    </div>
+                </div>
+
+                <!-- Step 5: Calcola d -->
+                <div class="step-box step-5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Calcola la chiave privata d = e<sup>-1</sup> mod φ(n)</h4>
+                        <p>d è l'inverso modulare di e rispetto a φ(n)</p>
+                        <div class="step-formula" id="step5-result">d × e ≡ 1 (mod φ(n)) → d × 7 ≡ 1 (mod 192) → d = <strong>55</strong></div>
+                        <p style="font-size: 0.9em; color: #94a3b8; margin-top: 10px;">Verifica: 55 × 7 = 385 = 2×192 + 1 ≡ 1 (mod 192) ✓</p>
+                    </div>
+                </div>
+
+                <!-- Step 6: Le chiavi -->
+                <div class="step-box step-6">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h4>🎉 Le tue chiavi RSA sono pronte!</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key display -->
+            <div class="key-display">
+                <div class="key-box public">
+                    <h4>🔓 CHIAVE PUBBLICA</h4>
+                    <p>Condividila con tutti!</p>
+                    <div class="key-value">n = <span id="pub-n">221</span></div>
+                    <div class="key-value">e = <span id="pub-e">7</span></div>
+                </div>
+                <div class="key-box private">
+                    <h4>🔒 CHIAVE PRIVATA</h4>
+                    <p>Tienila segreta!</p>
+                    <div class="key-value">n = <span id="priv-n">221</span></div>
+                    <div class="key-value">d = <span id="priv-d">55</span></div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>🌍 Nel mondo reale</h4>
+                <p>I numeri sarebbero MOLTO più grandi:</p>
+                <ul>
+                    <li><strong>p, q:</strong> primi di 1024-2048 bit ciascuno (~300-600 cifre decimali)</li>
+                    <li><strong>n:</strong> 2048-4096 bit (~600-1200 cifre decimali)</li>
+                    <li><strong>e:</strong> quasi sempre 65537 (2<sup>16</sup>+1, primo di Fermat)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== CIFRATURA/DECIFRATURA ==================== -->
+        <div class="concept-section encrypt" id="encrypt">
+            <h2>🔐 Lab: Cifra e Decifra con RSA</h2>
+            <p class="subtitle">Usa le chiavi generate per cifrare un messaggio</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered highlight">
+                        <strong>Cifratura:</strong> c = m<sup>e</sup> mod n<br><br>
+                        <strong>Decifratura:</strong> m = c<sup>d</sup> mod n
+                    </div>
+
+                    <div class="input-group">
+                        <label>Messaggio da cifrare (numero < n):</label>
+                        <div class="input-row">
+                            <span>m =</span>
+                            <input type="number" id="rsa-m" value="42" class="input-medium" min="0">
+                            <span id="m-valid"></span>
+                        </div>
+                    </div>
+
+                    <button class="game-btn success" onclick="rsaEncryptDecrypt()">🔐 Cifra e Decifra!</button>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Calcoli step-by-step:</h4>
+                        <div id="rsa-calculations">
+                            <p>Clicca "Cifra e Decifra" per vedere i calcoli...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encryption flow -->
+            <div class="encryption-flow" id="encryption-flow">
+                <div class="flow-box message">
+                    <h5>📝 Messaggio originale</h5>
+                    <div class="value" id="flow-m">42</div>
+                </div>
+                <div class="flow-arrow">
+                    →<br>
+                    <small>m<sup>e</sup> mod n</small>
+                </div>
+                <div class="flow-box cipher">
+                    <h5>🔒 Testo cifrato</h5>
+                    <div class="value" id="flow-c">?</div>
+                </div>
+                <div class="flow-arrow">
+                    →<br>
+                    <small>c<sup>d</sup> mod n</small>
+                </div>
+                <div class="flow-box decrypted">
+                    <h5>✅ Messaggio decifrato</h5>
+                    <div class="value" id="flow-dec">?</div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>💬 E se voglio cifrare del testo?</h4>
+                <p>RSA lavora con numeri, non testo. Per cifrare "Ciao":</p>
+                <ol>
+                    <li>Converti ogni carattere in numero (es. ASCII): C=67, i=105, a=97, o=111</li>
+                    <li>Oppure concatena in un unico numero grande</li>
+                    <li>Il numero deve essere < n!</li>
+                </ol>
+                <p><strong>In pratica:</strong> RSA cifra una chiave AES (256 bit), poi AES cifra il messaggio reale.</p>
+            </div>
+        </div>
+
+        <!-- ==================== PERCHÉ FUNZIONA ==================== -->
+        <div class="concept-section why" id="why">
+            <h2>🧮 Perché RSA Funziona?</h2>
+            <p class="subtitle">La magia matematica dietro il sistema</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula">
+Obiettivo: dimostrare che (m^e)^d ≡ m (mod n)
+
+Passaggi:
+1. Per costruzione: e × d ≡ 1 (mod φ(n))
+   Quindi: e × d = 1 + k × φ(n) per qualche k
+
+2. (m^e)^d = m^(e×d) = m^(1 + k×φ(n))
+
+3. = m × m^(k×φ(n)) = m × (m^φ(n))^k
+
+4. Per il Teorema di Eulero: m^φ(n) ≡ 1 (mod n)
+   (se GCD(m, n) = 1)
+
+5. Quindi: m × (1)^k = m × 1 = m
+
+<strong style="color: #4ade80;">Conclusione: m^(e×d) ≡ m (mod n) ✓</strong>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎯 In parole semplici</h4>
+                        <ol>
+                            <li>e e d sono "inversi" rispetto a φ(n)</li>
+                            <li>Elevare a e e poi a d equivale a elevare a e×d</li>
+                            <li>e×d = 1 + multiplo di φ(n)</li>
+                            <li>Per Eulero, m^φ(n) = 1 (mod n)</li>
+                            <li>Quindi m^(e×d) = m × 1 = m</li>
+                        </ol>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ La sicurezza dipende da...</h4>
+                        <p>Se Eve conosce φ(n), può calcolare d!</p>
+                        <p>Ma per calcolare φ(n) = (p-1)(q-1), deve conoscere p e q.</p>
+                        <p>Per trovare p e q da n, deve <strong>fattorizzare n</strong>.</p>
+                        <p style="color: #f87171; margin-top: 10px;"><strong>Con n di 2048 bit, ci vorrebbero miliardi di anni!</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FIRMA DIGITALE ==================== -->
+        <div class="concept-section signature" id="signature">
+            <h2>✍️ RSA per Firme Digitali</h2>
+            <p class="subtitle">Non solo cifratura: RSA può anche "firmare" documenti</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔄 L'inversione delle chiavi</h4>
+                        <p>Per la firma, usiamo le chiavi al contrario!</p>
+                        <ul>
+                            <li><strong>Firma:</strong> usa la chiave <span style="color: #f87171;">PRIVATA</span></li>
+                            <li><strong>Verifica:</strong> usa la chiave <span style="color: #4ade80;">PUBBLICA</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+FIRMA: firma = hash(messaggio)^d mod n
+
+VERIFICA: hash' = firma^e mod n
+          Se hash' == hash(messaggio) → firma valida!
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="signature-flow">
+                        <div class="sig-step">
+                            <div class="icon">📄</div>
+                            <div class="content">
+                                <strong>1. Alice ha un documento</strong><br>
+                                Vuole provare che l'ha scritto lei
+                            </div>
+                        </div>
+                        <div class="sig-step">
+                            <div class="icon">🔢</div>
+                            <div class="content">
+                                <strong>2. Calcola l'hash del documento</strong><br>
+                                hash = SHA256(documento) → numero di 256 bit
+                            </div>
+                        </div>
+                        <div class="sig-step">
+                            <div class="icon">🔏</div>
+                            <div class="content">
+                                <strong>3. Firma con chiave privata</strong><br>
+                                firma = hash^d mod n (solo Alice può farlo!)
+                            </div>
+                        </div>
+                        <div class="sig-step">
+                            <div class="icon">📤</div>
+                            <div class="content">
+                                <strong>4. Invia documento + firma</strong><br>
+                                Chiunque può verificare con la pubblica di Alice
+                            </div>
+                        </div>
+                        <div class="sig-step">
+                            <div class="icon">✅</div>
+                            <div class="content">
+                                <strong>5. Bob verifica</strong><br>
+                                hash' = firma^e mod n. Se hash' == hash(doc) → valida!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>🎯 Cosa garantisce la firma?</h4>
+                <ul>
+                    <li><strong>Autenticità:</strong> solo Alice (con la privata) può creare quella firma</li>
+                    <li><strong>Integrità:</strong> se il documento cambia, l'hash cambia, la firma non corrisponde</li>
+                    <li><strong>Non-ripudio:</strong> Alice non può negare di aver firmato</li>
+                </ul>
+            </div>
+
+            <!-- Mini firma demo -->
+            <div class="result-display">
+                <h4>🔏 Mini-demo firma (con le chiavi generate sopra)</h4>
+                <div class="input-row" style="margin: 15px 0;">
+                    <span>Messaggio (hash semplificato) =</span>
+                    <input type="number" id="sig-msg" value="100" class="input-medium" min="0">
+                    <button class="game-btn" onclick="signDemo()">✍️ Firma!</button>
+                </div>
+                <div id="sig-result">Clicca "Firma" per vedere il processo...</div>
+            </div>
+        </div>
+
+        <!-- ==================== ATTACCHI ==================== -->
+        <div class="concept-section attacks" id="attacks">
+            <h2>⚔️ Attacchi a RSA</h2>
+            <p class="subtitle">Come si può rompere RSA (e come difendersi)</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>❌ Attacco 1: Fattorizzazione di n</h4>
+                        <p>Se Eve riesce a fattorizzare n = p × q:</p>
+                        <ol>
+                            <li>Calcola φ(n) = (p-1)(q-1)</li>
+                            <li>Calcola d = e<sup>-1</sup> mod φ(n)</li>
+                            <li>Ha la chiave privata!</li>
+                        </ol>
+                        <p><strong>Difesa:</strong> usa n di almeno 2048 bit (4096 raccomandato)</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>❌ Attacco 2: Textbook RSA (senza padding)</h4>
+                        <p>RSA "puro" ha problemi:</p>
+                        <ul>
+                            <li>Stesso messaggio → stesso ciphertext (deterministico)</li>
+                            <li>Malleabile: c' = c × 2^e cifra 2m</li>
+                            <li>Messaggi piccoli vulnerabili</li>
+                        </ul>
+                        <p><strong>Difesa:</strong> usa SEMPRE padding (OAEP per cifratura, PSS per firma)</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>❌ Attacco 3: Timing Attack</h4>
+                        <p>Misurando il tempo di decifratura, si può dedurre d bit per bit.</p>
+                        <p><strong>Difesa:</strong> implementazioni constant-time, blinding</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>❌ Attacco 4: e troppo piccolo + più destinatari</h4>
+                        <p>Se e=3 e invii lo stesso m a 3 persone con n diversi:</p>
+                        <p>Con il Teorema Cinese del Resto, si può recuperare m!</p>
+                        <p><strong>Difesa:</strong> usa e=65537, sempre padding random</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔮 Minaccia futura: Computer Quantistici</h4>
+                        <p>L'algoritmo di Shor può fattorizzare in tempo polinomiale!</p>
+                        <p>Se/quando i computer quantistici saranno abbastanza potenti, RSA sarà vulnerabile.</p>
+                        <p><strong>Soluzione:</strong> crittografia post-quantum (già in fase di standardizzazione NIST)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NEL MONDO REALE ==================== -->
+        <div class="concept-section real" id="real">
+            <h2>🌍 RSA nel Mondo Reale</h2>
+            <p class="subtitle">Dove e come viene usato oggi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>🔒 TLS/HTTPS (sempre meno)</h4>
+                        <p>RSA era usato per:</p>
+                        <ul>
+                            <li>Certificati del server (firma della CA)</li>
+                            <li>Scambio chiavi (il client cifra con pubblica del server)</li>
+                        </ul>
+                        <p>Oggi TLS 1.3 preferisce ECDHE + firme (RSA o ECDSA) per Perfect Forward Secrecy.</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📧 PGP/GPG - Email sicure</h4>
+                        <p>RSA per cifrare le email:</p>
+                        <ul>
+                            <li>Genera chiave simmetrica casuale</li>
+                            <li>Cifra email con AES</li>
+                            <li>Cifra chiave AES con RSA pubblica del destinatario</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>✍️ Firma del codice</h4>
+                        <ul>
+                            <li>Driver Windows: firmati RSA/ECDSA</li>
+                            <li>App Android/iOS: firma del developer</li>
+                            <li>Package manager: npm, pip, apt verificano firme</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="timeline-event">
+                            <strong>1977</strong> - Rivest, Shamir, Adleman pubblicano RSA
+                        </div>
+                        <div class="timeline-event">
+                            <strong>1983</strong> - MIT brevetta RSA (scaduto 2000)
+                        </div>
+                        <div class="timeline-event">
+                            <strong>1991</strong> - PGP usa RSA per email sicure
+                        </div>
+                        <div class="timeline-event">
+                            <strong>1994</strong> - SSL 1.0 usa RSA
+                        </div>
+                        <div class="timeline-event">
+                            <strong>2015</strong> - Raccomandazione: RSA ≥ 2048 bit
+                        </div>
+                        <div class="timeline-event">
+                            <strong>2018</strong> - TLS 1.3: RSA key exchange deprecato
+                        </div>
+                        <div class="timeline-event">
+                            <strong>2024+</strong> - Transizione verso post-quantum
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>Il problema:</strong> scambiarsi chiavi senza canale sicuro</li>
+                    <li><strong>La soluzione:</strong> due chiavi, pubblica per cifrare, privata per decifrare</li>
+                    <li><strong>La matematica:</strong> primi, φ(n), esponenziazione modulare, inverso</li>
+                    <li><strong>La sicurezza:</strong> basata sulla difficoltà di fattorizzare</li>
+                    <li><strong>Gli attacchi:</strong> mai usare "textbook RSA", sempre padding!</li>
+                    <li><strong>Il futuro:</strong> ECC oggi, post-quantum domani</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== UTILITY FUNCTIONS ====================
+        
+        function gcd(a, b) {
+            while (b !== 0) {
+                [a, b] = [b, a % b];
+            }
+            return a;
+        }
+
+        function modPow(base, exp, mod) {
+            if (mod === 1) return 0;
+            let result = 1;
+            base = base % mod;
+            while (exp > 0) {
+                if (exp % 2 === 1) {
+                    result = (result * base) % mod;
+                }
+                exp = Math.floor(exp / 2);
+                base = (base * base) % mod;
+            }
+            return result;
+        }
+
+        function modInverse(a, m) {
+            let [old_r, r] = [a, m];
+            let [old_s, s] = [1, 0];
+            
+            while (r !== 0) {
+                const q = Math.floor(old_r / r);
+                [old_r, r] = [r, old_r - q * r];
+                [old_s, s] = [s, old_s - q * s];
+            }
+            
+            if (old_r !== 1) return null;
+            return ((old_s % m) + m) % m;
+        }
+
+        function factorizeNumber(n) {
+            if (n < 2) return [];
+            const factors = [];
+            let d = 2;
+            while (d * d <= n) {
+                while (n % d === 0) {
+                    factors.push(d);
+                    n = Math.floor(n / d);
+                }
+                d++;
+            }
+            if (n > 1) factors.push(n);
+            return factors;
+        }
+
+        // ==================== RSA KEY GENERATION ====================
+        
+        function updateRSAKeys() {
+            const p = parseInt(document.getElementById('rsa-p').value);
+            const q = parseInt(document.getElementById('rsa-q').value);
+            const e = parseInt(document.getElementById('rsa-e').value);
+            
+            // Step 1
+            if (p === q) {
+                document.getElementById('step1-result').innerHTML = `p = ${p}, q = ${q} <span style="color: #f87171;">⚠️ p e q devono essere diversi!</span>`;
+            } else {
+                document.getElementById('step1-result').innerHTML = `p = ${p}, q = ${q} ✓`;
+            }
+            
+            // Step 2: n
+            const n = p * q;
+            document.getElementById('step2-result').innerHTML = `n = ${p} × ${q} = <strong>${n}</strong>`;
+            
+            // Step 3: φ(n)
+            const phi = (p - 1) * (q - 1);
+            document.getElementById('step3-result').innerHTML = `φ(n) = (${p}-1) × (${q}-1) = ${p-1} × ${q-1} = <strong>${phi}</strong>`;
+            
+            // Step 4: validate e
+            const gcdVal = gcd(e, phi);
+            if (e < 2 || e >= phi) {
+                document.getElementById('e-valid').innerHTML = `<span style="color: #f87171;">✗ e deve essere 1 < e < ${phi}</span>`;
+                document.getElementById('step4-result').innerHTML = `e = ${e} non valido`;
+            } else if (gcdVal !== 1) {
+                document.getElementById('e-valid').innerHTML = `<span style="color: #f87171;">✗ GCD(${e}, ${phi}) = ${gcdVal} ≠ 1</span>`;
+                document.getElementById('step4-result').innerHTML = `GCD(${e}, ${phi}) = ${gcdVal} ≠ 1 → e = ${e} non valido`;
+            } else {
+                document.getElementById('e-valid').innerHTML = `<span style="color: #4ade80;">✓ Valido</span>`;
+                document.getElementById('step4-result').innerHTML = `GCD(${e}, ${phi}) = 1 ✓ → e = ${e} è valido`;
+            }
+            
+            // Step 5: d
+            const d = modInverse(e, phi);
+            if (d !== null) {
+                const verify = (d * e) % phi;
+                document.getElementById('step5-result').innerHTML = 
+                    `d × e ≡ 1 (mod φ(n)) → d × ${e} ≡ 1 (mod ${phi}) → d = <strong>${d}</strong><br>
+                    <small style="color: #94a3b8;">Verifica: ${d} × ${e} = ${d*e} = ${Math.floor((d*e)/phi)}×${phi} + ${verify} ≡ ${verify} (mod ${phi})</small>`;
+            } else {
+                document.getElementById('step5-result').innerHTML = `Impossibile calcolare d (e non valido)`;
+            }
+            
+            // Update key display
+            document.getElementById('pub-n').textContent = n;
+            document.getElementById('pub-e').textContent = e;
+            document.getElementById('priv-n').textContent = n;
+            document.getElementById('priv-d').textContent = d || '?';
+            
+            // Validate message input
+            const m = parseInt(document.getElementById('rsa-m').value) || 0;
+            if (m >= n) {
+                document.getElementById('m-valid').innerHTML = `<span style="color: #f87171;">✗ deve essere < ${n}</span>`;
+            } else if (m < 0) {
+                document.getElementById('m-valid').innerHTML = `<span style="color: #f87171;">✗ deve essere ≥ 0</span>`;
+            } else {
+                document.getElementById('m-valid').innerHTML = `<span style="color: #4ade80;">✓</span>`;
+            }
+        }
+
+        // ==================== RSA ENCRYPT/DECRYPT ====================
+        
+        function rsaEncryptDecrypt() {
+            const p = parseInt(document.getElementById('rsa-p').value);
+            const q = parseInt(document.getElementById('rsa-q').value);
+            const e = parseInt(document.getElementById('rsa-e').value);
+            const m = parseInt(document.getElementById('rsa-m').value) || 0;
+            
+            const n = p * q;
+            const phi = (p - 1) * (q - 1);
+            const d = modInverse(e, phi);
+            
+            if (m >= n || m < 0 || d === null) {
+                document.getElementById('rsa-calculations').innerHTML = 
+                    `<p style="color: #f87171;">Errore: verifica i parametri</p>`;
+                return;
+            }
+            
+            // Encrypt
+            const c = modPow(m, e, n);
+            
+            // Decrypt
+            const decrypted = modPow(c, d, n);
+            
+            // Show calculations
+            document.getElementById('rsa-calculations').innerHTML = `
+                <p><strong>Cifratura:</strong></p>
+                <p>c = m<sup>e</sup> mod n = ${m}<sup>${e}</sup> mod ${n}</p>
+                <p>c = <strong style="color: #a78bfa;">${c}</strong></p>
+                <br>
+                <p><strong>Decifratura:</strong></p>
+                <p>m = c<sup>d</sup> mod n = ${c}<sup>${d}</sup> mod ${n}</p>
+                <p>m = <strong style="color: #4ade80;">${decrypted}</strong></p>
+                <br>
+                <p style="color: ${decrypted === m ? '#4ade80' : '#f87171'};">
+                    ${decrypted === m ? '✓ Messaggio recuperato correttamente!' : '✗ Errore!'}
+                </p>
+            `;
+            
+            // Update flow
+            document.getElementById('flow-m').textContent = m;
+            document.getElementById('flow-c').textContent = c;
+            document.getElementById('flow-dec').textContent = decrypted;
+        }
+
+        // ==================== FACTORIZATION ====================
+        
+        function factorize() {
+            const n = parseInt(document.getElementById('factor-n').value) || 1;
+            const factors = factorizeNumber(n);
+            
+            if (factors.length === 1) {
+                document.getElementById('factor-result').innerHTML = `${n} è <strong style="color: #4ade80;">primo</strong>!`;
+            } else {
+                document.getElementById('factor-result').innerHTML = `${n} = ${factors.join(' × ')}`;
+            }
+        }
+
+        // ==================== SIGNATURE DEMO ====================
+        
+        function signDemo() {
+            const p = parseInt(document.getElementById('rsa-p').value);
+            const q = parseInt(document.getElementById('rsa-q').value);
+            const e = parseInt(document.getElementById('rsa-e').value);
+            const msg = parseInt(document.getElementById('sig-msg').value) || 0;
+            
+            const n = p * q;
+            const phi = (p - 1) * (q - 1);
+            const d = modInverse(e, phi);
+            
+            if (d === null || msg >= n) {
+                document.getElementById('sig-result').innerHTML = 
+                    `<p style="color: #f87171;">Errore nei parametri</p>`;
+                return;
+            }
+            
+            // Sign: signature = msg^d mod n
+            const signature = modPow(msg, d, n);
+            
+            // Verify: msg' = signature^e mod n
+            const verified = modPow(signature, e, n);
+            
+            document.getElementById('sig-result').innerHTML = `
+                <p><strong>Firma:</strong> firma = hash<sup>d</sup> mod n = ${msg}<sup>${d}</sup> mod ${n} = <strong style="color: #06b6d4;">${signature}</strong></p>
+                <br>
+                <p><strong>Verifica:</strong> hash' = firma<sup>e</sup> mod n = ${signature}<sup>${e}</sup> mod ${n} = <strong>${verified}</strong></p>
+                <br>
+                <p style="color: ${verified === msg ? '#4ade80' : '#f87171'};">
+                    ${verified === msg ? '✓ Firma VALIDA! hash\' == hash originale' : '✗ Firma NON valida!'}
+                </p>
+            `;
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('rsa-p').addEventListener('change', updateRSAKeys);
+            document.getElementById('rsa-q').addEventListener('change', updateRSAKeys);
+            document.getElementById('rsa-e').addEventListener('input', updateRSAKeys);
+            document.getElementById('rsa-m').addEventListener('input', updateRSAKeys);
+            
+            // Initialize
+            updateRSAKeys();
+        });
+    </script>
+</body>
+</html>
+

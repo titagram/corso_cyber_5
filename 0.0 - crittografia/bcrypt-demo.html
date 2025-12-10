@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>bcrypt - Password Hashing Sicuro</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.problem { border-color: #f87171; }
+        .concept-section.problem h2 { color: #f87171; }
+        
+        .concept-section.solution { border-color: #4ade80; }
+        .concept-section.solution h2 { color: #4ade80; }
+        
+        .concept-section.how { border-color: #3b82f6; }
+        .concept-section.how h2 { color: #3b82f6; }
+        
+        .concept-section.salt { border-color: #fbbf24; }
+        .concept-section.salt h2 { color: #fbbf24; }
+        
+        .concept-section.cost { border-color: #a78bfa; }
+        .concept-section.cost h2 { color: #a78bfa; }
+        
+        .concept-section.compare { border-color: #f472b6; }
+        .concept-section.compare h2 { color: #f472b6; }
+        
+        .concept-section.real { border-color: #06b6d4; }
+        .concept-section.real h2 { color: #06b6d4; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input, .input-row textarea, .input-row select {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+        }
+        
+        .input-row input:focus, .input-row textarea:focus, .input-row select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-small {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .input-medium {
+            width: 200px;
+        }
+        
+        .input-large {
+            width: 100%;
+            min-height: 80px;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #4ade80;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .result-value.large {
+            font-size: 1.2em;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Speed comparison */
+        .speed-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .speed-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .speed-label {
+            min-width: 150px;
+            font-weight: bold;
+        }
+        
+        .speed-visual {
+            flex: 1;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .speed-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #f87171);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .speed-value {
+            min-width: 120px;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Hash format visualization */
+        .hash-format {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .hash-part {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+        }
+        
+        .hash-part.algorithm {
+            background: rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+        
+        .hash-part.cost {
+            background: rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+        }
+        
+        .hash-part.salt {
+            background: rgba(167, 139, 250, 0.3);
+            color: #a78bfa;
+        }
+        
+        .hash-part.hash {
+            background: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+
+        /* Cost factor visualization */
+        .cost-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .cost-slider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .cost-slider input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            outline: none;
+        }
+        
+        .cost-slider input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+        
+        .cost-value {
+            min-width: 60px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+        
+        .cost-info {
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+        
+        .game-btn.danger {
+            background: #f87171;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Timing visualization */
+        .timing-demo {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .timing-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .timing-box h5 {
+            margin: 0 0 15px 0;
+            color: #94a3b8;
+        }
+        
+        .timing-value {
+            font-size: 2em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        
+        .timing-value.fast {
+            color: #f87171;
+        }
+        
+        .timing-value.slow {
+            color: #4ade80;
+        }
+        
+        .timing-description {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        /* Salt visualization */
+        .salt-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .salt-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .salt-row.identical {
+            background: rgba(248, 113, 113, 0.2);
+            border-left: 4px solid #f87171;
+        }
+        
+        .salt-row.different {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 4px solid #4ade80;
+        }
+        
+        .salt-label {
+            min-width: 120px;
+            font-weight: bold;
+        }
+        
+        .salt-value {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        /* Loading animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="9.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">🔐 bcrypt - Password Hashing Sicuro</h1>
+        <div class="subtitle">Rendere costoso ogni tentativo di crack: perché SHA non basta</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#problem">Il Problema SHA</a>
+            <a href="#solution">La Soluzione</a>
+            <a href="#how">Come Funziona</a>
+            <a href="#salt">Salt</a>
+            <a href="#cost">🎮 Cost Factor</a>
+            <a href="#verify">🎮 Verifica Password</a>
+            <a href="#compare">Confronto Algoritmi</a>
+            <a href="#real">Nel Mondo Reale</a>
+        </div>
+
+        <!-- ==================== IL PROBLEMA ==================== -->
+        <div class="concept-section problem" id="problem">
+            <h2>⚡ Il Problema: SHA è Troppo Veloce!</h2>
+            <p class="subtitle">Per le password serve lento, non veloce</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🤔 Perché SHA-256 NON va bene per password?</h4>
+                        <p>SHA-256 è progettato per essere <strong>velocissimo</strong>:</p>
+                        <ul>
+                            <li>Verifica integrità file: deve essere istantaneo</li>
+                            <li>Firme digitali: deve essere veloce</li>
+                            <li>Git commits: deve essere veloce</li>
+                        </ul>
+                        <p>Ma per le password serve l'<strong>opposto</strong>!</p>
+                    </div>
+
+                    <div class="speed-comparison">
+                        <div class="speed-bar">
+                            <div class="speed-label">SHA-256:</div>
+                            <div class="speed-visual">
+                                <div class="speed-fill" style="width: 100%;">8 miliardi hash/sec</div>
+                            </div>
+                            <div class="speed-value">8×10⁹/sec</div>
+                        </div>
+                        <div class="speed-bar">
+                            <div class="speed-label">bcrypt (cost 10):</div>
+                            <div class="speed-visual">
+                                <div class="speed-fill" style="width: 0.00125%;">100,000 hash/sec</div>
+                            </div>
+                            <div class="speed-value">10⁵/sec</div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>💥 Impatto sul Cracking</h4>
+                        <p>Con SHA-256, un attaccante può:</p>
+                        <ul>
+                            <li>Calcolare <strong>8 miliardi</strong> di hash al secondo</li>
+                            <li>Provare un dizionario da 10 milioni di password in <strong>1.25 secondi</strong></li>
+                            <li>Crackare password deboli in <strong>minuti</strong></li>
+                        </ul>
+                        <p>Con bcrypt (cost 10), lo stesso attacco richiede <strong>100 secondi</strong> per 10 milioni di password!</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="timing-demo">
+                        <div class="timing-box">
+                            <h5>SHA-256</h5>
+                            <div class="timing-value fast">~0.0001 ms</div>
+                            <div class="timing-description">Troppo veloce!</div>
+                        </div>
+                        <div class="timing-box">
+                            <h5>bcrypt (cost 10)</h5>
+                            <div class="timing-value slow">~100 ms</div>
+                            <div class="timing-description">Perfetto!</div>
+                        </div>
+                    </div>
+
+                    <div class="formula">
+<strong>Obiettivo:</strong> Rendere ogni tentativo costoso
+
+Se ogni hash richiede 100ms:
+• 10M password = 1M secondi = ~11 giorni
+• Con SHA-256: 10M password = 1.25 secondi
+
+Differenza: <strong>760,000× più lento!</strong>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Il Trade-off</h4>
+                        <p>Per l'utente legittimo:</p>
+                        <ul>
+                            <li>Login: 100ms è accettabile</li>
+                            <li>Registrazione: 100ms è accettabile</li>
+                        </ul>
+                        <p>Per l'attaccante:</p>
+                        <ul>
+                            <li>Brute force: 100ms × milioni = anni</li>
+                            <li>Dizionario: 100ms × migliaia = ore/giorni</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== LA SOLUZIONE ==================== -->
+        <div class="concept-section solution" id="solution">
+            <h2>✅ La Soluzione: Hash Lenti e Costosi</h2>
+            <p class="subtitle">bcrypt, scrypt, Argon2: algoritmi progettati per essere lenti</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔐 bcrypt - Blowfish-based</h4>
+                        <p>Progettato da Niels Provos e David Mazières nel 1999:</p>
+                        <ul>
+                            <li>Basato su Blowfish cipher</li>
+                            <li><strong>Cost factor</strong> configurabile (work factor)</li>
+                            <li>Genera <strong>salt</strong> automaticamente</li>
+                            <li>Output formato: <code>$2a$cost$salt$hash</code></li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+Formato bcrypt:
+$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
+ │  │  │                     │
+ │  │  │                     └─ Hash (31 caratteri)
+ │  │  └─────────────────────── Salt (22 caratteri)
+ │  └────────────────────────── Cost factor (10 = 2^10 iterazioni)
+ └───────────────────────────── Versione algoritmo
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="success-box">
+                        <h4>✨ Perché bcrypt funziona</h4>
+                        <ul>
+                            <li><strong>Lento per design:</strong> ogni hash richiede 2^cost iterazioni</li>
+                            <li><strong>Salt automatico:</strong> ogni password ha salt unico</li>
+                            <li><strong>Cost factor:</strong> puoi aumentarlo quando hardware migliora</li>
+                            <li><strong>Testato:</strong> usato da milioni di applicazioni</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📊 Cost Factor: Cosa significa?</h4>
+                        <p>Cost factor = numero di round = 2^cost iterazioni</p>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Cost</th>
+                                <th>Iterazioni</th>
+                                <th>Tempo (approssimativo)</th>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>16</td>
+                                <td>~1 ms</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>256</td>
+                                <td>~10 ms</td>
+                            </tr>
+                            <tr class="good">
+                                <td>10</td>
+                                <td>1,024</td>
+                                <td>~100 ms</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>4,096</td>
+                                <td>~400 ms</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td>16,384</td>
+                                <td>~1.6 s</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COME FUNZIONA ==================== -->
+        <div class="concept-section how" id="how">
+            <h2>🔧 Come Funziona bcrypt Internamente</h2>
+            <p class="subtitle">Blowfish key schedule ripetuto molte volte</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📋 Processo di Hashing</h4>
+                        <ol>
+                            <li><strong>Genera salt casuale</strong> (128 bit)</li>
+                            <li><strong>Deriva chiave</strong> da password + salt</li>
+                            <li><strong>Esegui Blowfish</strong> 2^cost volte</li>
+                            <li><strong>Output:</strong> salt + hash finale</li>
+                        </ol>
+                    </div>
+
+                    <div class="formula">
+Algoritmo semplificato:
+
+1. salt = random(128 bit)
+2. key = EksBlowfishSetup(password, salt, cost)
+3. state = "OrpheanBeholderScryDoubt"
+4. for i = 0 to 2^cost:
+     state = BlowfishEncrypt(key, state)
+5. hash = state
+6. return "$2a$cost$salt$hash"
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔄 EksBlowfish: Expensive Key Schedule</h4>
+                        <p>La chiave di Blowfish viene generata in modo costoso:</p>
+                        <ul>
+                            <li>Usa password + salt per inizializzare</li>
+                            <li>Esegue Blowfish key schedule</li>
+                            <li>Ripete questo processo cost volte</li>
+                        </ul>
+                        <p>Questo rende ogni hash <strong>computazionalmente costoso</strong>.</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Limitazione: 72 byte</h4>
+                        <p>bcrypt accetta password fino a <strong>72 byte</strong>.</p>
+                        <p>Password più lunghe vengono troncate!</p>
+                        <p><strong>Soluzione:</strong> fai hash della password con SHA-256 prima di passarla a bcrypt.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-display">
+                <h4>📝 Formato Hash bcrypt Decodificato</h4>
+                <div class="hash-format" id="hash-format-demo">
+                    <span class="hash-part algorithm">$2a$</span>
+                    <span class="hash-part cost">10</span>
+                    <span class="hash-part salt">N9qo8uLOickgx2ZMRZoMye</span>
+                    <span class="hash-part hash">IjZAgcfl7p92ldGxad68LJZdL17lhWy</span>
+                    <div style="margin-top: 15px; font-size: 0.85em; color: #94a3b8;">
+                        <p><strong>$2a$:</strong> Versione algoritmo (2a = bcrypt standard)</p>
+                        <p><strong>10:</strong> Cost factor (2^10 = 1,024 iterazioni)</p>
+                        <p><strong>N9qo8uLOickgx2ZMRZoMye:</strong> Salt (22 caratteri Base64)</p>
+                        <p><strong>IjZAgcfl7p92ldGxad68LJZdL17lhWy:</strong> Hash finale (31 caratteri Base64)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SALT ==================== -->
+        <div class="concept-section salt" id="salt">
+            <h2>🧂 Salt: Rendere Ogni Hash Unico</h2>
+            <p class="subtitle">Perché due password identiche devono avere hash diversi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>❌ Senza Salt: Problema</h4>
+                        <p>Se due utenti hanno la stessa password:</p>
+                        <div class="salt-comparison">
+                            <div class="salt-row identical">
+                                <div class="salt-label">Utente 1:</div>
+                                <div class="salt-value">password: "P@ssw0rd" → hash: abc123...</div>
+                            </div>
+                            <div class="salt-row identical">
+                                <div class="salt-label">Utente 2:</div>
+                                <div class="salt-value">password: "P@ssw0rd" → hash: abc123...</div>
+                            </div>
+                        </div>
+                        <p style="color: #f87171;">Stesso hash! Attaccante vede pattern, può usare rainbow tables!</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>✅ Con Salt: Soluzione</h4>
+                        <p>Ogni password ha un salt unico:</p>
+                        <div class="salt-comparison">
+                            <div class="salt-row different">
+                                <div class="salt-label">Utente 1:</div>
+                                <div class="salt-value">password: "P@ssw0rd" + salt₁ → hash: xyz789...</div>
+                            </div>
+                            <div class="salt-row different">
+                                <div class="salt-label">Utente 2:</div>
+                                <div class="salt-value">password: "P@ssw0rd" + salt₂ → hash: def456...</div>
+                            </div>
+                        </div>
+                        <p style="color: #4ade80;">Hash diversi! Rainbow tables inutili, ogni hash va attaccato separatamente!</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="formula">
+<strong>Come funziona il salt:</strong>
+
+Hashing: hash = bcrypt(password, salt)
+Verifica: bcrypt(password_input, salt_stored) == hash_stored
+
+Il salt NON è segreto!
+È salvato insieme all'hash nel database.
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🗄️ Storage nel Database</h4>
+                        <p>Tabella utenti:</p>
+                        <div class="formula">
+username | password_hash
+─────────┼───────────────────────────────────────────────
+alice    | $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ld...
+bob      | $2a$10$XyZ123abc...IjZAgcfl7p92ldGxad68LJZd...
+charlie  | $2a$10$AbC456def...IjZAgcfl7p92ldGxad68LJZd...
+
+Ogni hash include salt e cost factor!
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Regole per il Salt</h4>
+                        <ul>
+                            <li><strong>Unico:</strong> ogni password ha salt diverso</li>
+                            <li><strong>Casuale:</strong> generato da CSPRNG</li>
+                            <li><strong>Lunghezza:</strong> almeno 128 bit (16 byte)</li>
+                            <li><strong>Non segreto:</strong> può essere pubblico</li>
+                            <li><strong>Salvato:</strong> insieme all'hash nel DB</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COST FACTOR ==================== -->
+        <div class="concept-section cost" id="cost">
+            <h2>⚙️ Lab: Cost Factor - Trova il Bilanciamento Perfetto</h2>
+            <p class="subtitle">Troppo basso = vulnerabile, troppo alto = utenti frustrati</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🎯 Obiettivo: ~100-300ms per hash</h4>
+                        <p>Il tempo ideale dipende dal tuo server:</p>
+                        <ul>
+                            <li><strong>Server potente:</strong> cost più alto (12-14)</li>
+                            <li><strong>Server debole:</strong> cost più basso (8-10)</li>
+                            <li><strong>Mobile/IoT:</strong> cost ancora più basso (6-8)</li>
+                        </ul>
+                        <p>Testa sul tuo hardware e trova il cost che dà ~100-300ms!</p>
+                    </div>
+
+                    <div class="cost-demo">
+                        <div class="cost-slider">
+                            <label>Cost Factor:</label>
+                            <input type="range" id="cost-slider" min="4" max="14" value="10" step="1">
+                            <div class="cost-value" id="cost-display">10</div>
+                        </div>
+                        <div class="cost-info" id="cost-info">
+                            <p><strong>Iterazioni:</strong> 2^10 = 1,024</p>
+                            <p><strong>Tempo stimato:</strong> ~100 ms</p>
+                            <p><strong>Raccomandazione:</strong> Buono per server moderni</p>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password da hashare:</label>
+                        <div class="input-row">
+                            <input type="text" id="cost-password" value="MySecurePassword123!" class="input-large">
+                        </div>
+                        <button class="game-btn success" onclick="hashWithCost()">🔐 Hash con Cost Selezionato</button>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Risultato:</h4>
+                        <div id="cost-result">
+                            <p>Clicca "Hash con Cost Selezionato" per vedere il risultato...</p>
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>📈 Quando Aumentare il Cost</h4>
+                        <ul>
+                            <li><strong>Hardware migliora:</strong> aumenta cost ogni 2-3 anni</li>
+                            <li><strong>Nuovi utenti:</strong> usa cost più alto</li>
+                            <li><strong>Rehashing:</strong> al login, se cost è obsoleto</li>
+                        </ul>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Nota: Bilanciamento Cost Factor</h4>
+                        <p>Ricorda che il cost factor è un bilanciamento:</p>
+                        <ul>
+                            <li><strong>Troppo basso:</strong> vulnerabile agli attacchi brute force</li>
+                            <li><strong>Troppo alto:</strong> login lento, server sovraccaricato, utenti frustrati</li>
+                            <li><strong>Ideale:</strong> ~100-300ms per hash (vedi raccomandazione sopra)</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Regola d'oro:</strong> testa sempre sul tuo hardware specifico per trovare il cost ottimale!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VERIFICA PASSWORD ==================== -->
+        <div class="concept-section cost" id="verify">
+            <h2>🔍 Lab: Verifica Password</h2>
+            <p class="subtitle">Come controllare se una password è corretta</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>✅ Processo di Verifica</h4>
+                        <ol>
+                            <li>Ricevi password dall'utente</li>
+                            <li>Leggi hash salvato dal database</li>
+                            <li>Estrai salt e cost dall'hash</li>
+                            <li>Calcola: bcrypt(password_input, salt, cost)</li>
+                            <li>Confronta con hash salvato</li>
+                        </ol>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Hash salvato nel database:</label>
+                        <div class="input-row">
+                            <input type="text" id="verify-hash" value="" class="input-large" placeholder="Incolla hash bcrypt...">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password da verificare:</label>
+                        <div class="input-row">
+                            <input type="text" id="verify-password" value="" class="input-large" placeholder="Inserisci password...">
+                        </div>
+                        <button class="game-btn success" onclick="verifyPassword()">🔍 Verifica Password</button>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Risultato verifica:</h4>
+                        <div id="verify-result">
+                            <p>Inserisci hash e password per verificare...</p>
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🔐 Perché Funziona</h4>
+                        <p>bcrypt è <strong>deterministico</strong>:</p>
+                        <div class="formula">
+Stesso input (password + salt + cost) → Stesso output
+
+Se password_input == password_originale:
+  bcrypt(password_input, salt, cost) == hash_salvato ✓
+
+Se password_input != password_originale:
+  bcrypt(password_input, salt, cost) != hash_salvato ✗
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Timing Attack</h4>
+                        <p>Un attaccante può misurare il tempo di verifica:</p>
+                        <ul>
+                            <li>Password corretta: ~100ms</li>
+                            <li>Password sbagliata: ~100ms</li>
+                        </ul>
+                        <p>bcrypt è <strong>constant-time</strong> per design: stesso tempo sempre!</p>
+                        <p>MA: non dire mai "password errata" vs "utente non trovato" - usa messaggio generico!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONFRONTO ALGORITMI ==================== -->
+        <div class="concept-section compare" id="compare">
+            <h2>📊 Confronto: bcrypt vs Altri Algoritmi</h2>
+            <p class="subtitle">Quale algoritmo scegliere per le password?</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="round-box" style="border-color: #4ade80;">
+                        <h4 style="color: #4ade80;">✅ bcrypt</h4>
+                        <ul>
+                            <li><strong>Età:</strong> 1999 (maturo, testato)</li>
+                            <li><strong>Cost factor:</strong> configurabile</li>
+                            <li><strong>Salt:</strong> automatico</li>
+                            <li><strong>Limitazione:</strong> max 72 byte password</li>
+                            <li><strong>Uso:</strong> standard de facto, molto supportato</li>
+                        </ul>
+                    </div>
+
+                    <div class="round-box" style="border-color: #3b82f6;">
+                        <h4 style="color: #3b82f6;">⭐ Argon2</h4>
+                        <ul>
+                            <li><strong>Età:</strong> 2015 (vincitore Password Hashing Competition)</li>
+                            <li><strong>Parametri:</strong> tempo, memoria, parallelismo</li>
+                            <li><strong>Resistenza:</strong> GPU e ASIC</li>
+                            <li><strong>Raccomandazione:</strong> OWASP 2024 (prima scelta)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="round-box" style="border-color: #fbbf24;">
+                        <h4 style="color: #fbbf24;">🔷 scrypt</h4>
+                        <ul>
+                            <li><strong>Età:</strong> 2009</li>
+                            <li><strong>Caratteristica:</strong> memory-hard (alto consumo memoria)</li>
+                            <li><strong>Uso:</strong> Litecoin, alcune crypto</li>
+                            <li><strong>Parametri:</strong> N (cost), r (block size), p (parallelismo)</li>
+                        </ul>
+                    </div>
+
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Algoritmo</th>
+                            <th>Velocità</th>
+                            <th>Memory-hard</th>
+                            <th>Raccomandazione</th>
+                        </tr>
+                        <tr class="good">
+                            <td>Argon2id</td>
+                            <td>Configurabile</td>
+                            <td>✓ Sì</td>
+                            <td>⭐ Prima scelta</td>
+                        </tr>
+                        <tr class="good">
+                            <td>bcrypt</td>
+                            <td>Configurabile</td>
+                            <td>✗ No</td>
+                            <td>✓ Ottimo</td>
+                        </tr>
+                        <tr>
+                            <td>scrypt</td>
+                            <td>Configurabile</td>
+                            <td>✓ Sì</td>
+                            <td>✓ Buono</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>PBKDF2</td>
+                            <td>Configurabile</td>
+                            <td>✗ No</td>
+                            <td>⚠️ Solo se altri non disponibili</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>SHA-256</td>
+                            <td>Troppo veloce</td>
+                            <td>✗ No</td>
+                            <td>❌ MAI</td>
+                        </tr>
+                    </table>
+
+                    <div class="explanation-card">
+                        <h4>💡 Memory-Hard: Cosa significa?</h4>
+                        <p>Algoritmi memory-hard richiedono molta <strong>memoria RAM</strong>:</p>
+                        <ul>
+                            <li>GPU hanno poca RAM → meno efficaci</li>
+                            <li>ASIC costosi da costruire</li>
+                            <li>Attacchi distribuiti più difficili</li>
+                        </ul>
+                        <p>Argon2 e scrypt sono memory-hard, bcrypt no.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NEL MONDO REALE ==================== -->
+        <div class="concept-section real" id="real">
+            <h2>🌍 bcrypt nel Mondo Reale</h2>
+            <p class="subtitle">Implementazioni, best practices e codice reale</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>🐍 Python - bcrypt</h4>
+                        <div class="formula">
+import bcrypt
+
+# Hash password
+password = b"MySecurePassword123!"
+hashed = bcrypt.hashpw(password, bcrypt.gensalt(rounds=10))
+# Output: b'$2b$10$...'
+
+# Verifica password
+if bcrypt.checkpw(password_input, hashed):
+    print("Password corretta!")
+                        </div>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📦 Node.js - bcrypt</h4>
+                        <div class="formula">
+const bcrypt = require('bcrypt');
+
+// Hash password
+const hash = await bcrypt.hash('MyPassword123!', 10);
+
+// Verifica password
+const match = await bcrypt.compare('MyPassword123!', hash);
+if (match) {
+    console.log('Password corretta!');
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>☕ Java - BCrypt</h4>
+                        <div class="formula">
+import org.mindrot.jbcrypt.BCrypt;
+
+// Hash password
+String hashed = BCrypt.hashpw("MyPassword123!", 
+    BCrypt.gensalt(10));
+
+// Verifica password
+if (BCrypt.checkpw("MyPassword123!", hashed)) {
+    System.out.println("Password corretta!");
+}
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Best Practices</h4>
+                        <ul>
+                            <li>✓ Cost factor minimo: 10 (OWASP 2024)</li>
+                            <li>✓ Salt sempre generato automaticamente</li>
+                            <li>✓ Hash include tutto: algoritmo, cost, salt</li>
+                            <li>✓ Rehashing automatico se cost obsoleto</li>
+                            <li>✓ Password > 72 byte: hash con SHA-256 prima</li>
+                            <li>✓ Messaggi errore generici (no "password errata" vs "utente non trovato")</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Cosa NON fare</h4>
+                        <ul>
+                            <li>✗ Cost factor troppo basso (< 8)</li>
+                            <li>✗ Salt hardcoded o predicibile</li>
+                            <li>✗ Password > 72 byte senza pre-hash</li>
+                            <li>✗ Implementare bcrypt da zero</li>
+                            <li>✗ Loggare password o hash</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>Problema:</strong> SHA è troppo veloce per password (8 miliardi hash/sec)</li>
+                    <li><strong>Soluzione:</strong> bcrypt è lento per design (~100ms per hash)</li>
+                    <li><strong>Cost factor:</strong> configura la lentezza (10 = 2^10 iterazioni)</li>
+                    <li><strong>Salt:</strong> rende ogni hash unico, impedisce rainbow tables</li>
+                    <li><strong>Formato:</strong> $2a$cost$salt$hash (tutto incluso)</li>
+                    <li><strong>Verifica:</strong> bcrypt(password, salt) == hash salvato</li>
+                    <li><strong>Alternativa:</strong> Argon2 è la scelta moderna (OWASP 2024)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Simulazione bcrypt (semplificata per demo)
+        // In produzione usa librerie reali!
+        
+        function generateSalt() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
+            let salt = '';
+            for (let i = 0; i < 22; i++) {
+                salt += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return salt;
+        }
+
+        function simulateBcrypt(password, cost, salt = null) {
+            // Simulazione semplificata - in realtà usa Blowfish
+            // Per demo, simuliamo il tempo di calcolo
+            const iterations = Math.pow(2, cost);
+            const usedSalt = salt || generateSalt();
+            
+            // Simula hash deterministico usando password + salt
+            // In realtà sarebbe Blowfish, ma per demo usiamo SHA-256 per rendere deterministico
+            const combined = password + usedSalt + cost.toString();
+            const hashBytes = CryptoJS.SHA256(combined).toString();
+            // Prendi primi 31 caratteri e converti in formato Base64-like
+            const hash = hashBytes.substring(0, 31).replace(/[^A-Za-z0-9./]/g, 'A');
+            
+            return {
+                hash: `$2a$${cost}$${usedSalt}${hash}`,
+                salt: usedSalt,
+                iterations: iterations,
+                estimatedTime: Math.pow(2, cost - 7) * 10 // Approssimazione
+            };
+        }
+
+        function parseBcryptHash(hashString) {
+            const parts = hashString.split('$');
+            if (parts.length !== 4 || parts[0] !== '' || parts[1] !== '2a') {
+                return null;
+            }
+            return {
+                cost: parseInt(parts[2]),
+                salt: parts[3].substring(0, 22),
+                hash: parts[3].substring(22)
+            };
+        }
+
+        // ==================== COST FACTOR DEMO ====================
+        
+        function updateCostInfo() {
+            const slider = document.getElementById('cost-slider');
+            const cost = parseInt(slider.value);
+            const iterations = Math.pow(2, cost);
+            const estimatedTime = Math.pow(2, cost - 7) * 10; // ms
+            
+            // Aggiorna display del cost
+            document.getElementById('cost-display').textContent = cost;
+            
+            // Determina raccomandazione in base al cost
+            let recommendation = '';
+            let recommendationColor = '';
+            
+            if (cost < 8) {
+                recommendation = '⚠️ Troppo basso - vulnerabile agli attacchi';
+                recommendationColor = '#f87171';
+            } else if (cost <= 10) {
+                recommendation = '✅ Buono per server moderni (raccomandato OWASP)';
+                recommendationColor = '#4ade80';
+            } else if (cost <= 12) {
+                recommendation = '✅ Ottimo per server potenti';
+                recommendationColor = '#4ade80';
+            } else if (cost <= 14) {
+                recommendation = '⚠️ Alto - potrebbe essere troppo lento per alcuni server';
+                recommendationColor = '#fbbf24';
+            } else {
+                recommendation = '❌ Molto alto - probabilmente troppo lento';
+                recommendationColor = '#f87171';
+            }
+            
+            // Aggiorna info box
+            document.getElementById('cost-info').innerHTML = `
+                <p><strong>Iterazioni:</strong> 2^${cost} = ${iterations.toLocaleString()}</p>
+                <p><strong>Tempo stimato:</strong> ~${Math.round(estimatedTime)} ms</p>
+                <p style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; border-left: 4px solid ${recommendationColor};"><strong>Raccomandazione:</strong> ${recommendation}</p>
+            `;
+        }
+
+        async function hashWithCost() {
+            const password = document.getElementById('cost-password').value;
+            const cost = parseInt(document.getElementById('cost-slider').value);
+            
+            if (!password) {
+                document.getElementById('cost-result').innerHTML = 
+                    '<p style="color: #f87171;">Inserisci una password</p>';
+                return;
+            }
+            
+            document.getElementById('cost-result').innerHTML = 
+                '<p>Calcolando hash... <span class="loading"></span></p>';
+            
+            // Simula delay per cost più alto
+            const delay = Math.min(Math.pow(2, cost - 7) * 10, 2000);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            
+            const result = simulateBcrypt(password, cost);
+            
+            let html = `<p><strong>Password:</strong> "${password}"</p>`;
+            html += `<p><strong>Cost factor:</strong> ${cost} (2^${cost} = ${result.iterations.toLocaleString()} iterazioni)</p>`;
+            html += `<p><strong>Tempo calcolato:</strong> ~${Math.round(result.estimatedTime)} ms</p>`;
+            html += `<p style="margin-top: 15px;"><strong>Hash bcrypt:</strong></p>`;
+            html += `<div class="result-value large">${result.hash}</div>`;
+            
+            // Decodifica formato
+            html += `<div class="hash-format" style="margin-top: 15px;">
+                <span class="hash-part algorithm">\$${result.hash.split('$')[1]}\$</span>
+                <span class="hash-part cost">${cost}</span>
+                <span class="hash-part salt">\$${result.salt}</span>
+                <span class="hash-part hash">${result.hash.substring(result.hash.length - 31)}</span>
+            </div>`;
+            
+            document.getElementById('cost-result').innerHTML = html;
+        }
+
+        // ==================== VERIFY PASSWORD ====================
+        
+        async function verifyPassword() {
+            const hashInput = document.getElementById('verify-hash').value.trim();
+            const passwordInput = document.getElementById('verify-password').value;
+            
+            if (!hashInput || !passwordInput) {
+                document.getElementById('verify-result').innerHTML = 
+                    '<p style="color: #f87171;">Inserisci hash e password</p>';
+                return;
+            }
+            
+            const parsed = parseBcryptHash(hashInput);
+            if (!parsed) {
+                document.getElementById('verify-result').innerHTML = 
+                    '<p style="color: #f87171;">Formato hash non valido. Usa formato: $2a$cost$salt$hash</p>';
+                return;
+            }
+            
+            document.getElementById('verify-result').innerHTML = 
+                '<p>Verificando... <span class="loading"></span></p>';
+            
+            // Simula verifica (delay per simulare lentezza bcrypt)
+            const delay = Math.min(Math.pow(2, parsed.cost - 7) * 10, 2000);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            
+            // Calcola hash della password inserita usando lo stesso salt e cost dell'hash salvato
+            // Questo simula bcrypt.compare(password, hash)
+            const computedHash = simulateBcrypt(passwordInput, parsed.cost, parsed.salt);
+            const match = computedHash.hash === hashInput;
+            
+            let html = `<p><strong>Hash analizzato:</strong></p>`;
+            html += `<div class="hash-format">
+                <span class="hash-part algorithm">\$2a\$</span>
+                <span class="hash-part cost">${parsed.cost}</span>
+                <span class="hash-part salt">\$${parsed.salt}</span>
+                <span class="hash-part hash">${parsed.hash}</span>
+            </div>`;
+            html += `<p style="margin-top: 15px;"><strong>Password inserita:</strong> "${passwordInput}"</p>`;
+            html += `<p style="margin-top: 15px;"><strong>Hash calcolato:</strong> ${computedHash.hash.substring(0, 50)}...</p>`;
+            html += `<p style="margin-top: 15px; padding: 15px; background: ${match ? 'rgba(74,222,128,0.2)' : 'rgba(248,113,113,0.2)'}; border-radius: 8px; border-left: 4px solid ${match ? '#4ade80' : '#f87171'};">
+                ${match ? '✅ Password CORRETTA!' : '❌ Password ERRATA!'}
+            </p>`;
+            html += `<p style="font-size: 0.85em; color: #94a3b8; margin-top: 10px;">
+                Nota: Questa è una simulazione semplificata. In produzione usa librerie reali (bcrypt.compare) che calcolano bcrypt(password, salt, cost) e confrontano con hash salvato.
+            </p>`;
+            
+            document.getElementById('verify-result').innerHTML = html;
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('cost-slider').addEventListener('input', updateCostInfo);
+            
+            // Initialize
+            updateCostInfo();
+        });
+    </script>
+</body>
+</html>
+

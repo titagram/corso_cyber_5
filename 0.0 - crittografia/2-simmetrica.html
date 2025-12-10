@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crittografia Simmetrica</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.intro { border-color: #3b82f6; }
+        .concept-section.intro h2 { color: #3b82f6; }
+        
+        .concept-section.why { border-color: #4ade80; }
+        .concept-section.why h2 { color: #4ade80; }
+        
+        .concept-section.where { border-color: #fbbf24; }
+        .concept-section.where h2 { color: #fbbf24; }
+        
+        .concept-section.algorithms { border-color: #a78bfa; }
+        .concept-section.algorithms h2 { color: #a78bfa; }
+        
+        .concept-section.compare { border-color: #f472b6; }
+        .concept-section.compare h2 { color: #f472b6; }
+        
+        .concept-section.choose { border-color: #06b6d4; }
+        .concept-section.choose h2 { color: #06b6d4; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Use case cards */
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .use-case-card {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        .use-case-card.https {
+            border-color: #3b82f6;
+        }
+        
+        .use-case-card.messaging {
+            border-color: #4ade80;
+        }
+        
+        .use-case-card.storage {
+            border-color: #fbbf24;
+        }
+        
+        .use-case-card.vpn {
+            border-color: #a78bfa;
+        }
+        
+        .use-case-card.database {
+            border-color: #f472b6;
+        }
+        
+        .use-case-card h5 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .use-case-card ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        /* Algorithm card */
+        .algorithm-card {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border-left: 4px solid;
+            margin: 15px 0;
+        }
+        
+        .algorithm-card.aes {
+            border-color: #3b82f6;
+        }
+        
+        .algorithm-card.chacha {
+            border-color: #4ade80;
+        }
+        
+        .algorithm-card h4 {
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .algorithm-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .spec-item {
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+        
+        .spec-label {
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        
+        .spec-value {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+
+        /* Speed comparison */
+        .speed-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .speed-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .speed-label {
+            min-width: 150px;
+            font-weight: bold;
+        }
+        
+        .speed-visual {
+            flex: 1;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .speed-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #3b82f6);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .speed-value {
+            min-width: 120px;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Decision tree */
+        .decision-tree {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .decision-node {
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .decision-arrow {
+            text-align: center;
+            color: #64748b;
+            font-size: 1.5em;
+            margin: 5px 0;
+        }
+        
+        .decision-result {
+            padding: 15px;
+            background: rgba(74, 222, 128, 0.2);
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4ade80;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="intro.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna all'introduzione
+        </a>
+
+        <h1 class="title">🔐 Crittografia Simmetrica</h1>
+        <div class="subtitle">Una chiave per cifrare e decifrare: veloce, efficiente, onnipresente</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#intro">Cos'è</a>
+            <a href="#why">Perché Usarla</a>
+            <a href="#where">Dove si Usa</a>
+            <a href="#algorithms">Algoritmi Principali</a>
+            <a href="#compare">Confronto</a>
+            <a href="#choose">Come Scegliere</a>
+        </div>
+
+        <!-- ==================== INTRODUZIONE ==================== -->
+        <div class="concept-section intro" id="intro">
+            <h2>🔑 Cos'è la Crittografia Simmetrica?</h2>
+            <p class="subtitle">Una sola chiave segreta per cifrare e decifrare</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered">
+                        <strong>Simmetrica:</strong> Chiave Segreta → Cifra → Decifra (stessa chiave)
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Definizione</h4>
+                        <p>La crittografia simmetrica usa <strong>una sola chiave segreta</strong> per:</p>
+                        <ul>
+                            <li>✓ Cifrare il messaggio</li>
+                            <li>✓ Decifrare il messaggio</li>
+                        </ul>
+                        <p>Chi ha la chiave può cifrare e decifrare. Chi non ce l'ha, non può.</p>
+                    </div>
+
+                    <div class="formula">
+Processo:
+1. Alice e Bob condividono chiave segreta K
+2. Alice: Messaggio + K → Cifrato
+3. Alice invia cifrato a Bob
+4. Bob: Cifrato + K → Messaggio originale
+
+Problema: Come condividere K in modo sicuro?
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="success-box">
+                        <h4>✅ Caratteristiche Chiave</h4>
+                        <ul>
+                            <li>✓ <strong>Velocità:</strong> Molto veloce (miliardi di byte/secondo)</li>
+                            <li>✓ <strong>Efficienza:</strong> Poca CPU, poca memoria</li>
+                            <li>✓ <strong>Chiavi corte:</strong> 128-256 bit (16-32 byte)</li>
+                            <li>✓ <strong>Dati grandi:</strong> Ideale per file, video, database</li>
+                            <li>✓ <strong>Standard maturi:</strong> AES, ChaCha20 testati e sicuri</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Problema: Distribuzione Chiavi</h4>
+                        <p>Il problema principale della crittografia simmetrica:</p>
+                        <ul>
+                            <li>✗ Come condividere la chiave in modo sicuro?</li>
+                            <li>✗ Se invii la chiave su canale non sicuro → vulnerabile</li>
+                            <li>✗ Se incontri di persona → non sempre possibile</li>
+                        </ul>
+                        <p><strong>Soluzione:</strong> Usa crittografia asimmetrica per scambiare la chiave, poi simmetrica per i dati!</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Uso nel Mondo Reale</h4>
+                        <p>La crittografia simmetrica è usata per:</p>
+                        <ul>
+                            <li>✓ <strong>HTTPS:</strong> Cifra tutto il traffico web</li>
+                            <li>✓ <strong>Messaggi:</strong> WhatsApp, Signal, Telegram</li>
+                            <li>✓ <strong>Dischi:</strong> BitLocker, FileVault, LUKS</li>
+                            <li>✓ <strong>Database:</strong> Dati sensibili cifrati</li>
+                            <li>✓ <strong>VPN:</strong> Tunnel crittografato</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PERCHÉ USARLA ==================== -->
+        <div class="concept-section why" id="why">
+            <h2>⚡ Perché Usare Crittografia Simmetrica?</h2>
+            <p class="subtitle">Velocità, efficienza, sicurezza: la scelta giusta per i dati</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🚀 Vantaggi Principali</h4>
+                        <p><strong>1. Velocità:</strong></p>
+                        <ul>
+                            <li>AES-256: ~500 MB/s su CPU moderna</li>
+                            <li>ChaCha20: ~1 GB/s su CPU moderna</li>
+                            <li>Hardware acceleration: ancora più veloce</li>
+                        </ul>
+                        <p><strong>2. Efficienza:</strong></p>
+                        <ul>
+                            <li>Poca CPU: non rallenta l'applicazione</li>
+                            <li>Poca memoria: overhead minimo</li>
+                            <li>Batteria: poco consumo su mobile</li>
+                        </ul>
+                    </div>
+
+                    <div class="speed-comparison">
+                        <div class="speed-bar">
+                            <div class="speed-label">AES-256:</div>
+                            <div class="speed-visual">
+                                <div class="speed-fill" style="width: 100%;">~500 MB/s</div>
+                            </div>
+                            <div class="speed-value">Molto veloce</div>
+                        </div>
+                        <div class="speed-bar">
+                            <div class="speed-label">ChaCha20:</div>
+                            <div class="speed-visual">
+                                <div class="speed-fill" style="width: 100%;">~1 GB/s</div>
+                            </div>
+                            <div class="speed-value">Ancora più veloce</div>
+                        </div>
+                        <div class="speed-bar">
+                            <div class="speed-label">RSA-2048 (per confronto):</div>
+                            <div class="speed-visual">
+                                <div class="speed-fill" style="width: 0.1%;">~1 MB/s</div>
+                            </div>
+                            <div class="speed-value">500× più lento!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>💡 Quando Usare Simmetrica</h4>
+                        <p>Usa crittografia simmetrica quando:</p>
+                        <ul>
+                            <li>✓ Hai già la chiave condivisa (dopo handshake asimmetrico)</li>
+                            <li>✓ Devi cifrare grandi quantità di dati</li>
+                            <li>✓ Velocità è importante</li>
+                            <li>✓ Hai risorse limitate (mobile, IoT)</li>
+                            <li>✓ Cifri dati locali (disco, database)</li>
+                        </ul>
+                    </div>
+
+                    <div class="formula">
+Confronto dimensioni chiavi:
+
+Simmetrica:
+- AES-256: 32 byte (256 bit)
+- ChaCha20: 32 byte (256 bit)
+
+Asimmetrica (per confronto):
+- RSA-2048: 256 byte (2048 bit)
+- ECDH P-256: 32 byte (ma calcoli più lenti)
+
+Simmetrica: chiavi corte, calcoli veloci!
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Perché è la Scelta Standard</h4>
+                        <p>Nella pratica, <strong>tutti</strong> usano crittografia simmetrica per i dati:</p>
+                        <ul>
+                            <li>HTTPS: RSA/ECDH per handshake, AES per traffico</li>
+                            <li>Signal: X3DH per chiavi, AES per messaggi</li>
+                            <li>BitLocker: AES per cifrare disco</li>
+                            <li>VPN: AES/ChaCha20 per tunnel</li>
+                        </ul>
+                        <p><strong>Regola:</strong> Asimmetrica per chiavi, simmetrica per dati!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== DOVE SI USA ==================== -->
+        <div class="concept-section where" id="where">
+            <h2>🌍 Dove si Usa la Crittografia Simmetrica Oggi</h2>
+            <p class="subtitle">Onnipresente: ogni comunicazione sicura la usa</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="use-case-grid">
+                        <div class="use-case-card https">
+                            <h5>🔒 HTTPS / TLS</h5>
+                            <p><strong>Algoritmo:</strong> AES-128/256, ChaCha20-Poly1305</p>
+                            <p><strong>Uso:</strong> Cifra tutto il traffico web dopo handshake TLS</p>
+                            <ul>
+                                <li>Dati del form (password, carte)</li>
+                                <li>Cookie di sessione</li>
+                                <li>Contenuto delle pagine</li>
+                                <li>API requests/responses</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché AES/ChaCha20:</strong> Velocità necessaria per milioni di richieste/secondo
+                            </p>
+                        </div>
+
+                        <div class="use-case-card messaging">
+                            <h5>💬 Messaggi End-to-End</h5>
+                            <p><strong>Algoritmo:</strong> AES-256, Signal Protocol</p>
+                            <p><strong>Uso:</strong> WhatsApp, Signal, Telegram cifrano messaggi</p>
+                            <ul>
+                                <li>Testo dei messaggi</li>
+                                <li>File e immagini</li>
+                                <li>Chiamate vocali</li>
+                                <li>Videochiamate</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché AES:</strong> Standard sicuro, veloce, supportato ovunque
+                            </p>
+                        </div>
+
+                        <div class="use-case-card storage">
+                            <h5>💾 Cifratura Disco</h5>
+                            <p><strong>Algoritmo:</strong> AES-256 (XTS mode)</p>
+                            <p><strong>Uso:</strong> BitLocker (Windows), FileVault (Mac), LUKS (Linux)</p>
+                            <ul>
+                                <li>Cifra intero disco rigido</li>
+                                <li>Trasparente all'utente</li>
+                                <li>Hardware acceleration</li>
+                                <li>Performance quasi native</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché AES-XTS:</strong> Progettato per dischi, veloce, sicuro
+                            </p>
+                        </div>
+
+                        <div class="use-case-card vpn">
+                            <h5>🔐 VPN</h5>
+                            <p><strong>Algoritmo:</strong> AES-256, ChaCha20-Poly1305</p>
+                            <p><strong>Uso:</strong> Tunnel crittografato tra client e server</p>
+                            <ul>
+                                <li>Tutto il traffico di rete</li>
+                                <li>IP, DNS, tutto cifrato</li>
+                                <li>Protezione su reti pubbliche</li>
+                                <li>Bypass geografico</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché AES/ChaCha20:</strong> Velocità per non rallentare connessione
+                            </p>
+                        </div>
+
+                        <div class="use-case-card database">
+                            <h5>🗄️ Database Crittografati</h5>
+                            <p><strong>Algoritmo:</strong> AES-256 (GCM, CBC)</p>
+                            <p><strong>Uso:</strong> Cifra colonne sensibili nel database</p>
+                            <ul>
+                                <li>Password (hash, non cifratura!)</li>
+                                <li>Dati personali (PII)</li>
+                                <li>Carte di credito</li>
+                                <li>Documenti medici</li>
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #94a3b8;">
+                                <strong>Perché AES-GCM:</strong> Autenticazione integrata, sicuro, veloce
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>📊 Statistiche di Uso</h4>
+                        <p>Secondo Cloudflare (2024):</p>
+                        <ul>
+                            <li><strong>~95%</strong> del traffico HTTPS usa AES</li>
+                            <li><strong>~5%</strong> usa ChaCha20 (crescente su mobile)</li>
+                            <li><strong>100%</strong> dei messaggi E2E usano AES</li>
+                            <li><strong>~80%</strong> dei dischi cifrati usano AES</li>
+                        </ul>
+                        <p><strong>Conclusione:</strong> AES è lo standard de facto!</p>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Perché Proprio Questi Algoritmi?</h4>
+                        <p><strong>AES (Advanced Encryption Standard):</strong></p>
+                        <ul>
+                            <li>✓ Standard NIST (approvato governo USA)</li>
+                            <li>✓ Hardware acceleration (AES-NI su CPU moderne)</li>
+                            <li>✓ Testato per 20+ anni, nessuna vulnerabilità</li>
+                            <li>✓ Supportato ovunque (hardware, software)</li>
+                        </ul>
+                        <p><strong>ChaCha20:</strong></p>
+                        <ul>
+                            <li>✓ Più veloce su CPU senza AES-NI (mobile, ARM)</li>
+                            <li>✓ Resistente a timing attacks</li>
+                            <li>✓ Standard IETF (RFC 8439)</li>
+                            <li>✓ Usato da Google, Cloudflare</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Algoritmi da NON Usare</h4>
+                        <ul>
+                            <li>✗ <strong>DES:</strong> 56 bit, rotto (1977)</li>
+                            <li>✗ <strong>3DES:</strong> Obsoleto, lento (1998)</li>
+                            <li>✗ <strong>RC4:</strong> Vulnerabile, deprecato</li>
+                            <li>✗ <strong>Blowfish:</strong> Obsoleto, chiavi corte</li>
+                            <li>✗ <strong>Algoritmi custom:</strong> Mai inventare il tuo!</li>
+                        </ul>
+                        <p><strong>Regola:</strong> Usa solo AES o ChaCha20!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ALGORITMI PRINCIPALI ==================== -->
+        <div class="concept-section algorithms" id="algorithms">
+            <h2>🔐 Algoritmi Principali: AES e ChaCha20</h2>
+            <p class="subtitle">Due standard moderni, entrambi sicuri, ognuno con i suoi vantaggi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="algorithm-card aes">
+                        <h4>🔷 AES - Advanced Encryption Standard</h4>
+                        <p><strong>Creato:</strong> 2001 (NIST competition winner)</p>
+                        <p><strong>Designer:</strong> Joan Daemen, Vincent Rijmen</p>
+                        <p><strong>Standard:</strong> NIST FIPS 197</p>
+                        
+                        <div class="algorithm-specs">
+                            <div class="spec-item">
+                                <div class="spec-label">Chiavi supportate</div>
+                                <div class="spec-value">128, 192, 256 bit</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Dimensione blocco</div>
+                                <div class="spec-value">128 bit (16 byte)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Round</div>
+                                <div class="spec-value">10, 12, 14 (per 128/192/256)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Velocità (CPU moderna)</div>
+                                <div class="spec-value">~500 MB/s</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Hardware accel.</div>
+                                <div class="spec-value">AES-NI (Intel/AMD)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Sicurezza</div>
+                                <div class="spec-value">Eccellente</div>
+                            </div>
+                        </div>
+
+                        <div class="success-box" style="margin-top: 15px;">
+                            <h4>✅ Vantaggi AES</h4>
+                            <ul>
+                                <li>✓ Standard governativo (NIST)</li>
+                                <li>✓ Hardware acceleration (AES-NI)</li>
+                                <li>✓ Molto veloce su CPU moderne</li>
+                                <li>✓ Supportato ovunque</li>
+                                <li>✓ Testato per 20+ anni</li>
+                                <li>✓ Nessuna vulnerabilità nota</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box" style="margin-top: 15px;">
+                            <h4>⚠️ Svantaggi AES</h4>
+                            <ul>
+                                <li>✗ Più lento su CPU senza AES-NI (mobile, ARM vecchi)</li>
+                                <li>✗ Vulnerabile a timing attacks (se implementato male)</li>
+                                <li>✗ Block cipher (richiede padding per dati non multipli di 16 byte)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="algorithm-card chacha">
+                        <h4>🌊 ChaCha20 - Stream Cipher Moderno</h4>
+                        <p><strong>Creato:</strong> 2008 (Daniel J. Bernstein)</p>
+                        <p><strong>Standard:</strong> RFC 8439 (IETF)</p>
+                        <p><strong>Uso:</strong> Google, Cloudflare, TLS 1.3</p>
+                        
+                        <div class="algorithm-specs">
+                            <div class="spec-item">
+                                <div class="spec-label">Chiave</div>
+                                <div class="spec-value">256 bit (32 byte)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Nonce</div>
+                                <div class="spec-value">96 bit (12 byte)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Tipo</div>
+                                <div class="spec-value">Stream cipher</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Velocità (CPU moderna)</div>
+                                <div class="spec-value">~1 GB/s</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Hardware accel.</div>
+                                <div class="spec-value">No (ma veloce anche senza)</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Sicurezza</div>
+                                <div class="spec-value">Eccellente</div>
+                            </div>
+                        </div>
+
+                        <div class="success-box" style="margin-top: 15px;">
+                            <h4>✅ Vantaggi ChaCha20</h4>
+                            <ul>
+                                <li>✓ Più veloce di AES su CPU senza hardware accel.</li>
+                                <li>✓ Resistente a timing attacks</li>
+                                <li>✓ Stream cipher (no padding necessario)</li>
+                                <li>✓ Ottimo per mobile/ARM</li>
+                                <li>✓ Standard IETF (RFC 8439)</li>
+                                <li>✓ Usato da Google, Cloudflare</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box" style="margin-top: 15px;">
+                            <h4>⚠️ Svantaggi ChaCha20</h4>
+                            <ul>
+                                <li>✗ Più recente (meno "battle-tested" di AES)</li>
+                                <li>✗ Meno supporto hardware (no AES-NI equivalente)</li>
+                                <li>✗ Meno diffuso (ma in crescita)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Uso nel Mondo Reale</h4>
+                        <p><strong>AES è usato da:</strong></p>
+                        <ul>
+                            <li>HTTPS (maggior parte del traffico)</li>
+                            <li>WhatsApp, Signal (messaggi)</li>
+                            <li>BitLocker, FileVault (dischi)</li>
+                            <li>VPN (OpenVPN, WireGuard)</li>
+                        </ul>
+                        <p><strong>ChaCha20 è usato da:</strong></p>
+                        <ul>
+                            <li>Google (Chrome, Android)</li>
+                            <li>Cloudflare (TLS 1.3)</li>
+                            <li>WireGuard (VPN)</li>
+                            <li>Signal (come alternativa)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONFRONTO ==================== -->
+        <div class="concept-section compare" id="compare">
+            <h2>⚖️ Confronto: AES vs ChaCha20</h2>
+            <p class="subtitle">Quale scegliere? Dipende dal contesto</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Caratteristica</th>
+                            <th>AES</th>
+                            <th>ChaCha20</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Velocità (CPU con AES-NI)</strong></td>
+                            <td class="good">✅ Molto veloce (~500 MB/s)</td>
+                            <td>Veloce (~1 GB/s)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Velocità (CPU senza AES-NI)</strong></td>
+                            <td class="bad">❌ Lento (~50 MB/s)</td>
+                            <td class="good">✅ Veloce (~1 GB/s)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hardware Acceleration</strong></td>
+                            <td class="good">✅ AES-NI (Intel/AMD)</td>
+                            <td class="bad">❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mobile/ARM</strong></td>
+                            <td>Buono (se AES-NI)</td>
+                            <td class="good">✅ Eccellente</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Timing Attacks</strong></td>
+                            <td>Vulnerabile (se mal implementato)</td>
+                            <td class="good">✅ Resistente</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Maturità</strong></td>
+                            <td class="good">✅ 20+ anni</td>
+                            <td>15 anni</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Supporto</strong></td>
+                            <td class="good">✅ Universale</td>
+                            <td>Buono (in crescita)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tipo</strong></td>
+                            <td>Block cipher</td>
+                            <td>Stream cipher</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Standard</strong></td>
+                            <td>NIST FIPS 197</td>
+                            <td>RFC 8439 (IETF)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>💡 Quando Scegliere AES</h4>
+                        <p>Scegli AES quando:</p>
+                        <ul>
+                            <li>✓ Server moderni (CPU con AES-NI)</li>
+                            <li>✓ Hai bisogno di supporto universale</li>
+                            <li>✓ Compliance richiede standard NIST</li>
+                            <li>✓ Vuoi hardware acceleration</li>
+                            <li>✓ Preferisci algoritmo più "battle-tested"</li>
+                        </ul>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Quando Scegliere ChaCha20</h4>
+                        <p>Scegli ChaCha20 quando:</p>
+                        <ul>
+                            <li>✓ Applicazioni mobile/ARM</li>
+                            <li>✓ CPU senza AES-NI</li>
+                            <li>✓ Preoccupato per timing attacks</li>
+                            <li>✓ Vuoi stream cipher (no padding)</li>
+                            <li>✓ Preferisci algoritmo moderno</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Raccomandazione Generale</h4>
+                        <p><strong>Per nuovi progetti:</strong></p>
+                        <ul>
+                            <li>✓ <strong>Server moderni:</strong> AES-256 (con AES-NI)</li>
+                            <li>✓ <strong>Mobile/IoT:</strong> ChaCha20-Poly1305</li>
+                            <li>✓ <strong>TLS/HTTPS:</strong> Supporta entrambi, negozia il migliore</li>
+                        </ul>
+                        <p><strong>Regola:</strong> Entrambi sono sicuri! Scegli in base al contesto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COME SCEGLIERE ==================== -->
+        <div class="concept-section choose" id="choose">
+            <h2>🎯 Come Scegliere l'Algoritmo Giusto</h2>
+            <p class="subtitle">Decision tree pratico per scegliere AES o ChaCha20</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="decision-tree">
+                        <div class="decision-node">
+                            <strong>Domanda 1: Che tipo di dispositivo?</strong>
+                        </div>
+                        <div class="decision-arrow">↓</div>
+                        <div class="decision-result">
+                            <strong>Server moderno (Intel/AMD con AES-NI):</strong> → AES-256<br>
+                            <strong>Mobile/ARM/IoT:</strong> → ChaCha20-Poly1305
+                        </div>
+                        
+                        <div style="margin-top: 30px;">
+                            <div class="decision-node">
+                                <strong>Domanda 2: Hai bisogno di compliance?</strong>
+                            </div>
+                            <div class="decision-arrow">↓</div>
+                            <div class="decision-result">
+                                <strong>Sì (NIST/FIPS):</strong> → AES-256<br>
+                                <strong>No:</strong> → Entrambi vanno bene
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 30px;">
+                            <div class="decision-node">
+                                <strong>Domanda 3: Preoccupato per timing attacks?</strong>
+                            </div>
+                            <div class="decision-arrow">↓</div>
+                            <div class="decision-result">
+                                <strong>Sì:</strong> → ChaCha20-Poly1305<br>
+                                <strong>No (implementazione corretta):</strong> → AES va bene
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📋 Checklist di Scelta</h4>
+                        <p><strong>Usa AES-256 se:</strong></p>
+                        <ul>
+                            <li>□ Server con CPU Intel/AMD moderna</li>
+                            <li>□ Compliance NIST/FIPS richiesta</li>
+                            <li>□ Supporto universale necessario</li>
+                            <li>□ Hardware acceleration disponibile</li>
+                        </ul>
+                        <p><strong>Usa ChaCha20-Poly1305 se:</strong></p>
+                        <ul>
+                            <li>□ Applicazione mobile/ARM</li>
+                            <li>□ CPU senza AES-NI</li>
+                            <li>□ Preoccupato per timing attacks</li>
+                            <li>□ Preferisci stream cipher</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🌍 Esempi Pratici</h4>
+                        <p><strong>HTTPS Server (Cloudflare):</strong></p>
+                        <ul>
+                            <li>Supporta entrambi</li>
+                            <li>Negozia: AES se client ha AES-NI, ChaCha20 altrimenti</li>
+                            <li>Risultato: sempre il più veloce per il client</li>
+                        </ul>
+                        <p><strong>App Mobile (Signal):</strong></p>
+                        <ul>
+                            <li>Usa AES-256 (standard, supportato)</li>
+                            <li>Ma considera ChaCha20 per future versioni</li>
+                        </ul>
+                        <p><strong>VPN (WireGuard):</strong></p>
+                        <ul>
+                            <li>Usa ChaCha20-Poly1305</li>
+                            <li>Perché: veloce su tutti i dispositivi, resistente timing</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Regole d'Oro</h4>
+                        <ul>
+                            <li>✓ <strong>Entrambi sono sicuri:</strong> non sbagli con nessuno</li>
+                            <li>✓ <strong>Supporta entrambi:</strong> lascia al client scegliere (TLS)</li>
+                            <li>✓ <strong>Testa performance:</strong> misura sul tuo hardware</li>
+                            <li>✓ <strong>Non inventare algoritmi:</strong> usa solo AES o ChaCha20</li>
+                            <li>✓ <strong>Usa modalità sicure:</strong> GCM, Poly1305 per autenticazione</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>Crittografia simmetrica:</strong> una chiave per cifrare e decifrare</li>
+                    <li><strong>Vantaggi:</strong> veloce, efficiente, ideale per dati grandi</li>
+                    <li><strong>Uso:</strong> HTTPS, messaggi, dischi, VPN, database</li>
+                    <li><strong>AES:</strong> standard NIST, hardware acceleration, universale</li>
+                    <li><strong>ChaCha20:</strong> veloce su mobile, resistente timing attacks</li>
+                    <li><strong>Scegliere:</strong> AES per server moderni, ChaCha20 per mobile/IoT</li>
+                    <li><strong>Regola:</strong> entrambi sono sicuri, scegli in base al contesto!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

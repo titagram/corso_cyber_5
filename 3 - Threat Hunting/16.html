@@ -5,6 +5,58 @@
     <meta charset="UTF-8">
     <title>Diamond Model - Slide 16</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Stili per l'immagine cliccabile e il modale */
+        #clickable-img {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #clickable-img:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 1200px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 25px;
+            right: 45px;
+            color: #fff;
+            font-size: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,34 +76,77 @@
 
     <div class="container">
         <h1 class="title">Diamond Model</h1>
-        <div class="subtitle">Analisi delle Intrusioni</div>
+        <div class="subtitle">Mappare le relazioni di un'intrusione</div>
 
-        <div class="card border-blue">
-            <div class="card-title">I 4 Vertici</div>
-            <div class="card-text">
-                <ul style="margin-left: 20px;">
-                    <li><strong>Adversary:</strong> Chi attacca (Capacità, Intento).</li>
-                    <li><strong>Victim:</strong> Chi subisce (Vulnerabilità, Asset).</li>
-                    <li><strong>Infrastructure:</strong> Risorse usate (IP, Domini, Server).</li>
-                    <li><strong>Capability:</strong> I tool e le tecniche (Malware, Exploit).</li>
-                </ul>
+        <div class="grid-2-col">
+            <div class="card border-blue">
+                <div class="card-title">I 4 Vertici del Diamante</div>
+                <div class="card-text">
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Adversary:</strong> Chi è l'attaccante. Si analizzano le sue motivazioni, sponsor e
+                            risorse (es. un gruppo APT o un hacktivista).</li>
+                        <li><strong>Victim:</strong> Chi o cosa subisce l'attacco. Non solo l'azienda, ma anche
+                            specifici sistemi, persone o dati.</li>
+                        <li><strong>Infrastructure:</strong> Le risorse usate dall'attaccante per operare (es. indirizzi
+                            IP, domini C2, server malevoli).</li>
+                        <li><strong>Capability:</strong> I tool e le tecniche usate (es. uno specifico malware, un
+                            exploit, una tecnica di spear-phishing).</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card border-purple">
+                <div class="card-title">A Cosa Serve?</div>
+                <div class="card-text">
+                    <p>Il modello non è solo descrittivo, ma è uno strumento di analisi attiva. Il suo punto di forza è
+                        il <strong>pivoting</strong>.</p>
+                    <p style="margin-top: 10px;"><strong>Esempio di Pivot:</strong> Se identifichi una `Capability` (es.
+                        malware X) e la sua `Infrastructure` (dominio C2 Y), puoi cercare nei log di rete quali altre
+                        `Victim` hanno contattato quel dominio, scoprendo l'intera portata dell'attacco.</p>
+                    <p style="margin-top: 10px;">Permette di raggruppare eventi diversi in un unico
+                        <strong>"Activity Group"</strong>, collegando intrusioni che sembravano separate ma che in
+                        realtà appartengono allo stesso `Adversary`.
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="card border-purple" style="margin-top: 20px;">
-            <div class="card-title">Interconnessione</div>
-            <div class="card-text">
-                <p>L'Avversario usa una Capacità attraverso un'Infrastruttura per colpire una Vittima.</p>
-                <p>A differenza della Kill Chain (lineare), il Diamond Model mostra le relazioni complesse.</p>
-            </div>
-        </div>
         <div style="text-align: center; margin-top: 15px;">
-            <img src="img/diamond.png" alt="Diamond Model" style="max-height: 120px; border-radius: 8px;">
+            <img src="img/diamond2.png" alt="Diamond Model" style="max-height: 120px; border-radius: 8px;"
+                id="clickable-img">
         </div>
+    </div>
+
+    <!-- Il Modale per l'immagine -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modal-img">
     </div>
 
     <script>const slideNumero = 16;</script>
     <script src="main.js"></script>
+
+    <script>
+        // Logica per il modale dell'immagine
+        var modal = document.getElementById("imageModal");
+        var img = document.getElementById("clickable-img");
+        var modalImg = document.getElementById("modal-img");
+        var span = document.getElementsByClassName("close-modal")[0];
+
+        img.onclick = function () {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+        }
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        modal.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 
 </html>

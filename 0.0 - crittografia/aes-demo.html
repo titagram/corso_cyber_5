@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>AES - Advanced Encryption Standard</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Sezioni */
+        .concept-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid;
+        }
+        
+        .concept-section h2 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-section .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .concept-section.intro { border-color: #3b82f6; }
+        .concept-section.intro h2 { color: #3b82f6; }
+        
+        .concept-section.structure { border-color: #4ade80; }
+        .concept-section.structure h2 { color: #4ade80; }
+        
+        .concept-section.operations { border-color: #fbbf24; }
+        .concept-section.operations h2 { color: #fbbf24; }
+        
+        .concept-section.ecb { border-color: #f87171; }
+        .concept-section.ecb h2 { color: #f87171; }
+        
+        .concept-section.modes { border-color: #a78bfa; }
+        .concept-section.modes h2 { color: #a78bfa; }
+        
+        .concept-section.decrypt { border-color: #06b6d4; }
+        .concept-section.decrypt h2 { color: #06b6d4; }
+        
+        .concept-section.real { border-color: #f472b6; }
+        .concept-section.real h2 { color: #f472b6; }
+
+        /* Layout */
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flex-col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Input styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-row input, .input-row textarea, .input-row select {
+            padding: 12px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+        }
+        
+        .input-row input:focus, .input-row textarea:focus, .input-row select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .input-small {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .input-medium {
+            width: 150px;
+        }
+        
+        .input-large {
+            width: 100%;
+            min-height: 80px;
+        }
+
+        /* Risultati */
+        .result-display {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .result-display h4 {
+            margin: 0 0 12px 0;
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            color: #4ade80;
+            word-break: break-all;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .formula.centered {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* State grid (4x4) */
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            max-width: 400px;
+            margin: 15px auto;
+        }
+        
+        .state-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .state-cell.changed {
+            background: rgba(74, 222, 128, 0.3);
+            border-color: #4ade80;
+            animation: pulse 0.5s;
+        }
+        
+        .state-cell.unchanged {
+            opacity: 0.5;
+        }
+
+        /* Round visualization */
+        .round-box {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #4ade80;
+        }
+        
+        .round-box h4 {
+            margin: 0 0 15px 0;
+            color: #4ade80;
+        }
+        
+        .round-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .round-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+        
+        .round-step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .round-step-icon.subbytes { background: #3b82f6; }
+        .round-step-icon.shiftrows { background: #a78bfa; }
+        .round-step-icon.mixcolumns { background: #fbbf24; color: black; }
+        .round-step-icon.addroundkey { background: #4ade80; color: black; }
+
+        /* ECB visualization */
+        .ecb-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .ecb-block {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        
+        .ecb-block-label {
+            min-width: 100px;
+            font-weight: bold;
+        }
+        
+        .ecb-block-content {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .ecb-block.identical {
+            background: rgba(248, 113, 113, 0.2);
+            border-left: 4px solid #f87171;
+        }
+
+        /* S-box visualization */
+        .sbox-grid {
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 2px;
+            max-width: 100%;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .sbox-cell {
+            padding: 8px 4px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75em;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        
+        .sbox-cell.header {
+            background: rgba(255,255,255,0.2);
+            font-weight: bold;
+        }
+        
+        .sbox-cell.highlight {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Key schedule visualization */
+        .key-schedule {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .key-round {
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .key-round h5 {
+            margin: 0 0 8px 0;
+            color: #fbbf24;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-table th {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table .good {
+            background: rgba(74, 222, 128, 0.2);
+        }
+        
+        .comparison-table .bad {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        /* Reality box */
+        .reality-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reality-box h4 {
+            color: #3b82f6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Warning box */
+        .warning-box {
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #f87171;
+        }
+
+        /* Success box */
+        .success-box {
+            padding: 20px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #4ade80;
+        }
+
+        /* Explanation card */
+        .explanation-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .explanation-card h4 {
+            margin: 0 0 12px 0;
+            color: #fbbf24;
+        }
+
+        /* Game buttons */
+        .game-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        
+        .game-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .game-btn.danger {
+            background: #f87171;
+        }
+        
+        .game-btn.success {
+            background: #4ade80;
+            color: black;
+        }
+
+        /* Navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .section-nav a {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .section-nav a:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Image demo placeholder */
+        .image-demo {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .image-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .image-box h5 {
+            margin: 0 0 15px 0;
+            color: #94a3b8;
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            color: #64748b;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="4.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Torna alla slide
+        </a>
+
+        <h1 class="title">🔐 AES - Advanced Encryption Standard</h1>
+        <div class="subtitle">Lo standard mondiale per la crittografia simmetrica - Come funziona?</div>
+
+        <!-- Navigation -->
+        <div class="section-nav">
+            <a href="#intro">Cos'è AES</a>
+            <a href="#structure">Struttura</a>
+            <a href="#operations">Le 4 Operazioni</a>
+            <a href="#rounds">🎮 Simula Round</a>
+            <a href="#decrypt">🔓 Decifratura</a>
+            <a href="#ecb">ECB è Cattivo</a>
+            <a href="#modes">Modalità Sicure</a>
+            <a href="#real">Nel Mondo Reale</a>
+        </div>
+
+        <!-- ==================== INTRODUZIONE ==================== -->
+        <div class="concept-section intro" id="intro">
+            <h2>🌍 Cos'è AES e Perché è Importante</h2>
+            <p class="subtitle">Lo standard scelto dal governo USA nel 2001, usato da miliardi di dispositivi</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>📊 AES in numeri</h4>
+                        <ul>
+                            <li><strong>Standardizzato:</strong> 2001 (NIST)</li>
+                            <li><strong>Chiavi supportate:</strong> 128, 192, 256 bit</li>
+                            <li><strong>Blocchi:</strong> sempre 128 bit (16 byte)</li>
+                            <li><strong>Round:</strong> 10 (AES-128), 12 (AES-192), 14 (AES-256)</li>
+                            <li><strong>Velocità:</strong> ~3-5 GB/s con AES-NI (hardware)</li>
+                        </ul>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>🔒 Dove viene usato?</h4>
+                        <ul>
+                            <li><strong>TLS/HTTPS:</strong> cifra tutto il traffico web</li>
+                            <li><strong>WiFi (WPA2/WPA3):</strong> protegge le reti wireless</li>
+                            <li><strong>File system:</strong> BitLocker, FileVault, VeraCrypt</li>
+                            <li><strong>Database:</strong> colonne cifrate</li>
+                            <li><strong>Messaggistica:</strong> Signal, WhatsApp</li>
+                            <li><strong>VPN:</strong> IPsec, WireGuard</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="formula">
+<strong>Perché AES e non DES?</strong>
+
+DES (1977):
+• Chiavi di 56 bit → troppo corte
+• Attaccabile con brute force
+• Sostituito da 3DES, poi AES
+
+AES (2001):
+• Chiavi più lunghe (128+ bit)
+• Design pubblico e analizzato
+• Hardware accelerato (AES-NI)
+• Standard mondiale
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✓ Perché è sicuro?</h4>
+                        <p>AES è stato analizzato per <strong>20+ anni</strong> da migliaia di crittografi.</p>
+                        <p>Nessun attacco pratico trovato (tranne side-channel su implementazioni deboli).</p>
+                        <p>Anche con computer quantistici, AES-256 rimane sicuro!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== STRUTTURA ==================== -->
+        <div class="concept-section structure" id="structure">
+            <h2>🏗️ La Struttura di AES: Round Ripetuti</h2>
+            <p class="subtitle">AES applica una sequenza di operazioni più volte - ogni round aumenta la sicurezza</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="formula centered">
+                        <strong>Struttura generale:</strong><br><br>
+                        Input (16 byte) →<br>
+                        AddRoundKey (chiave iniziale) →<br>
+                        [Round 1-9/11/13] →<br>
+                        Round finale (senza MixColumns) →<br>
+                        Output (16 byte cifrato)
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>🎯 Perché più round?</h4>
+                        <p>Ogni round mescola i dati. Con più round:</p>
+                        <ul>
+                            <li>Ogni bit dell'output dipende da ogni bit dell'input</li>
+                            <li>Cambiare 1 bit dell'input cambia ~50% dei bit dell'output</li>
+                            <li>Impossibile distinguere pattern</li>
+                        </ul>
+                        <p><strong>10 round</strong> sono il compromesso tra sicurezza e velocità.</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="round-box">
+                        <h4>📋 Un Round AES contiene:</h4>
+                        <div class="round-steps">
+                            <div class="round-step">
+                                <div class="round-step-icon subbytes">1</div>
+                                <div><strong>SubBytes:</strong> sostituzione non-lineare (S-box)</div>
+                            </div>
+                            <div class="round-step">
+                                <div class="round-step-icon shiftrows">2</div>
+                                <div><strong>ShiftRows:</strong> spostamento righe</div>
+                            </div>
+                            <div class="round-step">
+                                <div class="round-step-icon mixcolumns">3</div>
+                                <div><strong>MixColumns:</strong> mescolamento colonne</div>
+                            </div>
+                            <div class="round-step">
+                                <div class="round-step-icon addroundkey">4</div>
+                                <div><strong>AddRoundKey:</strong> XOR con chiave di round</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Il principio di Shannon</h4>
+                        <p>AES segue due principi fondamentali:</p>
+                        <ul>
+                            <li><strong>Confusione:</strong> relazione complessa tra chiave e ciphertext (SubBytes)</li>
+                            <li><strong>Diffusione:</strong> cambiare 1 bit cambia molti bit (ShiftRows, MixColumns)</li>
+                        </ul>
+                        <p>Ogni round aumenta confusione e diffusione!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reality-box">
+                <h4>🔑 Key Schedule: Una chiave diversa per ogni round</h4>
+                <p>Da una chiave principale (128/192/256 bit), AES genera <strong>chiavi di round</strong> diverse.</p>
+                <p>Ogni round usa una chiave diversa, rendendo ancora più difficile l'attacco.</p>
+            </div>
+        </div>
+
+        <!-- ==================== LE 4 OPERAZIONI ==================== -->
+        <div class="concept-section operations" id="operations">
+            <h2>🔧 Le 4 Operazioni di AES</h2>
+            <p class="subtitle">Ogni operazione ha uno scopo preciso nella sicurezza</p>
+
+            <!-- SubBytes -->
+            <div class="round-box">
+                <h4>1️⃣ SubBytes - La S-Box (Sostituzione)</h4>
+                <p>Ogni byte viene sostituito con un altro byte secondo una tabella predefinita (S-box).</p>
+                
+                <div class="flex-row">
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>🎯 Scopo: Confusione</h4>
+                            <p>La S-box è <strong>non-lineare</strong>: non è una semplice moltiplicazione.</p>
+                            <p>Rende difficile dedurre la chiave anche se conosci input e output.</p>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Prova SubBytes (semplificato):</label>
+                            <div class="input-row">
+                                <span>Byte input:</span>
+                                <input type="text" id="subbyte-input" value="00" class="input-small" maxlength="2" placeholder="00">
+                                <span>→</span>
+                                <span class="result-value" id="subbyte-output">63</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>📊 Proprietà della S-box</h4>
+                            <ul>
+                                <li><strong>Biunivoca:</strong> ogni input ha un output unico</li>
+                                <li><strong>Non-lineare:</strong> S(a) ⊕ S(b) ≠ S(a ⊕ b)</li>
+                                <li><strong>Fissa:</strong> stessa per tutti (pubblicata)</li>
+                            </ul>
+                        </div>
+
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <div class="sbox-grid" id="sbox-preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ShiftRows -->
+            <div class="round-box">
+                <h4>2️⃣ ShiftRows - Spostamento delle Righe</h4>
+                <p>Ogni riga della matrice 4×4 viene spostata ciclicamente a sinistra.</p>
+                
+                <div class="flex-row">
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>📐 Come funziona</h4>
+                            <p>AES organizza i 16 byte in una matrice 4×4:</p>
+                            <div class="formula">
+Riga 0: spostata di 0 posizioni
+Riga 1: spostata di 1 posizione
+Riga 2: spostata di 2 posizioni
+Riga 3: spostata di 3 posizioni
+                            </div>
+                        </div>
+
+                        <div class="result-display">
+                            <h4>Esempio:</h4>
+                            <div id="shiftrows-demo">
+                                <p>Stato iniziale:</p>
+                                <div class="state-grid" id="shiftrows-before"></div>
+                                <p style="margin-top: 15px;">Dopo ShiftRows:</p>
+                                <div class="state-grid" id="shiftrows-after"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>🎯 Scopo: Diffusione</h4>
+                            <p>Mescola i byte tra colonne diverse.</p>
+                            <p>Un byte che era nella colonna 0 può finire nella colonna 1, 2, o 3.</p>
+                            <p>Rende difficile tracciare dove finiscono i bit originali.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MixColumns -->
+            <div class="round-box">
+                <h4>3️⃣ MixColumns - Mescolamento delle Colonne</h4>
+                <p>Ogni colonna viene moltiplicata per una matrice fissa (operazione lineare ma complessa).</p>
+                
+                <div class="flex-row">
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>🧮 Matematica (semplificata)</h4>
+                            <p>Ogni colonna viene trattata come un polinomio e moltiplicata modulo x⁴+1.</p>
+                            <p>In pratica: ogni byte della colonna influenza tutti gli altri byte della stessa colonna.</p>
+                        </div>
+
+                        <div class="formula">
+Esempio colonna [a, b, c, d]:
+Risultato:
+a' = 2a ⊕ 3b ⊕ c ⊕ d
+b' = a ⊕ 2b ⊕ 3c ⊕ d
+c' = a ⊕ b ⊕ 2c ⊕ 3d
+d' = 3a ⊕ b ⊕ c ⊕ 2d
+
+(2 e 3 sono moltiplicazioni in GF(2⁸))
+                        </div>
+                    </div>
+
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>🎯 Scopo: Diffusione massima</h4>
+                            <p>Un cambiamento in un byte della colonna influenza tutti e 4 i byte.</p>
+                            <p>Dopo MixColumns, è impossibile sapere quale byte originale ha causato quale cambiamento.</p>
+                        </div>
+
+                        <div class="warning-box">
+                            <h4>⚠️ Nota importante</h4>
+                            <p>L'ultimo round <strong>NON ha MixColumns</strong>!</p>
+                            <p>Perché? Per rendere la decifratura simmetrica (stesse operazioni in ordine inverso).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AddRoundKey -->
+            <div class="round-box">
+                <h4>4️⃣ AddRoundKey - XOR con la Chiave</h4>
+                <p>Ogni byte viene combinato con il byte corrispondente della chiave di round usando XOR.</p>
+                
+                <div class="flex-row">
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>🔗 Collegamento a XOR</h4>
+                            <p>Questa è l'unica operazione che usa la chiave!</p>
+                            <p>Ricordi perché XOR è reversibile? (vedi <a href="2-xor-demo.html" style="color: #4ade80;">lab XOR</a>)</p>
+                            <p>state ⊕ key → per decifrare: (state ⊕ key) ⊕ key = state</p>
+                        </div>
+
+                        <div class="formula">
+Esempio:
+Byte stato:    10110101
+Byte chiave:   11001100
+Risultato:     01111001  (XOR bit a bit)
+                        </div>
+                    </div>
+
+                    <div class="flex-col">
+                        <div class="explanation-card">
+                            <h4>🎯 Scopo: Introdurre la chiave</h4>
+                            <p>Senza questa operazione, AES sarebbe una permutazione fissa (chiunque potrebbe decifrare).</p>
+                            <p>La chiave rende ogni cifratura unica.</p>
+                        </div>
+
+                        <div class="result-display">
+                            <h4>Visualizzazione AddRoundKey:</h4>
+                            <div id="addroundkey-demo">
+                                <p>Stato ⊕ Chiave di round = Nuovo stato</p>
+                                <div class="state-grid" id="addroundkey-state"></div>
+                                <p style="margin-top: 10px;">⊕</p>
+                                <div class="state-grid" id="addroundkey-key"></div>
+                                <p style="margin-top: 10px;">=</p>
+                                <div class="state-grid" id="addroundkey-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SIMULAZIONE ROUND ==================== -->
+        <div class="concept-section operations" id="rounds">
+            <h2>🎮 Lab: Simula un Round AES</h2>
+            <p class="subtitle">Vedi come le 4 operazioni trasformano i dati</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="input-group">
+                        <label>Inserisci 16 byte (hex, senza spazi):</label>
+                        <div class="input-row">
+                            <input type="text" id="round-input" value="00112233445566778899aabbccddeeff" class="input-large" maxlength="32" placeholder="00112233445566778899aabbccddeeff">
+                        </div>
+                        <p style="font-size: 0.85em; color: #94a3b8; margin-top: 5px;">Esempio: "00112233445566778899aabbccddeeff" (32 caratteri hex = 16 byte)</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Chiave di round (16 byte hex):</label>
+                        <div class="input-row">
+                            <input type="text" id="round-key" value="000102030405060708090a0b0c0d0e0f" class="input-large" maxlength="32" placeholder="000102030405060708090a0b0c0d0e0f">
+                        </div>
+                    </div>
+
+                    <button class="game-btn success" onclick="simulateRound()">▶️ Simula Round Completo</button>
+                </div>
+
+                <div class="flex-col">
+                    <div class="result-display">
+                        <h4>Risultato del round:</h4>
+                        <div id="round-result">
+                            <p>Clicca "Simula Round" per vedere la trasformazione...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ECB È CATTIVO ==================== -->
+        <div class="concept-section ecb" id="ecb">
+            <h2>☠️ Perché ECB Mode è Inaccettabile</h2>
+            <p class="subtitle">Il famoso "ECB Penguin" - quando la crittografia rivela invece di nascondere</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="warning-box">
+                        <h4>❌ Il problema di ECB</h4>
+                        <p>ECB (Electronic Codebook) cifra ogni blocco <strong>indipendentemente</strong>:</p>
+                        <div class="formula">
+Blocco 1 → Cifrato 1
+Blocco 2 → Cifrato 2
+Blocco 3 → Cifrato 1  ← Stesso blocco = stesso ciphertext!
+                        </div>
+                        <p>Se due blocchi sono identici, i ciphertext sono identici!</p>
+                    </div>
+
+                    <div class="ecb-visual" id="ecb-demo">
+                        <div class="ecb-block">
+                            <div class="ecb-block-label">Messaggio:</div>
+                            <div class="ecb-block-content">"HELLO HELLO"</div>
+                        </div>
+                        <div class="ecb-block">
+                            <div class="ecb-block-label">Diviso in blocchi:</div>
+                            <div class="ecb-block-content">["HELL", "O HE", "LLO "], ["HELL", "O HE", "LLO "]</div>
+                        </div>
+                        <div class="ecb-block identical">
+                            <div class="ecb-block-label">Cifrato ECB:</div>
+                            <div class="ecb-block-content">[A3B2, C1D4, E5F6], [A3B2, C1D4, E5F6] ← Pattern visibili!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🖼️ Il "ECB Penguin"</h4>
+                        <p>Nel 2008, qualcuno cifrò un'immagine di un pinguino con AES-ECB.</p>
+                        <p>Il risultato? Il pinguino era ancora <strong>visibile</strong>!</p>
+                        <p>Perché? Zone uniformi (cielo, neve) producevano blocchi identici → pattern visibili.</p>
+                    </div>
+
+                    <div class="image-demo">
+                        <div class="image-box">
+                            <h5>Immagine originale</h5>
+                            <div class="image-placeholder">Pinguino<br>(pattern uniformi)</div>
+                        </div>
+                        <div class="image-box">
+                            <h5>Cifrata con ECB</h5>
+                            <div class="image-placeholder" style="background: repeating-linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.1) 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px);">
+                                Pattern visibili!<br>Pinguino riconoscibile
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Attacchi possibili con ECB</h4>
+                        <ul>
+                            <li><strong>Pattern analysis:</strong> blocchi identici rivelano struttura</li>
+                            <li><strong>Dictionary attack:</strong> se conosci alcuni blocchi, puoi riconoscerli</li>
+                            <li><strong>Replay attack:</strong> blocchi possono essere riordinati</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ Soluzione: Modalità con IV/Nonce</h4>
+                <p>Usa <strong>CBC, CTR, o GCM</strong> invece di ECB!</p>
+                <p>Queste modalità introducono casualità (IV/nonce) che rende ogni cifratura unica, anche con blocchi identici.</p>
+            </div>
+        </div>
+
+        <!-- ==================== DECIFRATURA ==================== -->
+        <div class="concept-section operations" id="decrypt">
+            <h2>🔓 Lab: Come Funziona la Decifratura AES</h2>
+            <p class="subtitle">Le operazioni inverse che riportano il ciphertext al plaintext originale</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="explanation-card">
+                        <h4>🔄 Simmetria: Cifratura e Decifratura</h4>
+                        <p>AES è <strong>simmetrico</strong>: le operazioni di decifratura sono l'inverso di quelle di cifratura.</p>
+                        <p>L'ordine è invertito e ogni operazione ha la sua versione "inversa":</p>
+                    </div>
+
+                    <div class="round-box">
+                        <h4>📋 Operazioni Inverse:</h4>
+                        <div class="round-steps">
+                            <div class="round-step">
+                                <div class="round-step-icon addroundkey">4</div>
+                                <div><strong>InvAddRoundKey:</strong> XOR con chiave (uguale!)</div>
+                            </div>
+                            <div class="round-step">
+                                <div class="round-step-icon mixcolumns">3</div>
+                                <div><strong>InvMixColumns:</strong> moltiplicazione con matrice inversa</div>
+                            </div>
+                            <div class="round-step">
+                                <div class="round-step-icon shiftrows">2</div>
+                                <div><strong>InvShiftRows:</strong> spostamento a destra invece che sinistra</div>
+                            </div>
+                            <div class="round-step">
+                                <div class="round-step-icon subbytes">1</div>
+                                <div><strong>InvSubBytes:</strong> S-box inversa</div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 15px; color: #94a3b8; font-size: 0.9em;">Nota: l'ordine è invertito rispetto alla cifratura!</p>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="formula centered">
+                        <strong>Cifratura:</strong><br>
+                        Plaintext → SubBytes → ShiftRows → MixColumns → AddRoundKey → Ciphertext<br><br>
+                        <strong>Decifratura:</strong><br>
+                        Ciphertext → InvAddRoundKey → InvMixColumns → InvShiftRows → InvSubBytes → Plaintext
+                    </div>
+
+                    <div class="explanation-card">
+                        <h4>💡 Perché AddRoundKey è uguale?</h4>
+                        <p>XOR è <strong>simmetrico</strong>:</p>
+                        <div class="formula">
+Se: state ⊕ key = result
+Allora: result ⊕ key = state
+
+Perché: (state ⊕ key) ⊕ key = state ⊕ (key ⊕ key) = state ⊕ 0 = state
+                        </div>
+                        <p>Quindi AddRoundKey funziona sia per cifrare che per decifrare!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab completo cifratura + decifratura -->
+            <div class="round-box" style="border-color: #06b6d4; margin-top: 30px;">
+                <h4 style="color: #06b6d4;">🎮 Lab Completo: Cifra e Decifra</h4>
+                <p>Inserisci un messaggio, cifralo con un round AES, poi decifralo per vedere che ottieni il messaggio originale!</p>
+
+                <div class="flex-row" style="margin-top: 20px;">
+                    <div class="flex-col">
+                        <div class="input-group">
+                            <label>Plaintext (16 byte hex):</label>
+                            <div class="input-row">
+                                <input type="text" id="enc-dec-plain" value="00112233445566778899aabbccddeeff" class="input-large" maxlength="32" placeholder="00112233445566778899aabbccddeeff">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Chiave di round (16 byte hex):</label>
+                            <div class="input-row">
+                                <input type="text" id="enc-dec-key" value="000102030405060708090a0b0c0d0e0f" class="input-large" maxlength="32" placeholder="000102030405060708090a0b0c0d0e0f">
+                            </div>
+                        </div>
+
+                        <button class="game-btn success" onclick="encryptDecryptDemo()">▶️ Cifra e Decifra!</button>
+                    </div>
+
+                    <div class="flex-col">
+                        <div class="result-display">
+                            <h4>Risultato:</h4>
+                            <div id="enc-dec-result">
+                                <p>Clicca "Cifra e Decifra" per vedere il processo completo...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualizzazione step-by-step decifratura -->
+            <div class="result-display" id="decrypt-steps" style="margin-top: 20px;">
+                <h4>Passaggi della Decifratura:</h4>
+                <p style="color: #94a3b8;">Esegui prima la cifratura per vedere i passaggi...</p>
+            </div>
+        </div>
+
+        <!-- ==================== MODALITÀ SICURE ==================== -->
+        <div class="concept-section modes" id="modes">
+            <h2>🛡️ Modalità di Operazione Sicure</h2>
+            <p class="subtitle">Come usare AES correttamente nella pratica</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="round-box" style="border-color: #4ade80;">
+                        <h4 style="color: #4ade80;">✅ GCM (Galois/Counter Mode) - RACCOMANDATO</h4>
+                        <ul>
+                            <li><strong>Cifratura + Autenticazione</strong> in un'unica operazione (AEAD)</li>
+                            <li>Usa un <strong>nonce unico</strong> per ogni messaggio</li>
+                            <li>Produce: ciphertext + tag di autenticazione</li>
+                            <li>Velocissimo, parallelizzabile</li>
+                            <li>Standard in TLS 1.3</li>
+                        </ul>
+                        <div class="formula">
+ciphertext, tag = AES-GCM-Encrypt(key, nonce, plaintext, aad)
+                        </div>
+                    </div>
+
+                    <div class="round-box" style="border-color: #fbbf24;">
+                        <h4 style="color: #fbbf24;">⚠️ CBC (Cipher Block Chaining) - Solo se necessario</h4>
+                        <ul>
+                            <li>Richiede <strong>IV casuale</strong> per ogni messaggio</li>
+                            <li>Solo cifratura, <strong>serve MAC separato</strong> (HMAC-SHA256)</li>
+                            <li>Vulnerabile a padding oracle attacks</li>
+                            <li>Usa solo se GCM non disponibile</li>
+                        </ul>
+                        <div class="formula">
+ciphertext = AES-CBC-Encrypt(key, iv, plaintext)
+tag = HMAC-SHA256(key_mac, ciphertext)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="round-box" style="border-color: #a78bfa;">
+                        <h4 style="color: #a78bfa;">✅ CTR (Counter Mode) - Stream-like</h4>
+                        <ul>
+                            <li>Trasforma AES in stream cipher</li>
+                            <li>No padding necessario</li>
+                            <li>Richiede <strong>nonce unico</strong></li>
+                            <li><strong>Serve MAC separato</strong> per autenticazione</li>
+                        </ul>
+                    </div>
+
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Modalità</th>
+                            <th>Autenticazione</th>
+                            <th>Padding</th>
+                            <th>Raccomandazione</th>
+                        </tr>
+                        <tr class="good">
+                            <td>GCM</td>
+                            <td>✓ Inclusa</td>
+                            <td>No</td>
+                            <td>⭐ Usa questo</td>
+                        </tr>
+                        <tr>
+                            <td>CTR</td>
+                            <td>✗ Serve MAC</td>
+                            <td>No</td>
+                            <td>OK con MAC</td>
+                        </tr>
+                        <tr>
+                            <td>CBC</td>
+                            <td>✗ Serve MAC</td>
+                            <td>Sì</td>
+                            <td>Solo se necessario</td>
+                        </tr>
+                        <tr class="bad">
+                            <td>ECB</td>
+                            <td>✗ No</td>
+                            <td>Sì</td>
+                            <td>❌ MAI</td>
+                        </tr>
+                    </table>
+
+                    <div class="explanation-card">
+                        <h4>🔑 Regola d'oro</h4>
+                        <p><strong>Sempre:</strong></p>
+                        <ul>
+                            <li>Usa GCM quando possibile</li>
+                            <li>Nonce/IV unico per ogni messaggio</li>
+                            <li>Se usi CBC/CTR, aggiungi HMAC</li>
+                            <li>Mai ECB in produzione!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NEL MONDO REALE ==================== -->
+        <div class="concept-section real" id="real">
+            <h2>🌍 AES nel Mondo Reale</h2>
+            <p class="subtitle">Implementazioni, performance e best practices</p>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>⚡ AES-NI: Accelerazione Hardware</h4>
+                        <p>CPU moderne (Intel/AMD dal 2010+) hanno istruzioni dedicate:</p>
+                        <ul>
+                            <li><strong>AESENC:</strong> esegue un round AES</li>
+                            <li><strong>AESENCLAST:</strong> round finale</li>
+                            <li><strong>Velocità:</strong> 3-5 GB/s invece di ~100 MB/s</li>
+                        </ul>
+                        <p>Le librerie moderne (OpenSSL, libsodium) usano automaticamente AES-NI se disponibile.</p>
+                    </div>
+
+                    <div class="reality-box">
+                        <h4>📚 Librerie raccomandate</h4>
+                        <ul>
+                            <li><strong>OpenSSL:</strong> C/C++, molto usata</li>
+                            <li><strong>libsodium:</strong> API semplice, sicura di default</li>
+                            <li><strong>cryptography (Python):</strong> wrapper su OpenSSL</li>
+                            <li><strong>WebCrypto API:</strong> browser, usa hardware quando disponibile</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="reality-box">
+                        <h4>🔐 Esempio pratico: WebCrypto API</h4>
+                        <div class="formula">
+// Genera chiave AES-256-GCM
+const key = await crypto.subtle.generateKey(
+  { name: "AES-GCM", length: 256 },
+  true,
+  ["encrypt", "decrypt"]
+);
+
+// Cifra
+const iv = crypto.getRandomValues(new Uint8Array(12));
+const ciphertext = await crypto.subtle.encrypt(
+  { name: "AES-GCM", iv: iv },
+  key,
+  plaintext
+);
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Checklist per sviluppatori</h4>
+                        <ul>
+                            <li>✓ Usa AES-256-GCM o AES-128-GCM</li>
+                            <li>✓ Genera nonce casuale per ogni messaggio</li>
+                            <li>✓ Non riutilizzare mai nonce con stessa chiave</li>
+                            <li>✓ Salva nonce insieme al ciphertext</li>
+                            <li>✓ Usa librerie standard, non implementare AES da zero</li>
+                            <li>✓ Verifica sempre il tag di autenticazione (GCM)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <h4>🎓 Riassunto: Cosa hai imparato</h4>
+                <ul>
+                    <li><strong>AES:</strong> standard mondiale, blocchi da 128 bit, 10/12/14 round</li>
+                    <li><strong>4 operazioni:</strong> SubBytes (confusione), ShiftRows/MixColumns (diffusione), AddRoundKey (chiave)</li>
+                    <li><strong>ECB è cattivo:</strong> blocchi identici → ciphertext identici, pattern visibili</li>
+                    <li><strong>GCM è best:</strong> cifratura + autenticazione, no padding, veloce</li>
+                    <li><strong>Nonce unico:</strong> mai riutilizzare con stessa chiave!</li>
+                    <li><strong>Usa librerie:</strong> non implementare AES da zero</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // S-box semplificata (primi valori reali AES)
+        const AES_SBOX = [
+            0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
+            0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
+            0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15,
+            0x04, 0xc7, 0x23, 0xc3, 0x18, 0x96, 0x05, 0x9a, 0x07, 0x12, 0x80, 0xe2, 0xeb, 0x27, 0xb2, 0x75,
+            0x09, 0x83, 0x2c, 0x1a, 0x1b, 0x6e, 0x5a, 0xa0, 0x52, 0x3b, 0xd6, 0xb3, 0x29, 0xe3, 0x2f, 0x84,
+            0x53, 0xd1, 0x00, 0xed, 0x20, 0xfc, 0xb1, 0x5b, 0x6a, 0xcb, 0xbe, 0x39, 0x4a, 0x4c, 0x58, 0xcf,
+            0xd0, 0xef, 0xaa, 0xfb, 0x43, 0x4d, 0x33, 0x85, 0x45, 0xf9, 0x02, 0x7f, 0x50, 0x3c, 0x9f, 0xa8,
+            0x51, 0xa3, 0x40, 0x8f, 0x92, 0x9d, 0x38, 0xf5, 0xbc, 0xb6, 0xda, 0x21, 0x10, 0xff, 0xf3, 0xd2,
+            0xcd, 0x0c, 0x13, 0xec, 0x5f, 0x97, 0x44, 0x17, 0xc4, 0xa7, 0x7e, 0x3d, 0x64, 0x5d, 0x19, 0x73,
+            0x60, 0x81, 0x4f, 0xdc, 0x22, 0x2a, 0x90, 0x88, 0x46, 0xee, 0xb8, 0x14, 0xde, 0x5e, 0x0b, 0xdb,
+            0xe0, 0x32, 0x3a, 0x0a, 0x49, 0x06, 0x24, 0x5c, 0xc2, 0xd3, 0xac, 0x62, 0x91, 0x95, 0xe4, 0x79,
+            0xe7, 0xc8, 0x37, 0x6d, 0x8d, 0xd5, 0x4e, 0xa9, 0x6c, 0x56, 0xf4, 0xea, 0x65, 0x7a, 0xae, 0x08,
+            0xba, 0x78, 0x25, 0x2e, 0x1c, 0xa6, 0xb4, 0xc6, 0xe8, 0xdd, 0x74, 0x1f, 0x4b, 0xbd, 0x8b, 0x8a,
+            0x70, 0x3e, 0xb5, 0x66, 0x48, 0x03, 0xf6, 0x0e, 0x61, 0x35, 0x57, 0xb9, 0x86, 0xc1, 0x1d, 0x9e,
+            0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf,
+            0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
+        ];
+
+        function hexToBytes(hex) {
+            hex = hex.replace(/\s+/g, '');
+            const bytes = [];
+            for (let i = 0; i < hex.length; i += 2) {
+                bytes.push(parseInt(hex.substr(i, 2), 16));
+            }
+            return bytes;
+        }
+
+        function bytesToHex(bytes) {
+            return bytes.map(b => b.toString(16).padStart(2, '0')).join(' ').toUpperCase();
+        }
+
+        function subBytes(byte) {
+            return AES_SBOX[byte];
+        }
+
+        function shiftRows(state) {
+            const newState = [...state];
+            // Riga 1: shift 1
+            [newState[1], newState[5], newState[9], newState[13]] = 
+                [newState[5], newState[9], newState[13], newState[1]];
+            // Riga 2: shift 2
+            [newState[2], newState[6], newState[10], newState[14]] = 
+                [newState[10], newState[14], newState[2], newState[6]];
+            // Riga 3: shift 3
+            [newState[3], newState[7], newState[11], newState[15]] = 
+                [newState[15], newState[3], newState[7], newState[11]];
+            return newState;
+        }
+
+        // Inverse S-box (primi valori reali AES)
+        const AES_INV_SBOX = [
+            0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb,
+            0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb,
+            0x54, 0x7b, 0x94, 0x32, 0xa6, 0xc2, 0x23, 0x3d, 0xee, 0x4c, 0x95, 0x0b, 0x42, 0xfa, 0xc3, 0x4e,
+            0x08, 0x2e, 0xa1, 0x66, 0x28, 0xd9, 0x24, 0xb2, 0x76, 0x5b, 0xa2, 0x49, 0x6d, 0x8b, 0xd1, 0x25,
+            0x72, 0xf8, 0xf6, 0x64, 0x86, 0x68, 0x98, 0x16, 0xd4, 0xa4, 0x5c, 0xcc, 0x5d, 0x65, 0xb6, 0x92,
+            0x6c, 0x70, 0x48, 0x50, 0xfd, 0xed, 0xb9, 0xda, 0x5e, 0x15, 0x46, 0x57, 0xa7, 0x8d, 0x9d, 0x84,
+            0x90, 0xd8, 0xab, 0x00, 0x8c, 0xbc, 0xd3, 0x0a, 0xf7, 0xe4, 0x58, 0x05, 0xb8, 0xb3, 0x45, 0x06,
+            0xd0, 0x2c, 0x1e, 0x8f, 0xca, 0x3f, 0x0f, 0x02, 0xc1, 0xaf, 0xbd, 0x03, 0x01, 0x13, 0x8a, 0x6b,
+            0x3a, 0x91, 0x11, 0x41, 0x4f, 0x67, 0xdc, 0xea, 0x97, 0xf2, 0xcf, 0xce, 0xf0, 0xb4, 0xe6, 0x73,
+            0x96, 0xac, 0x74, 0x22, 0xe7, 0xad, 0x35, 0x85, 0xe2, 0xf9, 0x37, 0xe8, 0x1c, 0x75, 0xdf, 0x6e,
+            0x47, 0xf1, 0x1a, 0x71, 0x1d, 0x29, 0xc5, 0x89, 0x6f, 0xb7, 0x62, 0x0e, 0xaa, 0x18, 0xbe, 0x1b,
+            0xfc, 0x56, 0x3e, 0x4b, 0xc6, 0xd2, 0x79, 0x20, 0x9a, 0xdb, 0xc0, 0xfe, 0x78, 0xcd, 0x5a, 0xf4,
+            0x1f, 0xdd, 0xa8, 0x33, 0x88, 0x07, 0xc7, 0x31, 0xb1, 0x12, 0x10, 0x59, 0x27, 0x80, 0xec, 0x5f,
+            0x60, 0x51, 0x7f, 0xa9, 0x19, 0xb5, 0x4a, 0x0d, 0x2d, 0xe5, 0x7a, 0x9f, 0x93, 0xc9, 0x9c, 0xef,
+            0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
+            0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
+        ];
+
+        function invSubBytes(byte) {
+            return AES_INV_SBOX[byte];
+        }
+
+        function invShiftRows(state) {
+            const newState = [...state];
+            // Riga 1: shift right 1 (inverso di shift left 1)
+            [newState[1], newState[5], newState[9], newState[13]] = 
+                [newState[13], newState[1], newState[5], newState[9]];
+            // Riga 2: shift right 2 (inverso di shift left 2)
+            [newState[2], newState[6], newState[10], newState[14]] = 
+                [newState[10], newState[14], newState[2], newState[6]];
+            // Riga 3: shift right 3 (inverso di shift left 3)
+            [newState[3], newState[7], newState[11], newState[15]] = 
+                [newState[7], newState[11], newState[15], newState[3]];
+            return newState;
+        }
+
+        function addRoundKey(state, key) {
+            return state.map((b, i) => b ^ key[i]);
+        }
+
+        function renderStateGrid(containerId, state, highlightIndices = []) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for (let i = 0; i < 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'state-cell' + (highlightIndices.includes(i) ? ' changed' : '');
+                cell.textContent = state[i].toString(16).padStart(2, '0').toUpperCase();
+                container.appendChild(cell);
+            }
+        }
+
+        // ==================== SUBBYTES DEMO ====================
+        
+        function updateSubBytes() {
+            const input = document.getElementById('subbyte-input').value;
+            if (input.length !== 2) return;
+            
+            const byte = parseInt(input, 16);
+            if (isNaN(byte) || byte < 0 || byte > 255) return;
+            
+            const output = subBytes(byte);
+            document.getElementById('subbyte-output').textContent = 
+                output.toString(16).padStart(2, '0').toUpperCase();
+        }
+
+        function renderSBox() {
+            const container = document.getElementById('sbox-preview');
+            container.innerHTML = '';
+            
+            // Header
+            for (let i = 0; i < 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'sbox-cell header';
+                cell.textContent = i.toString(16).toUpperCase();
+                container.appendChild(cell);
+            }
+            
+            // Values (first row only for demo)
+            for (let i = 0; i < 16; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'sbox-cell';
+                cell.textContent = AES_SBOX[i].toString(16).padStart(2, '0').toUpperCase();
+                cell.title = `Input: 0x${i.toString(16).padStart(2, '0')} → Output: 0x${AES_SBOX[i].toString(16).padStart(2, '0')}`;
+                container.appendChild(cell);
+            }
+        }
+
+        // ==================== SHIFTROWS DEMO ====================
+        
+        function renderShiftRows() {
+            const before = [0x00, 0x01, 0x02, 0x03, 0x10, 0x11, 0x12, 0x13, 0x20, 0x21, 0x22, 0x23, 0x30, 0x31, 0x32, 0x33];
+            const after = shiftRows([...before]);
+            
+            renderStateGrid('shiftrows-before', before);
+            renderStateGrid('shiftrows-after', after, [1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15]);
+        }
+
+        // ==================== ADDROUNDKEY DEMO ====================
+        
+        function renderAddRoundKey() {
+            const state = [0x19, 0xa0, 0x9a, 0xe9, 0x3d, 0xf4, 0xc6, 0xf8, 0xe3, 0xe2, 0x8d, 0x48, 0xbe, 0x2b, 0x2a, 0x08];
+            const key = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c];
+            const result = addRoundKey(state, key);
+            
+            renderStateGrid('addroundkey-state', state);
+            renderStateGrid('addroundkey-key', key);
+            renderStateGrid('addroundkey-result', result, Array.from({length: 16}, (_, i) => i));
+        }
+
+        // ==================== ROUND SIMULATION ====================
+        
+        function simulateRound() {
+            const inputHex = document.getElementById('round-input').value.replace(/\s+/g, '');
+            const keyHex = document.getElementById('round-key').value.replace(/\s+/g, '');
+            
+            if (inputHex.length !== 32 || keyHex.length !== 32) {
+                document.getElementById('round-result').innerHTML = 
+                    '<p style="color: #f87171;">Errore: inserisci esattamente 32 caratteri hex (16 byte) per input e chiave</p>';
+                return;
+            }
+            
+            let state = hexToBytes(inputHex);
+            const key = hexToBytes(keyHex);
+            
+            let html = '<h5>Stato iniziale:</h5>';
+            html += `<div class="state-grid" id="round-init"></div>`;
+            
+            // SubBytes
+            const afterSubBytes = state.map(b => subBytes(b));
+            html += '<h5 style="margin-top: 20px;">1. Dopo SubBytes:</h5>';
+            html += `<div class="state-grid" id="round-subbytes"></div>`;
+            
+            // ShiftRows
+            const afterShiftRows = shiftRows([...afterSubBytes]);
+            html += '<h5 style="margin-top: 20px;">2. Dopo ShiftRows:</h5>';
+            html += `<div class="state-grid" id="round-shiftrows"></div>`;
+            
+            // MixColumns (simplified - skip for demo)
+            html += '<h5 style="margin-top: 20px;">3. Dopo MixColumns:</h5>';
+            html += '<p style="color: #94a3b8; font-size: 0.9em;">(Operazione complessa - omessa per semplicità)</p>';
+            
+            // AddRoundKey
+            const afterAddRoundKey = addRoundKey(afterShiftRows, key);
+            html += '<h5 style="margin-top: 20px;">4. Dopo AddRoundKey (XOR con chiave):</h5>';
+            html += `<div class="state-grid" id="round-final"></div>`;
+            
+            html += `<p style="margin-top: 20px; color: #4ade80;"><strong>Risultato finale (hex):</strong> ${bytesToHex(afterAddRoundKey)}</p>`;
+            
+            document.getElementById('round-result').innerHTML = html;
+            
+            // Render grids
+            setTimeout(() => {
+                renderStateGrid('round-init', state);
+                renderStateGrid('round-subbytes', afterSubBytes, Array.from({length: 16}, (_, i) => i));
+                renderStateGrid('round-shiftrows', afterShiftRows, [1,5,9,13,2,6,10,14,3,7,11,15]);
+                renderStateGrid('round-final', afterAddRoundKey, Array.from({length: 16}, (_, i) => i));
+            }, 10);
+        }
+
+        // ==================== ENCRYPT/DECRYPT DEMO ====================
+        
+        function encryptDecryptDemo() {
+            const plainHex = document.getElementById('enc-dec-plain').value.replace(/\s+/g, '');
+            const keyHex = document.getElementById('enc-dec-key').value.replace(/\s+/g, '');
+            
+            if (plainHex.length !== 32 || keyHex.length !== 32) {
+                document.getElementById('enc-dec-result').innerHTML = 
+                    '<p style="color: #f87171;">Errore: inserisci esattamente 32 caratteri hex (16 byte) per plaintext e chiave</p>';
+                return;
+            }
+            
+            let state = hexToBytes(plainHex);
+            const key = hexToBytes(keyHex);
+            
+            // ========== CIFRATURA ==========
+            let html = '<h5 style="color: #a78bfa;">📤 CIFRATURA:</h5>';
+            html += '<p>Plaintext originale:</p>';
+            html += `<div class="state-grid" id="enc-plain"></div>`;
+            
+            // SubBytes
+            const afterSubBytes = state.map(b => subBytes(b));
+            html += '<p style="margin-top: 15px;">1. Dopo SubBytes:</p>';
+            html += `<div class="state-grid" id="enc-subbytes"></div>`;
+            
+            // ShiftRows
+            const afterShiftRows = shiftRows([...afterSubBytes]);
+            html += '<p style="margin-top: 15px;">2. Dopo ShiftRows:</p>';
+            html += `<div class="state-grid" id="enc-shiftrows"></div>`;
+            
+            // AddRoundKey
+            const ciphertext = addRoundKey(afterShiftRows, key);
+            html += '<p style="margin-top: 15px;">3. Dopo AddRoundKey (XOR con chiave):</p>';
+            html += `<div class="state-grid" id="enc-final"></div>`;
+            html += `<p style="margin-top: 15px; color: #a78bfa;"><strong>Ciphertext:</strong> ${bytesToHex(ciphertext)}</p>`;
+            
+            // ========== DECIFRATURA ==========
+            html += '<hr style="margin: 30px 0; border-color: rgba(255,255,255,0.2);">';
+            html += '<h5 style="color: #06b6d4;">📥 DECIFRATURA:</h5>';
+            html += '<p>Ciphertext da decifrare:</p>';
+            html += `<div class="state-grid" id="dec-cipher"></div>`;
+            
+            // InvAddRoundKey (prima operazione nella decifratura)
+            const afterInvAddRoundKey = addRoundKey(ciphertext, key); // XOR è simmetrico!
+            html += '<p style="margin-top: 15px;">1. Dopo InvAddRoundKey (XOR con chiave - annulla l\'operazione precedente):</p>';
+            html += `<div class="state-grid" id="dec-addroundkey"></div>`;
+            
+            // InvShiftRows
+            const afterInvShiftRows = invShiftRows([...afterInvAddRoundKey]);
+            html += '<p style="margin-top: 15px;">2. Dopo InvShiftRows (riporta i byte alle posizioni originali):</p>';
+            html += `<div class="state-grid" id="dec-shiftrows"></div>`;
+            
+            // InvSubBytes
+            const decrypted = afterInvShiftRows.map(b => invSubBytes(b));
+            html += '<p style="margin-top: 15px;">3. Dopo InvSubBytes (S-box inversa):</p>';
+            html += `<div class="state-grid" id="dec-subbytes"></div>`;
+            html += `<p style="margin-top: 15px; color: #06b6d4;"><strong>Plaintext decifrato:</strong> ${bytesToHex(decrypted)}</p>`;
+            
+            // Verifica
+            const matches = state.every((b, i) => b === decrypted[i]);
+            html += `<p style="margin-top: 20px; padding: 15px; background: ${matches ? 'rgba(74,222,128,0.2)' : 'rgba(248,113,113,0.2)'}; border-radius: 8px; border-left: 4px solid ${matches ? '#4ade80' : '#f87171'};">
+                ${matches ? '✅ <strong>Successo!</strong> Il plaintext decifrato corrisponde esattamente all\'originale!' : '❌ Errore nella decifratura'}
+            </p>`;
+            
+            document.getElementById('enc-dec-result').innerHTML = html;
+            
+            // Render grids
+            setTimeout(() => {
+                renderStateGrid('enc-plain', state);
+                renderStateGrid('enc-subbytes', afterSubBytes, Array.from({length: 16}, (_, i) => i));
+                renderStateGrid('enc-shiftrows', afterShiftRows, [1,5,9,13,2,6,10,14,3,7,11,15]);
+                renderStateGrid('enc-final', ciphertext, Array.from({length: 16}, (_, i) => i));
+                
+                renderStateGrid('dec-cipher', ciphertext);
+                renderStateGrid('dec-addroundkey', afterInvAddRoundKey, Array.from({length: 16}, (_, i) => i));
+                renderStateGrid('dec-shiftrows', afterInvShiftRows, [1,5,9,13,2,6,10,14,3,7,11,15]);
+                renderStateGrid('dec-subbytes', decrypted, Array.from({length: 16}, (_, i) => i));
+            }, 10);
+            
+            // Mostra passaggi dettagliati
+            showDecryptSteps(state, ciphertext, key, decrypted);
+        }
+
+        function showDecryptSteps(original, ciphertext, key, decrypted) {
+            const afterInvAddRoundKey = addRoundKey(ciphertext, key);
+            const afterInvShiftRows = invShiftRows([...afterInvAddRoundKey]);
+            
+            let html = '<div class="round-steps" style="margin-top: 15px;">';
+            
+            html += `<div class="round-step">
+                <div class="round-step-icon addroundkey">1</div>
+                <div>
+                    <strong>InvAddRoundKey:</strong> Ciphertext ⊕ Chiave<br>
+                    <small style="color: #94a3b8;">XOR è simmetrico, quindi annulla l'AddRoundKey della cifratura</small>
+                </div>
+            </div>`;
+            
+            html += `<div class="round-step">
+                <div class="round-step-icon shiftrows">2</div>
+                <div>
+                    <strong>InvShiftRows:</strong> Sposta le righe a destra<br>
+                    <small style="color: #94a3b8;">Riga 1: shift right 1, Riga 2: shift right 2, Riga 3: shift right 3</small>
+                </div>
+            </div>`;
+            
+            html += `<div class="round-step">
+                <div class="round-step-icon subbytes">3</div>
+                <div>
+                    <strong>InvSubBytes:</strong> Applica S-box inversa<br>
+                    <small style="color: #94a3b8;">Ogni byte viene sostituito con il valore originale dalla S-box inversa</small>
+                </div>
+            </div>`;
+            
+            html += '</div>';
+            
+            html += `<p style="margin-top: 20px; color: #4ade80;">
+                <strong>Risultato:</strong> Plaintext recuperato = ${bytesToHex(decrypted)}<br>
+                <strong>Originale:</strong> ${bytesToHex(original)}<br>
+                ${original.every((b, i) => b === decrypted[i]) ? '✓ Identici!' : '✗ Diversi'}
+            </p>`;
+            
+            document.getElementById('decrypt-steps').innerHTML = html;
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('subbyte-input').addEventListener('input', updateSubBytes);
+            
+            // Initialize
+            renderSBox();
+            renderShiftRows();
+            renderAddRoundKey();
+            updateSubBytes();
+        });
+    </script>
+</body>
+</html>
+
