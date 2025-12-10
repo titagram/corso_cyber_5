@@ -1,0 +1,40 @@
+###########################################################
+# Filebeat Configuration for Suricata EVE JSON Logs
+# Open Source - Apache 2.0 License
+###########################################################
+
+filebeat.inputs:
+  - type: filestream
+    id: suricata-eve-log
+    enabled: true
+    paths:
+      - /var/log/suricata/eve.json
+    parsers:
+      - ndjson:
+          target: ""
+          add_error_key: true
+    fields:
+      log_type: suricata
+    fields_under_root: false
+
+# Processors
+processors:
+  - add_fields:
+      target: ""
+      fields:
+        log_source: suricata
+        environment: mini-soc
+
+# Output to Logstash
+output.logstash:
+  hosts: ["logstash:5044"]
+
+# Logging
+logging.level: info
+logging.to_files: false
+
+# Disable modules
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+

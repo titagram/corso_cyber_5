@@ -1,0 +1,81 @@
+# Suricata Configuration for Mini SOC - Versione Semplificata per Docker
+# Open Source IDS/IPS - GPL v2 License
+
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS: "80,443,8080,8443"
+
+default-log-dir: /var/log/suricata/
+default-rule-path: /var/lib/suricata/rules
+rule-files:
+  - local.rules
+
+# Configure the type of alert (and other) logging
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-buffer-size: 4kb
+            payload-printable: yes
+            packet: yes
+            http-body: yes
+            http-body-printable: yes
+        - http:
+            extended: yes
+        - dns
+        - tls
+        - flow
+
+  - fast:
+      enabled: yes
+      filename: fast.log
+      append: yes
+
+# Configure capture method
+# In Docker, usiamo pcap mode (non af-packet)
+runmode: autofp
+
+# Pcap mode per Docker (l'interfaccia viene specificata da command line)
+pcap:
+  - interface: eth0
+    checksum-checks: auto
+
+# App layer protocol detection
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+        default-config:
+          personality: IDS
+          request-body-limit: 100kb
+          response-body-limit: 100kb
+    tls:
+      enabled: yes
+    dns:
+      enabled: yes
+
+# Logging configuration
+logging:
+  default-log-format: "[%i] %t - (%f:%l) <%d> (%n) -- "
+  default-output-format: "%t - %i - %m"
+  stats:
+    enabled: yes
+    interval: 8
+
+# Detection engine
+detect:
+  profile: medium
+  inspection-recursion-limit: 3000
+

@@ -1,0 +1,40 @@
+# Local Suricata Rules for Mini SOC
+# Custom rules for educational purposes
+
+# Alert on port scans
+alert tcp any any -> $HOME_NET any (msg:"SURICATA Port Scan Detected"; flags:S,12; threshold: type both, track by_src, count 10, seconds 10; classtype:attempted-recon; sid:1000001; rev:1;)
+
+# Alert on nmap scans
+alert tcp any any -> $HOME_NET any (msg:"SURICATA Nmap Scan Detected"; flags:S,12; threshold: type both, track by_src, count 5, seconds 5; classtype:attempted-recon; sid:1000002; rev:1;)
+
+# Alert on SYN flood (DDoS) - Rileva 100+ SYN in 1 secondo
+alert tcp any any -> $HOME_NET any (msg:"SURICATA Possible SYN Flood DDoS Attack"; flags:S; threshold: type both, track by_dst, count 100, seconds 1; classtype:attempted-dos; sid:1000003; rev:1;)
+
+# Alert on UDP flood (DDoS)
+alert udp any any -> $HOME_NET any (msg:"SURICATA Possible UDP Flood DDoS Attack"; threshold: type both, track by_dst, count 1000, seconds 1; classtype:attempted-dos; sid:1000011; rev:1;)
+
+# Alert on ICMP flood (DDoS/Ping Flood)
+alert icmp any any -> $HOME_NET any (msg:"SURICATA Possible ICMP Flood DDoS Attack"; threshold: type both, track by_dst, count 100, seconds 1; classtype:attempted-dos; sid:1000012; rev:1;)
+
+# Alert on high connection rate (DDoS indicator)
+alert tcp any any -> $HOME_NET any (msg:"SURICATA High Connection Rate - Possible DDoS"; flags:S; threshold: type both, track by_dst, count 50, seconds 1; classtype:attempted-dos; sid:1000013; rev:1;)
+
+# Alert on HTTP scanning
+alert http any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SURICATA HTTP Directory Traversal Attempt"; flow:established,to_server; content:"../"; http_uri; classtype:web-application-attack; sid:1000004; rev:1;)
+
+# Alert on SQL injection attempts in HTTP
+alert http any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SURICATA Possible SQL Injection"; flow:established,to_server; content:"union"; http_uri; nocase; content:"select"; http_uri; nocase; classtype:web-application-attack; sid:1000005; rev:1;)
+
+# Alert on XSS attempts
+alert http any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SURICATA Possible XSS Attack"; flow:established,to_server; content:"<script"; http_uri; nocase; classtype:web-application-attack; sid:1000006; rev:1;)
+
+# Alert on suspicious user agents
+alert http any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SURICATA Suspicious User-Agent Detected"; flow:established,to_server; content:"nmap"; http_user_agent; nocase; classtype:web-application-attack; sid:1000007; rev:1;)
+
+alert http any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SURICATA Suspicious User-Agent Detected"; flow:established,to_server; content:"nikto"; http_user_agent; nocase; classtype:web-application-attack; sid:1000008; rev:1;)
+
+alert http any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SURICATA Suspicious User-Agent Detected"; flow:established,to_server; content:"sqlmap"; http_user_agent; nocase; classtype:web-application-attack; sid:1000009; rev:1;)
+
+# Alert on brute force attempts (multiple failed logins)
+alert http any any -> $HTTP_SERVERS $HTTP_PORTS (msg:"SURICATA Possible Brute Force Attack"; flow:established,to_server; content:"POST"; http_method; content:"/login"; http_uri; threshold: type both, track by_src, count 5, seconds 60; classtype:attempted-user; sid:1000010; rev:1;)
+

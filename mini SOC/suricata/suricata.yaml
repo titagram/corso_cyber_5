@@ -1,0 +1,145 @@
+# Suricata Configuration for Mini SOC
+# Open Source IDS/IPS - GPL v2 License
+
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+    SMTP_SERVERS: "$HOME_NET"
+    SQL_SERVERS: "$HOME_NET"
+    DNS_SERVERS: "$HOME_NET"
+    TELNET_SERVERS: "$HOME_NET"
+    AIM_SERVERS: "$EXTERNAL_NET"
+    DC_SERVERS: "$HOME_NET"
+    DNP3_SERVER: "$HOME_NET"
+    DNP3_CLIENT: "$HOME_NET"
+    MODBUS_CLIENT: "$HOME_NET"
+    MODBUS_SERVER: "$HOME_NET"
+    ENIP_CLIENT: "$HOME_NET"
+    ENIP_SERVER: "$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS: "80,443,8080,8443"
+    SHELLCODE_PORTS: "!80"
+    ORACLE_PORTS: 1521
+    SSH_PORTS: 22
+    DNP3_PORTS: 20000
+    MODBUS_PORTS: 502
+    FILE_DATA_PORTS: "[$HTTP_PORTS,110,143]"
+    FTP_PORTS: 21
+    GENEVE_PORTS: 6081
+    VXLAN_PORTS: 4789
+    TEREDO_PORTS: 3544
+
+default-log-dir: /var/log/suricata/
+default-rule-path: /var/lib/suricata/rules
+rule-files:
+  - local.rules
+  # Nota: suricata.rules viene scaricato automaticamente dall'immagine
+
+# Configure the type of alert (and other) logging
+outputs:
+  # EVE JSON log for integration with ELK Stack
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-buffer-size: 4kb
+            payload-printable: yes
+            packet: yes
+            http-body: yes
+            http-body-printable: yes
+            tagged-packets: yes
+        - http:
+            extended: yes
+        - dns
+        - tls
+        - files:
+            force-magic: yes
+        - ssh
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
+        - flow
+        - netflow
+
+  # Fast log for quick alerts
+  - fast:
+      enabled: yes
+      filename: fast.log
+      append: yes
+
+  # Unified2 output (optional)
+  - unified2-alert:
+      enabled: no
+
+# Configure capture method
+# In Docker, usiamo pcap mode (obbligatorio, af-packet non funziona)
+# runmode deve essere "pcap" per usare pcap mode
+runmode: pcap
+
+# Pcap mode per Docker - unica modalità compatibile
+pcap:
+  - interface: eth0
+    checksum-checks: auto
+    # In Docker bridge network, eth0 è l'interfaccia di default
+
+# App layer protocol detection
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+        default-config:
+          personality: IDS
+          request-body-limit: 100kb
+          response-body-limit: 100kb
+          request-body-inspection: yes
+          response-body-inspection: yes
+    tls:
+      enabled: yes
+    ssh:
+      enabled: yes
+    dns:
+      enabled: yes
+
+# Logging configuration
+logging:
+  default-log-format: "[%i] %t - (%f:%l) <%d> (%n) -- "
+  default-output-format: "%t - %i - %m"
+  stats:
+    enabled: yes
+    interval: 8
+    decoder-events: yes
+    stream-events: yes
+    rule-events: yes
+    app-layer: yes
+    detect-alerts: yes
+
+# Performance tuning (semplificato per Docker)
+threading:
+  set-cpu-affinity: no
+
+# Detection engine
+detect:
+  profile: medium
+  custom-values:
+    toclient-src-groups: 2
+    toserver-dst-groups: 2
+  sgh-mpm-context: auto
+  inspection-recursion-limit: 3000
+
+# Rule management (già definito sopra)
+# rule-files:
+#   - local.rules
+
+# Thresholding (opzionale, commentato se non presente)
+# threshold-file: /var/lib/suricata/rules/threshold.config
+
