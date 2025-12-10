@@ -1,0 +1,70 @@
+{
+  "version": "8.13.0",
+  "kibana": {
+    "version": "8.13.0",
+    "spaces": []
+  },
+  "saved_objects": [
+    {
+      "type": "dashboard",
+      "id": "security-soc-dashboard",
+      "attributes": {
+        "title": "🛡️ Security Operations Center - Dashboard Didattica",
+        "description": "Dashboard completa per analisi sicurezza: Suricata IDS + ModSecurity WAF",
+        "version": "WzEsMV0=",
+        "panelsJSON": "[{\"version\":\"8.13.0\",\"gridData\":{\"x\":0,\"y\":0,\"w\":24,\"h\":3,\"i\":\"filters-panel\"},\"panelIndex\":\"filters-panel\",\"embeddableConfig\":{},\"panelType\":\"controls\",\"id\":\"filters-control\"},{\"version\":\"8.13.0\",\"gridData\":{\"x\":0,\"y\":3,\"w\":12,\"h\":8,\"i\":\"timeline-panel\"},\"panelIndex\":\"timeline-panel\",\"embeddableConfig\":{},\"panelType\":\"visualization\",\"id\":\"timeline-viz\"},{\"version\":\"8.13.0\",\"gridData\":{\"x\":12,\"y\":3,\"w\":12,\"h\":8,\"i\":\"attack-types-panel\"},\"panelIndex\":\"attack-types-panel\",\"embeddableConfig\":{},\"panelType\":\"visualization\",\"id\":\"attack-types-viz\"},{\"version\":\"8.13.0\",\"gridData\":{\"x\":0,\"y\":11,\"w\":8,\"h\":6,\"i\":\"log-source-panel\"},\"panelIndex\":\"log-source-panel\",\"embeddableConfig\":{},\"panelType\":\"visualization\",\"id\":\"log-source-viz\"},{\"version\":\"8.13.0\",\"gridData\":{\"x\":8,\"y\":11,\"w\":8,\"h\":6,\"i\":\"top-ips-panel\"},\"panelIndex\":\"top-ips-panel\",\"embeddableConfig\":{},\"panelType\":\"visualization\",\"id\":\"top-ips-viz\"},{\"version\":\"8.13.0\",\"gridData\":{\"x\":16,\"y\":11,\"w\":8,\"h\":6,\"i\":\"response-codes-panel\"},\"panelIndex\":\"response-codes-panel\",\"embeddableConfig\":{},\"panelType\":\"visualization\",\"id\":\"response-codes-viz\"},{\"version\":\"8.13.0\",\"gridData\":{\"x\":0,\"y\":17,\"w\":12,\"h\":8,\"i\":\"top-uris-panel\"},\"panelIndex\":\"top-uris-panel\",\"embeddableConfig\":{},\"panelType\":\"visualization\",\"id\":\"top-uris-viz\"},{\"version\":\"8.13.0\",\"gridData\":{\"x\":12,\"y\":17,\"w\":12,\"h\":8,\"i\":\"events-table-panel\"},\"panelIndex\":\"events-table-panel\",\"embeddableConfig\":{},\"panelType\":\"visualization\",\"id\":\"events-table-viz\"}]",
+        "optionsJSON": "{\"useMargins\":true,\"syncColors\":false,\"hidePanelTitles\":false}",
+        "timeRestore": true,
+        "timeTo": "now",
+        "timeFrom": "now-24h",
+        "refreshInterval": {
+          "pause": false,
+          "value": 30000
+        },
+        "controlGroupInput": {
+          "controlStyle": "oneLine",
+          "chainingSystem": "HIERARCHICAL",
+          "panelsJSON": "[{\"order\":0,\"width\":\"medium\",\"grow\":true,\"type\":\"optionsListControl\",\"explicitInput\":{\"fieldName\":\"attack_type.keyword\",\"title\":\"Tipo di Minaccia\",\"id\":\"attack-type-filter\",\"enhancements\":{}}},{\"order\":1,\"width\":\"medium\",\"grow\":true,\"type\":\"optionsListControl\",\"explicitInput\":{\"fieldName\":\"log_source.keyword\",\"title\":\"Sorgente Log\",\"id\":\"log-source-filter\",\"enhancements\":{}}},{\"order\":2,\"width\":\"medium\",\"grow\":true,\"type\":\"optionsListControl\",\"explicitInput\":{\"fieldName\":\"client_ip.keyword\",\"title\":\"IP Sorgente\",\"id\":\"client-ip-filter\",\"enhancements\":{}}}]"
+        }
+      },
+      "references": [
+        {
+          "name": "timeline-viz",
+          "type": "visualization",
+          "id": "timeline-viz"
+        },
+        {
+          "name": "attack-types-viz",
+          "type": "visualization",
+          "id": "attack-types-viz"
+        },
+        {
+          "name": "log-source-viz",
+          "type": "visualization",
+          "id": "log-source-viz"
+        },
+        {
+          "name": "top-ips-viz",
+          "type": "visualization",
+          "id": "top-ips-viz"
+        },
+        {
+          "name": "response-codes-viz",
+          "type": "visualization",
+          "id": "response-codes-viz"
+        },
+        {
+          "name": "top-uris-viz",
+          "type": "visualization",
+          "id": "top-uris-viz"
+        },
+        {
+          "name": "events-table-viz",
+          "type": "visualization",
+          "id": "events-table-viz"
+        }
+      ]
+    }
+  ]
+}
+

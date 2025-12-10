@@ -1,0 +1,40 @@
+# Esempio configurazione Logstash per inviare log a Splunk
+# Copia questo file in logstash.conf o aggiungi l'output a quello esistente
+
+input {
+  # Input esistenti (Filebeat, ecc.)
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+  # Filtri esistenti
+  # ...
+}
+
+output {
+  # Output esistente a Elasticsearch
+  elasticsearch {
+    hosts => ["elasticsearch:9200"]
+    index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+  }
+  
+  # NUOVO: Output a Splunk via TCP
+  tcp {
+    host => "splunk"
+    port => 9997
+    codec => json_lines
+  }
+  
+  # ALTERNATIVA: Output a Splunk via HTTP Event Collector (HEC)
+  # http {
+  #   url => "http://splunk:8088/services/collector"
+  #   http_method => "post"
+  #   headers => {
+  #     "Authorization" => "Splunk YOUR_HEC_TOKEN"
+  #   }
+  #   format => "json"
+  # }
+}
+

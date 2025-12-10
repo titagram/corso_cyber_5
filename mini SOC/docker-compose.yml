@@ -15,6 +15,7 @@ volumes:
   suricata-rules:
   wazuh-data:
   wazuh-logs:
+  splunk-data:
 
 services:
 
@@ -49,7 +50,7 @@ services:
   # 2. Kibana (Dashboard SIEM)
   ###########################################################
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.13.0
+    image: docker.elastic.co/kibana/kibana:8.12.2
     container_name: kibana
     depends_on:
       elasticsearch:
@@ -175,6 +176,9 @@ services:
   ###########################################################
   # 8. Suricata IDS/IPS (Open Source - GPL v2)
   # Rileva: DDoS, scansioni porte, attacchi di rete
+  # Configurato per Kali Linux con runmode: pcap
+  # NOTA: Su Kali Linux, Suricata vede solo traffico della rete Docker bridge
+  # Per vedere tutto il traffico di sistema, decommentare network_mode: host
   ###########################################################
   suricata:
     build:
@@ -184,6 +188,7 @@ services:
     depends_on:
       - webapp
       - waf
+    # Capacità necessarie per Suricata su Kali Linux
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -192,15 +197,21 @@ services:
       - suricata-logs:/var/log/suricata
     networks:
       - soc-network
+    # Esegui come root per permettere scrittura nei log (necessario per volumi Docker)
+    # In produzione, considera un init container per impostare permessi corretti
+    user: root
+    # Usiamo Docker bridge network invece di host mode per evitare conflitti runmode
+    # Suricata vedrà solo traffico tra container (sufficiente per test)
+    # Per vedere tutto il traffico di sistema, decommentare network_mode: host sopra
+    # network_mode: host
     restart: unless-stopped
     entrypoint: ["/usr/bin/suricata"]
     command:
       - -c
       - /etc/suricata/suricata.yaml
+      # Specifica interfaccia per PCAP_DEV mode (Docker bridge network)
       - -i
       - eth0
-      - -S
-      - /var/lib/suricata/rules/local.rules
 
   ###########################################################
   # 9. Filebeat per Suricata (raccolta log EVE)
@@ -221,7 +232,47 @@ services:
     restart: unless-stopped
 
   ###########################################################
-  # 10. Wazuh Manager (SIEM Open Source - GPL v2)
+  # 10. Splunk Enterprise (SIEM Commerciale - Trial 60 giorni)
+  # Per uso didattico: trial gratuito 60 giorni
+  # Alternativa: Splunk Universal Forwarder (gratuito) o Splunk Light
+  # Porte:
+  #   - 8000: Web UI
+  #   - 8088: HTTP Event Collector (HEC)
+  #   - 9997: TCP Input (per Logstash/Filebeat)
+  ###########################################################
+  splunk:
+    build:
+      context: ./splunk
+      dockerfile: Dockerfile
+    container_name: splunk
+    environment:
+      - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD=changeme
+      - SPLUNK_HOME=/opt/splunk
+      # Evita problemi con permessi volumi Docker
+      - SPLUNK_ANSIBLE_SKIP_CHOWN=true
+    volumes:
+      - splunk-data:/opt/splunk/var
+      - modsec-logs:/var/log/modsecurity:ro
+      - suricata-logs:/var/log/suricata:ro
+      # File di configurazione copiati durante build, non montati come read-only
+    user: root
+    ports:
+      - "8000:8000"   # Web UI
+      - "8088:8088"   # HTTP Event Collector
+      - "9997:9997"   # TCP Input
+    networks:
+      - soc-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k -u admin:changeme https://localhost:8089/services/auth/login || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  ###########################################################
+  # 11. Wazuh Manager (SIEM Open Source - GPL v2)
   # NOTA: Wazuh richiede setup complesso con Wazuh Indexer
   # Per ora commentato - può essere aggiunto successivamente
   # Alternativa: usare Wazuh all-in-one da https://documentation.wazuh.com/

@@ -43,13 +43,17 @@ outputs:
       append: yes
 
 # Configure capture method
-# In Docker, usiamo pcap mode (non af-packet)
+# Con hackinsdn/suricata, Suricata usa af-packet mode automaticamente
+# Configuriamo af-packet per evitare warning
 runmode: autofp
 
-# Pcap mode per Docker (l'interfaccia viene specificata da command line)
-pcap:
+af-packet:
   - interface: eth0
-    checksum-checks: auto
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+    use-mmap: yes
+    tpacket-v3: yes
 
 # App layer protocol detection
 app-layer:
@@ -73,9 +77,19 @@ logging:
   stats:
     enabled: yes
     interval: 8
+    decoder-events: yes
+    stream-events: yes
+    rule-events: yes
+    app-layer: yes
+    detect-alerts: yes
+
+# Performance tuning per Kali Linux
+threading:
+  set-cpu-affinity: no
 
 # Detection engine
 detect:
   profile: medium
   inspection-recursion-limit: 3000
+  sgh-mpm-context: auto
 
