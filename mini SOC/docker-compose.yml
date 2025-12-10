@@ -1,6 +1,6 @@
 ###########################################################
-# Mini SOC - DVWA + ELK Stack + WAF (ModSecurity)
-# Corso Cyber Security
+# Mini SOC Completo - DVWA + ELK Stack + WAF + Suricata + Wazuh
+# Corso Cyber Security - Tutto Open Source (Nessun Abbonamento)
 ###########################################################
 
 networks:
@@ -11,6 +11,10 @@ volumes:
   esdata:
   modsec-logs:
   dvwa-db:
+  suricata-logs:
+  suricata-rules:
+  wazuh-data:
+  wazuh-logs:
 
 services:
 
@@ -167,4 +171,99 @@ services:
     networks:
       - soc-network
     restart: unless-stopped
+
+  ###########################################################
+  # 8. Suricata IDS/IPS (Open Source - GPL v2)
+  # Rileva: DDoS, scansioni porte, attacchi di rete
+  ###########################################################
+  suricata:
+    build:
+      context: ./suricata
+      dockerfile: Dockerfile
+    container_name: suricata
+    depends_on:
+      - webapp
+      - waf
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_NICE
+    volumes:
+      - suricata-logs:/var/log/suricata
+    networks:
+      - soc-network
+    restart: unless-stopped
+    entrypoint: ["/usr/bin/suricata"]
+    command:
+      - -c
+      - /etc/suricata/suricata.yaml
+      - -i
+      - eth0
+      - -S
+      - /var/lib/suricata/rules/local.rules
+
+  ###########################################################
+  # 9. Filebeat per Suricata (raccolta log EVE)
+  ###########################################################
+  filebeat-suricata:
+    build:
+      context: ./filebeat
+      dockerfile: Dockerfile-suricata
+    container_name: filebeat-suricata
+    depends_on:
+      - suricata
+      - logstash
+    user: root
+    volumes:
+      - suricata-logs:/var/log/suricata:ro
+    networks:
+      - soc-network
+    restart: unless-stopped
+
+  ###########################################################
+  # 10. Wazuh Manager (SIEM Open Source - GPL v2)
+  # NOTA: Wazuh richiede setup complesso con Wazuh Indexer
+  # Per ora commentato - può essere aggiunto successivamente
+  # Alternativa: usare Wazuh all-in-one da https://documentation.wazuh.com/
+  ###########################################################
+  # wazuh-manager:
+  #   image: wazuh/wazuh-manager:latest
+  #   container_name: wazuh-manager
+  #   depends_on:
+  #     - elasticsearch
+  #   environment:
+  #     - API_USERNAME=wazuh-wui
+  #     - API_PASSWORD=wazuh-wui
+  #   volumes:
+  #     - wazuh-data:/var/ossec/data
+  #     - wazuh-logs:/var/ossec/logs
+  #     - ./wazuh/manager/config/ossec.conf:/var/ossec/etc/ossec.conf:ro
+  #   networks:
+  #     - soc-network
+  #   restart: unless-stopped
+  #   ports:
+  #     - "1514:1514/udp"  # Agent communication
+  #     - "1515:1515/tcp"  # Agent enrollment
+  #     - "55000:55000/tcp"  # Wazuh API
+
+  ###########################################################
+  # 11. Wazuh Agent (EDR Open Source - GPL v2)
+  # Commentato insieme al Manager
+  ###########################################################
+  # wazuh-agent:
+  #   image: wazuh/wazuh-agent:latest
+  #   container_name: wazuh-agent
+  #   depends_on:
+  #     - wazuh-manager
+  #   environment:
+  #     - WAZUH_MANAGER=wazuh-manager
+  #     - WAZUH_REGISTRATION_SERVER=wazuh-manager
+  #     - WAZUH_REGISTRATION_PORT=1515
+  #     - WAZUH_REGISTRATION_PASSWORD=wazuh-wui
+  #   volumes:
+  #     - ./wazuh/agent/config/ossec.conf:/var/ossec/etc/ossec.conf:ro
+  #     - /:/rootfs:ro  # Monitor filesystem (FIM)
+  #   networks:
+  #     - soc-network
+  #   restart: unless-stopped
 
